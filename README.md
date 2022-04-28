@@ -18,7 +18,7 @@ The goal of the mod is to offer balance changes, new mechanics, and QoL features
 | v0.7.x | v1.0.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.0/Promethium.dll) |
 
 ## Quality of Life Changes
-* Game speeds up after 10 seconds of sending your orb out. It currently maxs out at 3x the gamespeed.
+* Game speeds up after 10 seconds of sending your orb out. It currently maxes out at 3x the gamespeed.
 * You can now retarget after sending your orb out!
 * You can turn off enemy turn on reload in the configs! Default is vanilla behavior.
 
