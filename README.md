@@ -1,5 +1,5 @@
 # Promethium
-**This Mod Does NOT work on the Demo. It is for the Early Access version of the Game**
+**This Mod does NOT work on the Demo. It is for the Early Access version of the Game**
 
 The goal of the mod is to offer balance changes, new mechanics, and QoL features. It is currently in development, so please report any bugs found!
 
