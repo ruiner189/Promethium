@@ -40,7 +40,6 @@ namespace PeglinMod
 
             EnemyAttackOnShuffleConfig = Config.Bind<bool>("Mechanics","EnemyAttackOnShuffle", true, "Disabling this will prevent enemies from taking two turns in certain circumstances");
 
-
             //SendOrbsToConsole();
         }
 
@@ -55,6 +54,7 @@ namespace PeglinMod
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(filePath);
             texture = new Texture2D(10, 20, TextureFormat.ARGB32, false);
             texture.LoadImage(ReadToEnd(stream));
+            texture.filterMode = FilterMode.Point;
             return texture;
         }
 
@@ -62,7 +62,7 @@ namespace PeglinMod
         {
             filePath = $"{Name}.Resources.{filePath}";
             Texture2D texture = LoadTexture(filePath);
-            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0f, 0f));
+            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         }
 
         private static byte[] ReadToEnd(Stream stream)
