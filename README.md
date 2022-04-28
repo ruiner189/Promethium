@@ -3,6 +3,20 @@
 
 The goal of the mod is to offer balance changes, new mechanics, and QoL features. It is currently in development, so please report any bugs found!
 
+## Installation
+1. Download [Promethium](/#releases)
+2. Download [BepInEx_x64_5.x.x.x.zip](https://github.com/BepInEx/BepInEx/releases)
+3. Go to your install directory for Peglin.
+    * For Steam go to your Steam Library and right click Peglin > Manage > Browse Local Files
+4. Unzip the BepInEx folder into your peglin directory
+5. Launch Peglin. BepInEx will then create a plugins folder. Close Peglin after the game launches.
+6. Put Promethium in your plugin folder (...\Peglin\Bepinex\plugins)
+
+## Releases
+| Peglin - Version| Mod Version | Link |
+|----------|-------------|-----------------|
+| v0.7.x | v1.0.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.0/Promethium.dll) |
+
 ## Quality of Life Changes
 * Game speeds up after 10 seconds of sending your orb out. It currently maxs out at 3x the gamespeed.
 * You can now retarget after sending your orb out!
@@ -30,7 +44,7 @@ Level 2
 Level 3
 * Increases Maximum Armor by 4
 * Replenishes Armor by 2 every reload
-
+----------
 
 #### Bouldorb
 * Replenishes Armor to maximum value if discarded
