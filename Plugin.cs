@@ -1,9 +1,9 @@
-﻿using Battle;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
@@ -16,7 +16,7 @@ namespace PeglinMod
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.0.0";
+        public const String Version = "1.0.1";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -115,14 +115,16 @@ namespace PeglinMod
         {
             foreach(GameObject obj in Resources.LoadAll<GameObject>("Prefabs/Orbs/"))
             {
-                Logger.LogInfo(obj.name);
-                FireballAttack attack = obj.GetComponent<FireballAttack>();
+                Attack attack = obj.GetComponent<Attack>();
                 if(attack != null)
                 {
-                    Logger.LogInfo($"({attack.locName})");
+                    Logger.LogInfo($"{obj.name} ({attack.locName})");
                 }
             }
         }
+
+
+
 
     }
 }

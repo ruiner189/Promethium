@@ -3,16 +3,12 @@ using Cruciball;
 using HarmonyLib;
 using PeglinMod.Patches.Mechanics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace PeglinMod.Patches.Balls
 {
     [HarmonyPatch(typeof(BattleController), "AttemptOrbDiscard")]
-    public class OnDiscard
+    public class AddArmorOnDiscard
     {
         public static void Prefix(BattleController __instance, GameObject ____ball, CruciballManager ____cruciballManager, PlayerStatusEffectController ____playerStatusEffectController)
         {

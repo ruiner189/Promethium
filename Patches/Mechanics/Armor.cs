@@ -4,11 +4,6 @@ using Cruciball;
 using HarmonyLib;
 using PeglinMod.Patches.Status_Effect;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace PeglinMod.Patches.Mechanics
@@ -26,7 +21,6 @@ namespace PeglinMod.Patches.Mechanics
             if (controller != null) _controller = controller;
             if (change == 0) return;
 
-            Plugin.Log.LogMessage($"Changing by {change}");
             armorEffect = new StatusEffect((StatusEffectType)CustomStatusEffect.Armor, change);
 
             if(_controller != null)
@@ -45,7 +39,6 @@ namespace PeglinMod.Patches.Mechanics
 
             if(orbName == "Stone" && orbLevel > 1)
             {
-
                 amount = (orbLevel - 1) * 3;
 
                 if (cruciballLevel >= 3)
@@ -87,6 +80,25 @@ namespace PeglinMod.Patches.Mechanics
             }
 
             return amount;
+        }
+
+        public static float GetArmorDamageMultiplier(Attack ball, CruciballManager cruciballManager)
+        {
+            String orbName = ball.locName;
+            int orbLevel = ball.Level;
+            int cruciballLevel = cruciballManager != null ? cruciballManager.currentCruciballLevel : -1;
+
+            if(orbName == "Orbelisk")
+            {
+                if(orbLevel == 1)
+                    return currentArmor * 0.05f;
+                else if (orbLevel == 2)
+                    return currentArmor * 0.07f;
+                else if (orbLevel == 3)
+                    return currentArmor * 0.09f;
+            }
+
+            return 0;
         }
 
         public static int GetTotalMaximumArmor(CruciballManager cruciballManager)
