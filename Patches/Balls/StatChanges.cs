@@ -151,7 +151,7 @@ namespace PeglinMod.Patches.Balls
                         .Replace("%ar", "" + Armor.GetArmorReloadFromOrb(__instance, ____cruciballManager))
                         .Replace("%ad", "" + Armor.GetArmorDiscardFromOrb(__instance, ____cruciballManager))
                         .Replace("%ma", "" + Armor.GetTotalMaximumArmor(____cruciballManager))
-                        .Replace("%md", "" + (int) (Armor.GetArmorDamageMultiplier(__instance, ____cruciballManager) * 100) + "%")
+                        .Replace("%md", "" + (Armor.GetArmorDamageMultiplier(__instance, ____cruciballManager) + 1) + "x")
                         .Replace("%ac", "" + Armor.currentArmor)
                         + "</indent>\n";
                 } else
