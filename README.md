@@ -16,6 +16,8 @@ The goal of the mod is to offer balance changes, new mechanics, and QoL features
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
 | v0.7.x | v1.0.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.0/Promethium.dll) |
+| v0.7.x | v1.0.1 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.1/Promethium.dll) |
+
 
 ## Quality of Life Changes
 * Game speeds up after 10 seconds of sending your orb out. It currently maxes out at 3x the gamespeed.
@@ -48,3 +50,19 @@ Level 3
 
 #### Bouldorb
 * Replenishes Armor to maximum value if discarded
+----------
+#### Orbelisk
+Level 1
+* Attack: 1 | Crit: 3
+* Multiplies damage based on current armor (0.05 * currentArmor)
+* On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
+
+Level 2
+* Attack: 2 | Crit: 5
+* Multiplies damage based on current armor (0.07 * currentArmor)
+* On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
+
+Level 3
+* Attack: 3 | Crit: 7
+* Multiplies damage based on current armor (0.09 * currentArmor)
+* On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
