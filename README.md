@@ -4,7 +4,7 @@
 The goal of the mod is to offer balance changes, new mechanics, and QoL features. It is currently in development, so please report any bugs found!
 
 ## Installation
-1. Download [Promethium](/#releases)
+1. Download [Promethium](https://github.com/ruiner189/Promethium/releases)
 2. Download [BepInEx_x64_5.x.x.x.zip](https://github.com/BepInEx/BepInEx/releases)
 3. Go to your install directory for Peglin.
     * For Steam go to your Steam Library and right click Peglin > Manage > Browse Local Files
