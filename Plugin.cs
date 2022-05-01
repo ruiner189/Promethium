@@ -2,13 +2,14 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using Promethium.Patches.Balls;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
 
-namespace PeglinMod
+namespace Promethium
 {
     [BepInPlugin(GUID, Name, Version)]
     public class Plugin : BaseUnityPlugin
@@ -34,6 +35,7 @@ namespace PeglinMod
             Log = Logger;
 
             LoadSprites();
+            RegisterModifiedOrbs();
 
             _harmony = new Harmony(GUID);
             _harmony.PatchAll();
@@ -46,6 +48,13 @@ namespace PeglinMod
         private void LoadSprites()
         {
             ArmorEffect = LoadSprite("ArmorEffect.png");
+        }
+
+        private void RegisterModifiedOrbs()
+        {
+            ModifiedBouldorb.Register();
+            ModifiedOrbelisk.Register();
+            ModifiedStone.Register();
         }
 
         public static Texture2D LoadTexture(string filePath)
@@ -108,8 +117,6 @@ namespace PeglinMod
                 stream.Position = originalPosition;
             }
         }
-
-
 
         private void SendOrbsToConsole()
         {

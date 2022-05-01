@@ -2,11 +2,11 @@
 using Battle.StatusEffects;
 using Cruciball;
 using HarmonyLib;
-using PeglinMod.Patches.Status_Effect;
+using Promethium.Patches.Status_Effect;
 using System;
 using UnityEngine;
 
-namespace PeglinMod.Patches.Mechanics
+namespace Promethium.Patches.Mechanics
 {
     public static class Armor
     {

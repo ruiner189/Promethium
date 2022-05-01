@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 
 
-namespace PeglinMod.Patches
+namespace Promethium.Patches
 {
     [HarmonyPatch(typeof(BattleController), "ChooseShuffleOrDrawAtEndOfTurn")]
     public static class TurnEnd

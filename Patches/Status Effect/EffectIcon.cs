@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace PeglinMod.Patches.Status_Effect
+namespace Promethium.Patches.Status_Effect
 {
 
     [HarmonyPatch(typeof(StatusEffectData), nameof(StatusEffectData.GetStatusEffectIcon))]

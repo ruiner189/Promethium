@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace PeglinMod.Patches.Mechanics
+namespace Promethium.Patches.Mechanics
 {
     [HarmonyPatch(typeof(BattleController), "Update")]
     public static class SpeedUp

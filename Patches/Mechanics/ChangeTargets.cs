@@ -2,7 +2,7 @@
 using HarmonyLib;
 
 
-namespace PeglinMod.Patches
+namespace Promethium.Patches
 {
     [HarmonyPatch(typeof(TargetingManager), "StopTargetingOnFire")]
     public static class ChangeTargetWhileAttacking

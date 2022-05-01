@@ -1,37 +1,41 @@
 ﻿using Battle.StatusEffects;
 using Cruciball;
 using HarmonyLib;
-using PeglinMod.Patches.Mechanics;
+using Promethium.Patches.Mechanics;
+using Promethium.Extensions;
+using Promethium.Patches.Balls;
 using System;
 using UnityEngine;
 
-namespace PeglinMod.Patches.Balls
+namespace Promethium.Patches.Balls
 {
-    [HarmonyPatch(typeof(BattleController), "AttemptOrbDiscard")]
-    public class AddArmorOnDiscard
+
+    public sealed class ModifiedBouldorb : ModifiedOrb
     {
-        public static void Prefix(BattleController __instance, GameObject ____ball, CruciballManager ____cruciballManager, PlayerStatusEffectController ____playerStatusEffectController)
+        private static ModifiedBouldorb _instance;
+        private ModifiedBouldorb() : base("Bouldorb"){ }
+
+        public override void ChangeDescription(Attack attack)
         {
-            if(____ball != null && __instance.NumShotsDiscarded < __instance.MaxDiscardedShots)
-            {
-                FireballAttack attack = ____ball.GetComponent<FireballAttack>();
-                if(attack != null)
-                {
-                    String orbName = attack.locName;
-                    int orbLevel = attack.Level;
-                    int cruciballLevel = ____cruciballManager.currentCruciballLevel;
+            AddToDescription(attack, "ArmorDiscardMax", 3);
+        }
 
-                    if (orbName == "Bouldorb")
-                    {
-                        int original = Armor.currentArmor;
-                        int max = Armor.GetTotalMaximumArmor(____cruciballManager);
-                        Armor.currentArmor = max;
-                        Plugin.Log.LogMessage($"Bouldorb discarded. Armor set to { Armor.currentArmor } / {max}");
-                        Armor.ChangeArmorDisplay(Armor.currentArmor - original, ____playerStatusEffectController);
+        public override void OnDiscard(BattleController battleController, GameObject orb, Attack attack)
+        {
+            CruciballManager cruciballManager = battleController.GetCruciballManager();
+            PlayerStatusEffectController playerStatusEffectController = battleController.GetPlayerStatusEffectController();
+            int original = Armor.currentArmor;
+            int max = Armor.GetTotalMaximumArmor(cruciballManager);
+            Armor.currentArmor = max;
+            Plugin.Log.LogMessage($"Bouldorb discarded. Armor set to { Armor.currentArmor } / {max}");
+            Armor.ChangeArmorDisplay(Armor.currentArmor - original, playerStatusEffectController);
+        }
 
-                    }
-                }
-            }
+        public static ModifiedBouldorb Register()
+        {
+            if (_instance == null)
+                _instance = new ModifiedBouldorb();
+            return _instance;
         }
     }
 }
