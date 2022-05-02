@@ -16,7 +16,7 @@ namespace Promethium.Patches.Balls
         {
             if(attack.Level > 1)
             {
-                ReplaceDescription(attack, new string[] { "ArmorMax", "ArmorTurn"});
+                ReplaceDescription(attack, new string[] { "armor_max", "armor_turn"});
             }
         }
         public static ModifiedStone Register()

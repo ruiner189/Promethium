@@ -18,7 +18,7 @@ namespace Promethium.Patches.Balls
 
         public override void ChangeDescription(Attack attack)
         {
-            ReplaceDescription(attack, new string[] { "attacks_flying_and_ground", "ArmorDamageMultiplier", "ArmorDamageDiscardMultiplier" });
+            ReplaceDescription(attack, new string[] { "attacks_flying_and_ground", "armor_damage_multiplier", "armor_damage_discard_multiplier"});
         }
 
         public override void OnShotFired(BattleController battleController, GameObject orb, Attack attack)
@@ -26,7 +26,7 @@ namespace Promethium.Patches.Balls
             CruciballManager cruciballManager = battleController.GetCruciballManager();
             float multiplier = Armor.GetArmorDamageMultiplier(attack, cruciballManager);
             if (multiplier > 0)
-                battleController.GetBattleMultipliers().Add(multiplier + 1);
+                battleController.GetDamageMultipliers().Add(multiplier + 1);
             
         }
 
@@ -41,7 +41,7 @@ namespace Promethium.Patches.Balls
                 PlayerStatusEffectController playerStatusEffectController = battleController.GetPlayerStatusEffectController();
                 PlayerHealthController playerHealthController = battleController.GetPlayerHealthController();
 
-                battleController.GetBattleMultipliers().Add(multiplier + 1);
+                battleController.GetDamageMultipliers().Add(multiplier + 1);
                 int armorDamage = Armor.currentArmor;
                 Armor.currentArmor = 0;
                 Armor.ChangeArmorDisplay(-armorDamage, playerStatusEffectController);

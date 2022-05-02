@@ -17,7 +17,7 @@ namespace Promethium.Patches.Balls
 
         public override void ChangeDescription(Attack attack)
         {
-            AddToDescription(attack, "ArmorDiscardMax", 3);
+            AddToDescription(attack, "armor_discard_max", 3);
         }
 
         public override void OnDiscard(BattleController battleController, GameObject orb, Attack attack)

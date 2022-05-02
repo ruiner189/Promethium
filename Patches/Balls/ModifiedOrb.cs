@@ -17,12 +17,12 @@ namespace Promethium.Patches.Balls
     {
         private static List<ModifiedOrb> AllModifiedOrbs = new List<ModifiedOrb>();
 
-        private String _name;        
+        private String _name;
         public ModifiedOrb(String orbName)
         {
             _name = orbName;
             AllModifiedOrbs.Add(this);
-            Plugin.Log.LogMessage($"Registered {_name}");
+            Plugin.Log.LogMessage($"{_name} was successfully registered.");
         }
 
         public static ModifiedOrb GetOrb(String name)
@@ -35,9 +35,9 @@ namespace Promethium.Patches.Balls
             return _name;
         }
 
-        public virtual void OnDiscard(BattleController battleController, GameObject orb, Attack attack){}
+        public virtual void OnDiscard(BattleController battleController, GameObject orb, Attack attack) { }
 
-        public virtual void OnShotFired(BattleController battleController, GameObject orb, Attack attack) {}
+        public virtual void OnShotFired(BattleController battleController, GameObject orb, Attack attack) { }
 
         public virtual void ChangeDescription(Attack attack) { }
         public virtual int GetAttackValue(CruciballManager cruciballManager, Attack attack)
@@ -97,7 +97,7 @@ namespace Promethium.Patches.Balls
         {
             if (____battleState == 9) return;
             Attack attack = ____ball.GetComponent<Attack>();
-            if(attack != null)
+            if (attack != null)
             {
                 ModifiedOrb orb = ModifiedOrb.GetOrb(attack.locName);
                 if (orb != null) orb.OnShotFired(__instance, ____ball, attack);
@@ -126,52 +126,39 @@ namespace Promethium.Patches.Balls
     [HarmonyPatch(typeof(Attack), nameof(Attack.Description), MethodType.Getter)]
     public static class ChangeDescription
     {
-        public static Dictionary<String, String> stringDict;
 
-        private static void CreateDictionary()
-        {
-            stringDict = new Dictionary<String, String>();
-
-            stringDict.Add("ArmorMax", "Increases Maximum <color=\"purple\">Armor</color> by <color=\"purple\">%am</color>");
-            stringDict.Add("ArmorTurn", "Restores <color=\"purple\">%ar</color> <color=\"purple\">Armor</color> every reload");
-            stringDict.Add("ArmorDiscardMax", "Restores <color=\"purple\">Armor</color> to max if discarded");
-            stringDict.Add("ArmorDiscard", "Restores <color=\"purple\">Armor</color> by <color=\"purple\">%ad</color> if discarded");
-            stringDict.Add("ArmorDamageMultiplier", "Multiplies damage based on current <color=\"purple\">Armor</color>. Current multiplier: <color=\"purple\">%md</color>");
-            stringDict.Add("ArmorDamageDiscardMultiplier", "Discard to transfer multiplier to the next orb. Takes away all <color=\"purple\">Armor</color> and damages you for <color=\"red\">%ac</color>");
-        }
         public static bool Prefix(Attack __instance, CruciballManager ____cruciballManager, ref String __result)
         {
-            if (stringDict == null)
-                CreateDictionary();
-
             ModifiedOrb orb = ModifiedOrb.GetOrb(__instance.locName);
-            if(orb != null)
+            if (orb != null)
                 orb.ChangeDescription(__instance);
-            
+
             string text = "";
             foreach (string str in __instance.locDescStrings)
             {
-                if (str == null || str == "") continue;
-                if (stringDict.ContainsKey(str))
-                {
-                    text = text + "<sprite name=\"BULLET\"><indent=8%>" + stringDict[str]
-                        .Replace("%am", "" + Armor.GetArmorMaxFromOrb(__instance, ____cruciballManager))
-                        .Replace("%ar", "" + Armor.GetArmorReloadFromOrb(__instance, ____cruciballManager))
-                        .Replace("%ad", "" + Armor.GetArmorDiscardFromOrb(__instance, ____cruciballManager))
-                        .Replace("%ma", "" + Armor.GetTotalMaximumArmor(____cruciballManager))
-                        .Replace("%md", "" + (Armor.GetArmorDamageMultiplier(__instance, ____cruciballManager) + 1) + "x")
-                        .Replace("%ac", "" + Armor.currentArmor)
-                        + "</indent>\n";
-                }
-                else
-                {
-                    text = text + "<sprite name=\"BULLET\"><indent=8%>" + LocalizationManager.GetTranslation("Orbs/" + str, true, 0, true, true, __instance.gameObject, null, true) + "</indent>\n";
-                }
+                text = text + "<sprite name=\"BULLET\"><indent=8%>" + GetStringWithVariables(__instance, ____cruciballManager, LocalizationManager.GetTranslation("Orbs/" + str, true, 0, true, true, __instance.gameObject, null, true)) + "</indent>\n";
             }
             __result = text;
             return false;
         }
+
+        private static String GetStringWithVariables(Attack attack, CruciballManager manager, String str)
+        {
+            if (str.Contains("%"))
+            {
+                if (str.Contains("%am")) str = str.Replace("%am", "" + Armor.GetArmorMaxFromOrb(attack, manager));
+                if (str.Contains("%ar")) str = str.Replace("%ar", "" + Armor.GetArmorReloadFromOrb(attack, manager));
+                if (str.Contains("%ad")) str = str.Replace("%ad", "" + Armor.GetArmorDiscardFromOrb(attack, manager));
+                if (str.Contains("%ma")) str = str.Replace("%ma", "" + Armor.GetTotalMaximumArmor(manager));
+                if (str.Contains("%md")) str = str.Replace("%md", "" + (Armor.GetArmorDamageMultiplier(attack, manager) + 1) + "x");
+                if (str.Contains("%ac")) str = str.Replace("%ac", "" + Armor.currentArmor);
+            }
+            return str;
+        }
     }
+
+
+
 
 
     [HarmonyPatch(typeof(Attack), nameof(Attack.SoftInit))]

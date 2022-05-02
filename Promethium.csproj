@@ -22,6 +22,8 @@
     <Reference Include="$(peglin)\BepInEx\core\MonoMod.Utils.dll" />
     <Reference Include="$(peglin)\Peglin_Data\Managed\*.dll" />
     <EmbeddedResource Include="Resources\*" />
+    <EmbeddedResource Include="Resources\Relics\*" />
+
   </ItemGroup>
   
   <Target Name="Copy" AfterTargets="Build">

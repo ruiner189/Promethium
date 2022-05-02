@@ -2,7 +2,9 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using I2.Loc;
 using Promethium.Patches.Balls;
+using Promethium.Patches.Relics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +26,11 @@ namespace Promethium
 
         // Sprites
         public static Sprite ArmorEffect;
+        public static Sprite Curse_One;
+        public static Sprite Curse_Two;
+        public static Sprite Curse_Three;
+        public static Sprite Curse_Four;
+        public static Sprite Curse_Five;
 
 
         // Config
@@ -36,6 +43,7 @@ namespace Promethium
 
             LoadSprites();
             RegisterModifiedOrbs();
+            RegisterCustomRelics();
 
             _harmony = new Harmony(GUID);
             _harmony.PatchAll();
@@ -48,6 +56,12 @@ namespace Promethium
         private void LoadSprites()
         {
             ArmorEffect = LoadSprite("ArmorEffect.png");
+            Curse_One = LoadSprite("Relics.Curse_One.png");
+            Curse_Two = LoadSprite("Relics.Curse_Two.png");
+            Curse_Three = LoadSprite("Relics.Curse_Three.png");
+            Curse_Four = LoadSprite("Relics.Curse_Four.png");
+            Curse_Five = LoadSprite("Relics.Curse_Five.png");
+
         }
 
         private void RegisterModifiedOrbs()
@@ -55,6 +69,15 @@ namespace Promethium
             ModifiedBouldorb.Register();
             ModifiedOrbelisk.Register();
             ModifiedStone.Register();
+        }
+
+        private void RegisterCustomRelics()
+        {
+            CustomRelicFactory.Build("curse_one", Curse_One, CustomRelicEffect.CURSE_ONE);
+            CustomRelicFactory.Build("curse_two", Curse_Two, CustomRelicEffect.CURSE_TWO);
+            CustomRelicFactory.Build("curse_three", Curse_Three, CustomRelicEffect.CURSE_THREE);
+            CustomRelicFactory.Build("curse_four", Curse_Four, CustomRelicEffect.CURSE_FOUR);
+            CustomRelicFactory.Build("curse_five", Curse_Five, CustomRelicEffect.CURSE_FIVE);
         }
 
         public static Texture2D LoadTexture(string filePath)

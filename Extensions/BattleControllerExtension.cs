@@ -13,50 +13,38 @@ namespace Promethium.Extensions
     public static class BattleControllerExtension
     {
 
-        private static FieldInfo GetFieldInfo(Object obj, String field)
+        private static Dictionary<String, FieldInfo> _fieldInfoDict = new Dictionary<String,FieldInfo>();
+         
+        private static T GetPrivateFieldValue<T>(this BattleController controller, String fieldName)
         {
-            return obj.GetType().GetField(field, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (!_fieldInfoDict.ContainsKey(fieldName))
+                _fieldInfoDict.Add(fieldName, controller.GetType().GetField(fieldName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic));
+            return (T)_fieldInfoDict[fieldName].GetValue(controller);
         }
 
-        private static FieldInfo _cruciballManager;
         public static CruciballManager GetCruciballManager(this BattleController controller)
         {
-            if (_cruciballManager == null)
-                _cruciballManager = GetFieldInfo(controller, "_cruciballManager");
-
-           return (CruciballManager)_cruciballManager.GetValue(controller);
+            return controller.GetPrivateFieldValue<CruciballManager>("_cruciballManager");
         }
 
-        private static FieldInfo _playerStatusEffectController;
         public static PlayerStatusEffectController GetPlayerStatusEffectController(this BattleController controller)
         {
-            if (_playerStatusEffectController == null)
-                _playerStatusEffectController = GetFieldInfo(controller, "_playerStatusEffectController");
-            return (PlayerStatusEffectController) _playerStatusEffectController.GetValue(controller);
+            return controller.GetPrivateFieldValue<PlayerStatusEffectController>("_playerStatusEffectController");
         }
 
-        private static FieldInfo _battleState;
         public static int GetBattleState(this BattleController controller)
         {
-            if (_battleState == null)
-                _battleState = GetFieldInfo(controller, "_battleState");
-            return (int)_battleState.GetValue(controller);
+            return controller.GetPrivateFieldValue<int>("_battleState");
         }
 
-        private static FieldInfo _damageMultipliers;
-        public static List<float> GetBattleMultipliers(this BattleController controller)
+        public static List<float> GetDamageMultipliers(this BattleController controller)
         {
-            if (_damageMultipliers == null)
-                _damageMultipliers = GetFieldInfo(controller, "_damageMultipliers");
-            return (List<float>)_damageMultipliers.GetValue(controller);
+            return controller.GetPrivateFieldValue<List<float>>("_damageMultipliers");
         }
 
-        private static FieldInfo _playerHealthController;
         public static PlayerHealthController GetPlayerHealthController(this BattleController controller)
         {
-            if (_playerHealthController == null)
-                _playerHealthController = GetFieldInfo(controller, "_playerHealthController");
-            return (PlayerHealthController)_playerHealthController.GetValue(controller);
+            return controller.GetPrivateFieldValue<PlayerHealthController>("_playerHealthController");
         }
     }
 
