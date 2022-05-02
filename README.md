@@ -3,6 +3,10 @@
 
 The goal of the mod is to offer balance changes, new mechanics, and QoL features. It is currently in development, so please report any bugs found!
 
+## Localization
+Localization is being done at https://docs.google.com/spreadsheets/d/1r7o-GVIn6ljL4DvOIRY4eTTo1OhWjd-P2HyBS9UB0OI/edit#gid=0
+If you want to help translate, feel free to!
+
 ## Installation
 1. Download [Promethium](https://github.com/ruiner189/Promethium/releases)
 2. Download [BepInEx_x64_5.x.x.x.zip](https://github.com/BepInEx/BepInEx/releases)

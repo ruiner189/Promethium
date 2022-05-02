@@ -32,6 +32,9 @@ namespace Promethium
         public static Sprite Curse_Four;
         public static Sprite Curse_Five;
 
+        //Localization
+        public static List<String[]> LocalizationTerms;
+
 
         // Config
         private static ConfigEntry<bool> EnemyAttackOnShuffleConfig;
@@ -40,6 +43,8 @@ namespace Promethium
         private void Awake()
         {
             Log = Logger;
+
+            LocalizationTerms = ReadTSVFile("Localization.tsv");
 
             LoadSprites();
             RegisterModifiedOrbs();
@@ -78,6 +83,21 @@ namespace Promethium
             CustomRelicBuilder.Build("curse_three", Curse_Three, CustomRelicEffect.CURSE_THREE);
             CustomRelicBuilder.Build("curse_four", Curse_Four, CustomRelicEffect.CURSE_FOUR);
             CustomRelicBuilder.Build("curse_five", Curse_Five, CustomRelicEffect.CURSE_FIVE);
+        }
+
+        public List<String[]> ReadTSVFile(String filePath)
+        {
+            filePath = $"{Name}.Resources.{filePath}";
+            List<String[]> results = new List<String[]>();
+            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(filePath)))
+            {
+                while (!reader.EndOfStream)
+                {
+                    String line = reader.ReadLine();
+                    results.Add(line.Split('\t'));
+                }
+            }
+            return results;
         }
 
         public static Texture2D LoadTexture(string filePath)

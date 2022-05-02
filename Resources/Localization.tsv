@@ -1,0 +1,7 @@
+Keys	English	Français [fr]	Español [es]	Deutsch [de]	Nederlands [nl]	Italiano [it]	Português do Brasil [pt-BR]	Русский [ru]	简体中文 [zh-CN]	繁体中文 [zh-TW]	日本語 [ja]	한국어 [ko]	Svenska [sv]	Polski [pl]	Türkçe [tr]
+Orbs/armor_damage_multiplier	Multiplies damage based on current <color="purple">Armor</color>. Current multiplier: <color="purple">%md</color>														
+Orbs/armor_max	Increases Maximum <color="purple">Armor</color> by <color="purple">%am</color>														
+Orbs/armor_turn	Restores <color="purple">%ar Armor</color> every reload														
+Orbs/armor_discard_max	Restores <color="purple">Armor</color> to max if discarded														
+Orbs/armor_discard	Restores <color="purple">Armor</color> by <color="purple">%ad</color> if discarded														
+Orbs/armor_damage_discard_multiplier	Discard to transfer multiplier to the next orb. Takes away all <color="purple">Armor</color> and damages you for <color="red">%ac</color>														
