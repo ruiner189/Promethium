@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Promethium.Patches.Relics
 {
-    public class CustomRelicFactory{
+    public class CustomRelicBuilder{
 
         private static List<CustomRelic> _allCustomRelics = new List<CustomRelic>();
         private String _name;
@@ -27,25 +27,25 @@ namespace Promethium.Patches.Relics
             return _allCustomRelics.Find(relic => relic.effect == (RelicEffect) effect);
         }
 
-        public CustomRelicFactory SetName(String name)
+        public CustomRelicBuilder SetName(String name)
         {
             _name = name;
             return this;
         }
 
-        public CustomRelicFactory SetSprite(Sprite sprite)
+        public CustomRelicBuilder SetSprite(Sprite sprite)
         {
             _sprite = sprite;
             return this;
         }
 
-        public CustomRelicFactory SetRelicEffect(CustomRelicEffect effect)
+        public CustomRelicBuilder SetRelicEffect(CustomRelicEffect effect)
         {
             _effect = effect;
             return this;
         }
 
-        public CustomRelicFactory SetRelicPool(RelicPool pool)
+        public CustomRelicBuilder SetRelicPool(RelicPool pool)
         {
             _pool = pool;
             return this;
@@ -64,7 +64,7 @@ namespace Promethium.Patches.Relics
 
         public static CustomRelic Build(String name, Sprite sprite, CustomRelicEffect effect, RelicPool pool = RelicPool.RARE_SCENARIO)
         {
-           return new CustomRelicFactory()
+           return new CustomRelicBuilder()
                 .SetName(name)
                 .SetSprite(sprite)
                 .SetRelicEffect(effect)
@@ -78,7 +78,7 @@ namespace Promethium.Patches.Relics
     {
         public static void Prefix(RelicManager ____relicManager)
         {
-            List<CustomRelic> relics = CustomRelicFactory.GetAllCustomRelics();
+            List<CustomRelic> relics = CustomRelicBuilder.GetAllCustomRelics();
             ____relicManager.ToString();
             RelicSet commonPool = (RelicSet)____relicManager.GetType().GetField("_commonRelicPool", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(____relicManager);
             RelicSet rarePool = (RelicSet)____relicManager.GetType().GetField("_rareRelicPool", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(____relicManager);

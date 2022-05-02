@@ -73,11 +73,11 @@ namespace Promethium
 
         private void RegisterCustomRelics()
         {
-            CustomRelicFactory.Build("curse_one", Curse_One, CustomRelicEffect.CURSE_ONE);
-            CustomRelicFactory.Build("curse_two", Curse_Two, CustomRelicEffect.CURSE_TWO);
-            CustomRelicFactory.Build("curse_three", Curse_Three, CustomRelicEffect.CURSE_THREE);
-            CustomRelicFactory.Build("curse_four", Curse_Four, CustomRelicEffect.CURSE_FOUR);
-            CustomRelicFactory.Build("curse_five", Curse_Five, CustomRelicEffect.CURSE_FIVE);
+            CustomRelicBuilder.Build("curse_one", Curse_One, CustomRelicEffect.CURSE_ONE);
+            CustomRelicBuilder.Build("curse_two", Curse_Two, CustomRelicEffect.CURSE_TWO);
+            CustomRelicBuilder.Build("curse_three", Curse_Three, CustomRelicEffect.CURSE_THREE);
+            CustomRelicBuilder.Build("curse_four", Curse_Four, CustomRelicEffect.CURSE_FOUR);
+            CustomRelicBuilder.Build("curse_five", Curse_Five, CustomRelicEffect.CURSE_FIVE);
         }
 
         public static Texture2D LoadTexture(string filePath)
