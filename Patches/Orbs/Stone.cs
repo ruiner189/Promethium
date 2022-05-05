@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Promethium.Patches.Balls
+namespace Promethium.Patches.Orbs
 {
     public sealed class ModifiedStone : ModifiedOrb
     {

@@ -7,8 +7,9 @@ using Promethium.Patches.Mechanics;
 using Promethium.Extensions;
 using System.Collections.Generic;
 using UnityEngine;
+using Relics;
 
-namespace Promethium.Patches.Balls
+namespace Promethium.Patches.Orbs
 {
 
     public sealed class ModifiedOrbelisk : ModifiedOrb
@@ -30,7 +31,7 @@ namespace Promethium.Patches.Balls
             
         }
 
-        public override void OnDiscard(BattleController battleController, GameObject orb, Attack attack)
+        public override void OnDiscard(RelicManager relicManager, BattleController battleController, GameObject orb, Attack attack)
         {
 
             CruciballManager cruciballManager = battleController.GetCruciballManager();

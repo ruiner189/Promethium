@@ -19,18 +19,26 @@ If you want to help translate, feel free to!
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.x | v1.0.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.0/Promethium.dll) |
+| v0.7.x | v1.0.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.2/Promethium.dll) |
 | v0.7.x | v1.0.1 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.1/Promethium.dll) |
+| v0.7.x | v1.0.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.0/Promethium.dll) |
 
 
 ## Quality of Life Changes
 * Game speeds up after 10 seconds of sending your orb out. It currently maxes out at 3x the gamespeed.
 * You can now retarget after sending your orb out!
 * You can turn off enemy turn on reload in the configs! Default is vanilla behavior.
+* Confusion is removed while navigating
 
 ## New Mechanics
 ### Armor
 Armor acts as a second resource for health. It is used up first, and has unique ways of replenishing it. The amount of armor you currently have is indicated by a status effect.
+### Curse
+Are you ready to test your pachinko skills? If you make it to the final boss, continuing the game will start a Cursed run. There are a total of 5 tiers. Can you make it to the end?
+Each curse relic will make the enemies stronger in different ways. It'll also give the player a small buff so they might survive...
+
+#### Starting a Curse Run
+Each run will give you three choices. The negative effect is the same, while you get to choose the benefit. Your relics from the previous run will be reduced according to your curse level. The higher the curse, the more relics you get to keep. However, you are only allowed to keep 4 orbs between runs.
 
 ## Orb Changes
 #### Stone
@@ -58,15 +66,15 @@ Level 3
 #### Orbelisk
 Level 1
 * Attack: 1 | Crit: 3
-* Multiplies damage based on current armor (0.05 * currentArmor)
+* Multiplies damage based on current armor (0.08 * currentArmor)
 * On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
 
 Level 2
 * Attack: 2 | Crit: 5
-* Multiplies damage based on current armor (0.07 * currentArmor)
+* Multiplies damage based on current armor (0.10 * currentArmor)
 * On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
 
 Level 3
 * Attack: 3 | Crit: 7
-* Multiplies damage based on current armor (0.09 * currentArmor)
+* Multiplies damage based on current armor (0.12 * currentArmor)
 * On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
