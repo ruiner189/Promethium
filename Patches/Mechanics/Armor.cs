@@ -2,7 +2,10 @@
 using Battle.StatusEffects;
 using Cruciball;
 using HarmonyLib;
+using Promethium.Patches.Relics;
 using Promethium.Patches.Status_Effect;
+using Promethium.Extensions;
+using Relics;
 using System;
 using UnityEngine;
 
@@ -66,7 +69,7 @@ namespace Promethium.Patches.Mechanics
             return amount;
         }
 
-        public static int GetArmorDiscardFromOrb(Attack ball, CruciballManager cruciballManager)
+        public static int GetArmorDiscardFromOrb(Attack ball, RelicManager relicManager, CruciballManager cruciballManager)
         {
             String orbName = ball.locName;
             int orbLevel = ball.Level;
@@ -76,7 +79,7 @@ namespace Promethium.Patches.Mechanics
 
             if(orbName == "Bouldorb")
             {
-                amount = GetTotalMaximumArmor(cruciballManager);
+                amount = GetTotalMaximumArmor(relicManager, cruciballManager);
             }
 
             return amount;
@@ -91,17 +94,17 @@ namespace Promethium.Patches.Mechanics
             if(orbName == "Orbelisk")
             {
                 if(orbLevel == 1)
-                    return currentArmor * 0.05f;
+                    return currentArmor * 0.08f;
                 else if (orbLevel == 2)
-                    return currentArmor * 0.07f;
+                    return currentArmor * 0.10f;
                 else if (orbLevel == 3)
-                    return currentArmor * 0.09f;
+                    return currentArmor * 0.12f;
             }
 
             return 0;
         }
 
-        public static int GetTotalMaximumArmor(CruciballManager cruciballManager)
+        public static int GetTotalMaximumArmor(RelicManager relicManager, CruciballManager cruciballManager)
         {
             int total = 0;
 
@@ -113,7 +116,13 @@ namespace Promethium.Patches.Mechanics
                     total += GetArmorMaxFromOrb(attack, cruciballManager);
                 }
             }
-            return total;
+
+            if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_B))
+                total += 5;
+            if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_B))
+                total += 5;
+
+                return total;
         }
 
         public static int GetTotalArmorPerReload(CruciballManager cruciballManager)
@@ -130,6 +139,18 @@ namespace Promethium.Patches.Mechanics
             }
             return total;
         }
+
+        public static int GetTotalArmorPerTurn(RelicManager relicManager, CruciballManager crucibalManager)
+        {
+            int total = 0;
+
+            if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_C))
+                total += 1;
+            if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_C))
+                total += 1;
+
+            return total;
+        }
     }
 
     [HarmonyPatch(typeof(PlayerHealthController), nameof(PlayerHealthController.Damage))]
@@ -144,8 +165,6 @@ namespace Promethium.Patches.Mechanics
                 float difference = originalDamage - damage;
                 Armor.currentArmor = (int) Math.Max(Armor.currentArmor - difference, 0);
                 Armor.ChangeArmorDisplay((int) difference * -1);
-                Plugin.Log.LogMessage($"{damage}({originalDamage}) damage! {difference} Armor Used! {Armor.currentArmor} remaining");
-
             }
         }
     }
@@ -153,13 +172,12 @@ namespace Promethium.Patches.Mechanics
     [HarmonyPatch(typeof(BattleController), "ShuffleDeck")]
     public static class ResetArmorAfterReloading
     {
-        private static void Postfix(CruciballManager ____cruciballManager, PlayerStatusEffectController ____playerStatusEffectController)
+        private static void Postfix(RelicManager ____relicManager, CruciballManager ____cruciballManager, PlayerStatusEffectController ____playerStatusEffectController)
         {
             int original = Armor.currentArmor;
-            int max = Armor.GetTotalMaximumArmor(____cruciballManager);
+            int max = Armor.GetTotalMaximumArmor(____relicManager, ____cruciballManager);
             int additional = Armor.currentArmor + Armor.GetTotalArmorPerReload(____cruciballManager);
             Armor.currentArmor = Math.Min(max, additional);
-            Plugin.Log.LogMessage($"Armor reloaded! { Armor.currentArmor } / {max}");
             Armor.ChangeArmorDisplay(Armor.currentArmor - original ,____playerStatusEffectController);
         }
     }
@@ -167,15 +185,29 @@ namespace Promethium.Patches.Mechanics
     [HarmonyPatch(typeof(BattleController), "Start")]
     public static class ResetArmorOnStart
     {
-        private static void Postfix(CruciballManager ____cruciballManager, PlayerStatusEffectController ____playerStatusEffectController)
+        private static void Postfix(RelicManager ____relicManager, CruciballManager ____cruciballManager, PlayerStatusEffectController ____playerStatusEffectController)
         {
-            int max = Armor.GetTotalMaximumArmor(____cruciballManager);
-            int additional = Armor.GetTotalArmorPerReload(____cruciballManager);
+            int max = Armor.GetTotalMaximumArmor(____relicManager, ____cruciballManager);
+            int additional = Armor.GetTotalArmorPerReload(____cruciballManager) + Armor.GetTotalArmorPerTurn(____relicManager, ____cruciballManager);
             Armor.currentArmor = Math.Min(max, additional);
-            Plugin.Log.LogMessage($"Armor Start! { Armor.currentArmor } / {max}");
             Armor.ChangeArmorDisplay(Armor.currentArmor, ____playerStatusEffectController);
         }
     }
+
+    [HarmonyPatch(typeof(BattleController), "EnemyTurnComplete")]
+    public static class AddArmorOnTurn
+    {
+        private static void Postfix(RelicManager ____relicManager, CruciballManager ____cruciballManager, PlayerStatusEffectController ____playerStatusEffectController)
+        {
+            int original = Armor.currentArmor;
+            int max = Armor.GetTotalMaximumArmor(____relicManager, ____cruciballManager);
+            int additional = Armor.currentArmor + Armor.GetTotalArmorPerTurn(____relicManager, ____cruciballManager);
+            Armor.currentArmor = Math.Min(max, additional);
+            Armor.ChangeArmorDisplay(Armor.currentArmor - original, ____playerStatusEffectController);
+        }
+    }
+
+
 
 
 

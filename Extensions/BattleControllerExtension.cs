@@ -1,6 +1,7 @@
 ﻿using Battle;
 using Battle.StatusEffects;
 using Cruciball;
+using Relics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,11 @@ namespace Promethium.Extensions
         public static CruciballManager GetCruciballManager(this BattleController controller)
         {
             return controller.GetPrivateFieldValue<CruciballManager>("_cruciballManager");
+        }
+
+        public static RelicManager GetRelicManager(this BattleController controller)
+        {
+            return controller.GetPrivateFieldValue<RelicManager>("_relicManager");
         }
 
         public static PlayerStatusEffectController GetPlayerStatusEffectController(this BattleController controller)

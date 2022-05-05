@@ -5,3 +5,33 @@ Orbs/armor_turn	Restores <color="purple">%ar Armor</color> every reload
 Orbs/armor_discard_max	Restores <color="purple">Armor</color> to max if discarded														
 Orbs/armor_discard	Restores <color="purple">Armor</color> by <color="purple">%ad</color> if discarded														
 Orbs/armor_damage_discard_multiplier	Discard to transfer multiplier to the next orb. Takes away all <color="purple">Armor</color> and damages you for <color="red">%ac</color>														
+Relics/curseOneA_name	Curse I - Balance														
+Relics/curseOneA_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+1 /+1</style>.														
+Relics/curseOneB_name	Curse I - Attack														
+Relics/curseOneB_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+2 /+0</style>.														
+Relics/curseOneC_name	Curse I - Crit														
+Relics/curseOneC_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+0 /+2</style>.														
+Relics/curseTwoA_name	Curse II - Health														
+Relics/curseTwoA_desc	<color="red">Healing is halved.</color> Max health increased by <style=heal>25</style>														
+Relics/curseTwoB_name	Curse II - Sturdy Armor														
+Relics/curseTwoB_desc	<color="red">Healing is halved. </color> Max <color="purple">Armor</color> increased by 5														
+Relics/curseTwoC_name	Curse II - Fast Equip														
+Relics/curseTwoC_desc	<color="red">Healing is halved.</color> Gain 1 <color="purple">Armor</color> every turn														
+Relics/curseThreeA_name	Curse III - Bomb														
+Relics/curseThreeA_desc	<color="red">Enemies regenerate 5% max health each turn.<color="red"> Pegboards start with +2 <sprite name="BOMB">														
+Relics/curseThreeB_name	Curse III - Attack														
+Relics/curseThreeB_desc	<color="red">Enemies regenerate 5% max health each turn.<color="red"> All attacks get <style=dmg_bonus>+2 /+0</style>.														
+Relics/curseThreeC_name	Curse III - Crit														
+Relics/curseThreeC_desc	<color="red">Enemies regenerate 5% max health each turn.<color="red"> All attacks get <style=dmg_bonus>+0 /+2</style>.														
+Relics/curseFourA_name	Curse IV - Health														
+Relics/curseFourA_desc	<color="red">Enemies gain 1 attack each turn.</color> Max health increased by <style=heal>25</style>														
+Relics/curseFourB_name	Curse IV - Sturdy Armor														
+Relics/curseFourB_desc	<color="red">Enemies gain 1 attack each turn.</color> Max <color="purple">Armor</color> increased by 5														
+Relics/curseFourC_name	Curse IV - Fast Equip														
+Relics/curseFourC_desc	<color="red">Enemies gain 1 attack each turn.</color> Gain 1 <color="purple">Armor</color> every turn														
+Relics/curseFiveA_name	Curse V														
+Relics/curseFiveA_desc	<color="red">Chests are replaced with Elites</color>														
+Relics/curseFiveB_name	Curse V														
+Relics/curseFiveB_desc	<color="red">Chests are replaced with <color="red">Elites</color>														
+Relics/curseFiveC_name	Curse V														
+Relics/curseFiveC_desc	<color="red">Chests are replaced with <color="red">Elites</color>														

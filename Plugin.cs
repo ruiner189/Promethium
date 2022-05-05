@@ -3,12 +3,14 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using I2.Loc;
-using Promethium.Patches.Balls;
+using Promethium.Patches.Orbs;
 using Promethium.Patches.Relics;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using TMPro;
+using UI;
 using UnityEngine;
 
 namespace Promethium
@@ -19,18 +21,18 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.0.1";
+        public const String Version = "1.0.2";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
 
         // Sprites
         public static Sprite ArmorEffect;
-        public static Sprite Curse_One;
-        public static Sprite Curse_Two;
-        public static Sprite Curse_Three;
-        public static Sprite Curse_Four;
-        public static Sprite Curse_Five;
+        public static Sprite CurseOne;
+        public static Sprite CurseTwo;
+        public static Sprite CurseThree;
+        public static Sprite CurseFour;
+        public static Sprite CurseFive;
 
         //Localization
         public static List<String[]> LocalizationTerms;
@@ -38,7 +40,9 @@ namespace Promethium
 
         // Config
         private static ConfigEntry<bool> EnemyAttackOnShuffleConfig;
+        private static ConfigEntry<bool> CurseRunOnConfig;
         public static bool EnemyAttackOnReload => EnemyAttackOnShuffleConfig.Value;
+        public static bool CurseRunOn => CurseRunOnConfig.Value;
 
         private void Awake()
         {
@@ -54,18 +58,19 @@ namespace Promethium
             _harmony.PatchAll();
 
             EnemyAttackOnShuffleConfig = Config.Bind<bool>("Mechanics","EnemyAttackOnShuffle", true, "Disabling this will prevent enemies from taking two turns in certain circumstances");
+            CurseRunOnConfig = Config.Bind<bool>("Curse Run", "CurseRunOn", true, "Finish a game to increase your curse level. How far can you go?");
 
-            //SendOrbsToConsole();
+            SendOrbsToConsole();
         }
 
         private void LoadSprites()
         {
             ArmorEffect = LoadSprite("ArmorEffect.png");
-            Curse_One = LoadSprite("Relics.Curse_One.png");
-            Curse_Two = LoadSprite("Relics.Curse_Two.png");
-            Curse_Three = LoadSprite("Relics.Curse_Three.png");
-            Curse_Four = LoadSprite("Relics.Curse_Four.png");
-            Curse_Five = LoadSprite("Relics.Curse_Five.png");
+            CurseOne = LoadSprite("Relics.Curse_One.png");
+            CurseTwo = LoadSprite("Relics.Curse_Two.png");
+            CurseThree = LoadSprite("Relics.Curse_Three.png");
+            CurseFour = LoadSprite("Relics.Curse_Four.png");
+            CurseFive = LoadSprite("Relics.Curse_Five.png");
 
         }
 
@@ -74,15 +79,32 @@ namespace Promethium
             ModifiedBouldorb.Register();
             ModifiedOrbelisk.Register();
             ModifiedStone.Register();
+            ModifiedDoctorb.Register();
+            ModifiedNosforbatu.Register();
         }
 
         private void RegisterCustomRelics()
         {
-            CustomRelicBuilder.Build("curse_one", Curse_One, CustomRelicEffect.CURSE_ONE);
-            CustomRelicBuilder.Build("curse_two", Curse_Two, CustomRelicEffect.CURSE_TWO);
-            CustomRelicBuilder.Build("curse_three", Curse_Three, CustomRelicEffect.CURSE_THREE);
-            CustomRelicBuilder.Build("curse_four", Curse_Four, CustomRelicEffect.CURSE_FOUR);
-            CustomRelicBuilder.Build("curse_five", Curse_Five, CustomRelicEffect.CURSE_FIVE);
+            CustomRelicBuilder.BuildAsCurse("curseOneA", CurseOne, CustomRelicEffect.CURSE_ONE_A, 1);
+            CustomRelicBuilder.BuildAsCurse("curseOneB", CurseOne, CustomRelicEffect.CURSE_ONE_B, 1);
+            CustomRelicBuilder.BuildAsCurse("curseOneC", CurseOne, CustomRelicEffect.CURSE_ONE_C, 1);
+
+            CustomRelicBuilder.BuildAsCurse("curseTwoA", CurseTwo, CustomRelicEffect.CURSE_TWO_A, 2);
+            CustomRelicBuilder.BuildAsCurse("curseTwoB", CurseTwo, CustomRelicEffect.CURSE_TWO_B, 2);
+            CustomRelicBuilder.BuildAsCurse("curseTwoC", CurseTwo, CustomRelicEffect.CURSE_TWO_C, 2);
+
+            CustomRelicBuilder.BuildAsCurse("curseThreeA", CurseThree, CustomRelicEffect.CURSE_THREE_A, 3);
+            CustomRelicBuilder.BuildAsCurse("curseThreeB", CurseThree, CustomRelicEffect.CURSE_THREE_B, 3);
+            CustomRelicBuilder.BuildAsCurse("curseThreeC", CurseThree, CustomRelicEffect.CURSE_THREE_C, 3);
+
+            CustomRelicBuilder.BuildAsCurse("curseFourA", CurseFour, CustomRelicEffect.CURSE_FOUR_A, 4);
+            CustomRelicBuilder.BuildAsCurse("curseFourB", CurseFour, CustomRelicEffect.CURSE_FOUR_B, 4);
+            CustomRelicBuilder.BuildAsCurse("curseFourC", CurseFour, CustomRelicEffect.CURSE_FOUR_C, 4);
+
+            CustomRelicBuilder.BuildAsCurse("curseFiveA", CurseFive, CustomRelicEffect.CURSE_FIVE_A, 5);
+            CustomRelicBuilder.BuildAsCurse("curseFiveB", CurseFive, CustomRelicEffect.CURSE_FIVE_B, 5);
+            CustomRelicBuilder.BuildAsCurse("curseFiveC", CurseFive, CustomRelicEffect.CURSE_FIVE_C, 5);
+
         }
 
         public List<String[]> ReadTSVFile(String filePath)
@@ -176,6 +198,17 @@ namespace Promethium
 
 
 
+    }
+
+    [HarmonyPatch(typeof(VersionDisplay), "Start")]
+    public static class ModVersionDisplay
+    {
+        public static void Postfix(VersionDisplay __instance)
+        {
+            TMP_Text text = __instance.GetComponent<TMP_Text>();
+            text.text  = $"Peglin {text.text}\n{Plugin.Name} v{Plugin.Version}";
+            __instance.transform.position += new Vector3(0, 0.5f, 0);
+        }
     }
 }
 

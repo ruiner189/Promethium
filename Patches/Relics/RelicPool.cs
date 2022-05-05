@@ -11,6 +11,7 @@ namespace Promethium.Patches.Relics
         COMMON,
         RARE,
         BOSS,
-        RARE_SCENARIO
+        RARE_SCENARIO,
+        CURSE
     }
 }

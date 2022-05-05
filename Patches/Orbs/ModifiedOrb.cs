@@ -3,6 +3,7 @@ using Cruciball;
 using HarmonyLib;
 using I2.Loc;
 using Promethium.Patches.Mechanics;
+using Relics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Promethium.Patches.Balls
+namespace Promethium.Patches.Orbs
 {
     public abstract class ModifiedOrb
     {
@@ -35,7 +36,7 @@ namespace Promethium.Patches.Balls
             return _name;
         }
 
-        public virtual void OnDiscard(BattleController battleController, GameObject orb, Attack attack) { }
+        public virtual void OnDiscard(RelicManager relicManager, BattleController battleController, GameObject orb, Attack attack) { }
 
         public virtual void OnShotFired(BattleController battleController, GameObject orb, Attack attack) { }
 
@@ -109,7 +110,7 @@ namespace Promethium.Patches.Balls
     [HarmonyPatch(typeof(BattleController), "AttemptOrbDiscard")]
     public static class OnDiscard
     {
-        public static void Prefix(BattleController __instance, int ____battleState, GameObject ____ball) {
+        public static void Prefix(BattleController __instance, RelicManager ____relicManager, int ____battleState, GameObject ____ball) {
             if (____battleState == 9) return;
             if (__instance.NumShotsDiscarded >= __instance.MaxDiscardedShots) return;
 
@@ -117,7 +118,7 @@ namespace Promethium.Patches.Balls
             if (attack != null)
             {
                 ModifiedOrb orb = ModifiedOrb.GetOrb(attack.locName);
-                if (orb != null) orb.OnDiscard(__instance, ____ball, attack);
+                if (orb != null) orb.OnDiscard(____relicManager, __instance, ____ball, attack);
             }
 
         }
@@ -127,7 +128,7 @@ namespace Promethium.Patches.Balls
     public static class ChangeDescription
     {
 
-        public static bool Prefix(Attack __instance, CruciballManager ____cruciballManager, ref String __result)
+        public static bool Prefix(Attack __instance, RelicManager ____relicManager, CruciballManager ____cruciballManager, ref String __result)
         {
             ModifiedOrb orb = ModifiedOrb.GetOrb(__instance.locName);
             if (orb != null)
@@ -136,21 +137,21 @@ namespace Promethium.Patches.Balls
             string text = "";
             foreach (string str in __instance.locDescStrings)
             {
-                text = text + "<sprite name=\"BULLET\"><indent=8%>" + GetStringWithVariables(__instance, ____cruciballManager, LocalizationManager.GetTranslation("Orbs/" + str, true, 0, true, true, __instance.gameObject, null, true)) + "</indent>\n";
+                text = text + "<sprite name=\"BULLET\"><indent=8%>" + GetStringWithVariables(__instance, ____relicManager, ____cruciballManager, LocalizationManager.GetTranslation("Orbs/" + str, true, 0, true, true, __instance.gameObject, null, true)) + "</indent>\n";
             }
             __result = text;
             return false;
         }
 
-        private static String GetStringWithVariables(Attack attack, CruciballManager manager, String str)
+        private static String GetStringWithVariables(Attack attack, RelicManager relicManager, CruciballManager cruciballManager, String str)
         {
             if (str.Contains("%"))
             {
-                if (str.Contains("%am")) str = str.Replace("%am", "" + Armor.GetArmorMaxFromOrb(attack, manager));
-                if (str.Contains("%ar")) str = str.Replace("%ar", "" + Armor.GetArmorReloadFromOrb(attack, manager));
-                if (str.Contains("%ad")) str = str.Replace("%ad", "" + Armor.GetArmorDiscardFromOrb(attack, manager));
-                if (str.Contains("%ma")) str = str.Replace("%ma", "" + Armor.GetTotalMaximumArmor(manager));
-                if (str.Contains("%md")) str = str.Replace("%md", "" + (Armor.GetArmorDamageMultiplier(attack, manager) + 1) + "x");
+                if (str.Contains("%am")) str = str.Replace("%am", "" + Armor.GetArmorMaxFromOrb(attack, cruciballManager));
+                if (str.Contains("%ar")) str = str.Replace("%ar", "" + Armor.GetArmorReloadFromOrb(attack, cruciballManager));
+                if (str.Contains("%ad")) str = str.Replace("%ad", "" + Armor.GetArmorDiscardFromOrb(attack, relicManager, cruciballManager));
+                if (str.Contains("%ma")) str = str.Replace("%ma", "" + Armor.GetTotalMaximumArmor(relicManager, cruciballManager));
+                if (str.Contains("%md")) str = str.Replace("%md", "" + (Armor.GetArmorDamageMultiplier(attack, cruciballManager) + 1) + "x");
                 if (str.Contains("%ac")) str = str.Replace("%ac", "" + Armor.currentArmor);
             }
             return str;

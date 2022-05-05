@@ -11,21 +11,11 @@ namespace Promethium.Patches.Relics
 {
     public class CustomRelicBuilder{
 
-        private static List<CustomRelic> _allCustomRelics = new List<CustomRelic>();
         private String _name;
         private Sprite _sprite;
         private CustomRelicEffect _effect = CustomRelicEffect.NONE;
         private RelicPool _pool = RelicPool.RARE_SCENARIO;
 
-        public static List<CustomRelic> GetAllCustomRelics()
-        {
-            return _allCustomRelics;
-        }
-
-        public static CustomRelic GetCustomRelic(CustomRelicEffect effect)
-        {
-            return _allCustomRelics.Find(relic => relic.effect == (RelicEffect) effect);
-        }
 
         public CustomRelicBuilder SetName(String name)
         {
@@ -58,7 +48,17 @@ namespace Promethium.Patches.Relics
             relic.sprite = _sprite;
             relic.effect = (RelicEffect) _effect;
             relic.SetPoolType(_pool);
-            _allCustomRelics.Add(relic);
+            return relic;
+        }
+
+        public CurseRelic BuildAsCurse(int CurseLevel)
+        {
+            CurseRelic relic = ScriptableObject.CreateInstance<CurseRelic>();
+            relic.locKey = _name;
+            relic.sprite = _sprite;
+            relic.effect = (RelicEffect) _effect;
+            relic.SetPoolType(_pool);
+            relic.CurseLevel = CurseLevel;
             return relic;
         }
 
@@ -71,6 +71,16 @@ namespace Promethium.Patches.Relics
                 .SetRelicPool(pool)
                 .Build();
         }
+
+        public static CurseRelic BuildAsCurse(String name, Sprite sprite, CustomRelicEffect effect, int curseLevel, RelicPool pool = RelicPool.CURSE)
+        {
+            return new CustomRelicBuilder()
+                 .SetName(name)
+                 .SetSprite(sprite)
+                 .SetRelicEffect(effect)
+                 .SetRelicPool(pool)
+                 .BuildAsCurse(curseLevel);
+        }
     }
 
     [HarmonyPatch(typeof(GameInit),"Start")]
@@ -78,7 +88,7 @@ namespace Promethium.Patches.Relics
     {
         public static void Prefix(RelicManager ____relicManager)
         {
-            List<CustomRelic> relics = CustomRelicBuilder.GetAllCustomRelics();
+            List<CustomRelic> relics = CustomRelic.AllCustomRelics;
             ____relicManager.ToString();
             RelicSet commonPool = (RelicSet)____relicManager.GetType().GetField("_commonRelicPool", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(____relicManager);
             RelicSet rarePool = (RelicSet)____relicManager.GetType().GetField("_rareRelicPool", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(____relicManager);
@@ -90,19 +100,23 @@ namespace Promethium.Patches.Relics
                 switch (relic.GetPoolType())
                 {
                     case RelicPool.COMMON:
-                        commonPool.relics.Add(relic);
+                        if(!commonPool.relics.Contains(relic))
+                            commonPool.relics.Add(relic);
                         break;
                     case RelicPool.RARE:
-                        rarePool.relics.Add(relic);
+                        if (!rarePool.relics.Contains(relic))
+                            rarePool.relics.Add(relic);
                         break;
                     case RelicPool.BOSS:
-                       bossPool.relics.Add(relic);
+                        if (!bossPool.relics.Contains(relic))
+                            bossPool.relics.Add(relic);
                         break;
                     case RelicPool.RARE_SCENARIO:
-                        rareScenarioPool.relics.Add(relic);
+                    case RelicPool.CURSE:
+                        if (!rareScenarioPool.relics.Contains(relic))
+                            rareScenarioPool.relics.Add(relic);
                         break;
                 }
-                Plugin.Log.LogMessage($"{relic.locKey} was successfully registered.");
             }
         }
     }
