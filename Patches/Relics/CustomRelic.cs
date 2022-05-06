@@ -39,6 +39,7 @@ namespace Promethium.Patches.Relics
     {
         public static void Postfix(RelicManager ____relicManager, int critCount, ref float __result)
         {
+            if (____relicManager == null) return;
             bool isCrit = critCount > 0;
 
             if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_A))

@@ -2,6 +2,7 @@
 using Cruciball;
 using HarmonyLib;
 using I2.Loc;
+using PeglinUI;
 using Promethium.Patches.Mechanics;
 using Relics;
 using System;
@@ -112,15 +113,15 @@ namespace Promethium.Patches.Orbs
     {
         public static void Prefix(BattleController __instance, RelicManager ____relicManager, int ____battleState, GameObject ____ball) {
             if (____battleState == 9) return;
-            if (__instance.NumShotsDiscarded >= __instance.MaxDiscardedShots) return;
-
-            Attack attack = ____ball.GetComponent<Attack>();
-            if (attack != null)
+            if (____ball != null && ____ball.GetComponent<PachinkoBall>().available && !DeckInfoManager.populatingDisplayOrb && !GameBlockingWindow.windowOpen && __instance.NumShotsDiscarded < __instance.MaxDiscardedShots)
             {
-                ModifiedOrb orb = ModifiedOrb.GetOrb(attack.locName);
-                if (orb != null) orb.OnDiscard(____relicManager, __instance, ____ball, attack);
+                Attack attack = ____ball.GetComponent<Attack>();
+                if (attack != null)
+                {
+                    ModifiedOrb orb = ModifiedOrb.GetOrb(attack.locName);
+                    if (orb != null) orb.OnDiscard(____relicManager, __instance, ____ball, attack);
+                }
             }
-
         }
     }
 

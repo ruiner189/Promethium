@@ -117,10 +117,14 @@ namespace Promethium.Patches.Mechanics
                 }
             }
 
-            if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_B))
-                total += 5;
-            if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_B))
-                total += 5;
+            if(relicManager != null)
+            {
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_B))
+                    total += 5;
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_B))
+                    total += 5;
+            }
+
 
                 return total;
         }
@@ -143,12 +147,14 @@ namespace Promethium.Patches.Mechanics
         public static int GetTotalArmorPerTurn(RelicManager relicManager, CruciballManager crucibalManager)
         {
             int total = 0;
+            if(relicManager != null)
+            {
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_C))
+                    total += 1;
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_C))
+                    total += 1;
 
-            if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_C))
-                total += 1;
-            if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_C))
-                total += 1;
-
+            }
             return total;
         }
     }
