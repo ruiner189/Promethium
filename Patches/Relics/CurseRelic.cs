@@ -75,16 +75,17 @@ namespace Promethium.Patches.Relics
     {
         public static void Prefix(Relic relic, FloatVariable ____maxPlayerHealth, FloatVariable ____playerHealth)
         {
+            if (relic == null) return;
             CustomRelicEffect effect = (CustomRelicEffect) relic.effect;
-            if (effect == CustomRelicEffect.CURSE_TWO_A)
+            if (effect == CustomRelicEffect.CURSE_TWO_HEALTH)
             {
-                ____maxPlayerHealth.Add(25f);
-                ____playerHealth.Add(25f);
+                ____maxPlayerHealth?.Add(25f);
+                ____playerHealth?.Add(25f);
             }
-            else if (effect == CustomRelicEffect.CURSE_FOUR_A)
+            else if (effect == CustomRelicEffect.CURSE_FOUR_HEALTH)
             {
-                ____maxPlayerHealth.Add(25f);
-                ____playerHealth.Add(25f);
+                ____maxPlayerHealth?.Add(25f);
+                ____playerHealth?.Add(25f);
             }
         }
     }
@@ -98,12 +99,12 @@ namespace Promethium.Patches.Relics
             if (____ownedRelics.ContainsKey(re))
             {
                 CustomRelicEffect effect = (CustomRelicEffect)re;
-                if (effect == CustomRelicEffect.CURSE_TWO_A)
+                if (effect == CustomRelicEffect.CURSE_TWO_HEALTH)
                 {
                     ____maxPlayerHealth.Subtract(25f);
                     ____playerHealth.Subtract(25f);
                 }
-                else if (effect == CustomRelicEffect.CURSE_FOUR_A)
+                else if (effect == CustomRelicEffect.CURSE_FOUR_HEALTH)
                 {
                     ____maxPlayerHealth.Subtract(25f);
                     ____playerHealth.Subtract(25f);
@@ -119,7 +120,7 @@ namespace Promethium.Patches.Relics
         public static void Prefix(Enemy __instance, RelicManager ____relicManager)
         {
             if (CurseRelic.IsCurseLevelActive(____relicManager, 3))
-                __instance.Heal(__instance.maxHealth * 0.05f);
+                __instance.Heal((float)Math.Round(__instance.maxHealth * 0.05f));
             if (CurseRelic.IsCurseLevelActive(____relicManager, 4))
             {
                 StatusEffect statusEffect = new StatusEffect(StatusEffectType.DmgBuff, 1);
@@ -150,7 +151,7 @@ namespace Promethium.Patches.Relics
         public static void Postfix(PlayerHealthController __instance, RelicManager ____relicManager, ref float __result)
         {
             if (CurseRelic.IsCurseLevelActive(____relicManager, 2))
-                __result *= 0.5f;
+                __result = (float) Math.Round(__result * 0.5f);
         }
     }
 
@@ -159,7 +160,7 @@ namespace Promethium.Patches.Relics
 
         public static void Postfix(PegManager ____pegManager, RelicManager ____relicManager)
         {
-            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_A))
+            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_BOMB))
             {
                 ____pegManager.ConvertPegsToBombs(3, false);
             }

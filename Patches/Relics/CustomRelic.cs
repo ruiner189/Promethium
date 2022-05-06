@@ -37,19 +37,28 @@ namespace Promethium.Patches.Relics
     [HarmonyPatch(typeof(Attack), nameof(Attack.GetModifiedDamagePerPeg))]
     public static class AddAttackPerPeg
     {
+        public static void Prefix()
+        {
+            RelicManager.ALL_ORBS_BUFF_DMG_REDUCTION = 0;
+            RelicManager.ALL_ORBS_BUFF_CRIT_REDUCTION = 0;
+        }
+
         public static void Postfix(RelicManager ____relicManager, int critCount, ref float __result)
         {
             if (____relicManager == null) return;
             bool isCrit = critCount > 0;
 
-            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_A))
+            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_BALANCE))
                 __result += 1;
-            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_B) && !isCrit)
+            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_ATTACK) && !isCrit)
                 __result += 2;
-            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_C) && isCrit)
+            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_CRIT) && isCrit)
+                __result += 2;
+            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_ATTACK) && !isCrit)
+                __result += 2;
+            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_CRIT) && isCrit)
                 __result += 2;
         }
     }
-
 
 }

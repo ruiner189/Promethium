@@ -26,19 +26,29 @@ namespace Promethium.Patches.Mechanics
 
 		public static void PruneDeck(DeckManager manager)
 		{
-			int amountToKeep = 4;
-			while (DeckManager.completeDeck != null && DeckManager.completeDeck.Count > amountToKeep)
+			if (Plugin.PruneOrbsOnNewCurseRunOn)
 			{
-				manager.RemoveRandomOrbFromDeck();
+				int amountToKeep = 4;
+				while (DeckManager.completeDeck != null && DeckManager.completeDeck.Count > amountToKeep)
+				{
+					manager.RemoveRandomOrbFromDeck();
+				}
 			}
 		}
 
 		public static void PruneRelics(RelicManager manager)
 		{
-			Random rand = new Random();
 			Dictionary<RelicEffect, Relic> relicDict = (Dictionary<RelicEffect, Relic>)typeof(RelicManager).GetField("_ownedRelics", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(manager);
-
 			List<Relic> relics = relicDict.Values.ToList();
+
+            if (!Plugin.PruneRelicsOnNewCurseRunOn)
+            {
+				manager.Reset();
+				relics.ForEach(manager.AddRelic);
+				return;
+            }
+
+			Random rand = new Random();
 			List<Relic> curses = relics.FindAll(relic => CurseRelic.AllCurseRelics.Contains(relic));
 			List<Relic> nonCurses = relics.FindAll(relic => !curses.Contains(relic)).OrderBy(relic => rand.Next()).ToList();
 			List<Relic> relicsToKeep = new List<Relic>();
@@ -153,7 +163,7 @@ namespace Promethium.Patches.Mechanics
 			if (upgradeChance > 0)
 			{
 				Random rand = new Random();
-				if (rand.Next(0, 1000) == upgradeChance)
+				if (rand.Next(1, 1000) == upgradeChance)
 				{
 					RelicRarity newRarity = RelicRarity.RARE;
 					if (rarity == RelicRarity.RARE) newRarity = RelicRarity.BOSS;

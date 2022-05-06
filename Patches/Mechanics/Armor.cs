@@ -119,9 +119,11 @@ namespace Promethium.Patches.Mechanics
 
             if(relicManager != null)
             {
-                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_B))
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_ARMOR))
                     total += 5;
-                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_B))
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_ARMOR))
+                    total += 5;
+                if (relicManager.RelicEffectActive(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
                     total += 5;
             }
 
@@ -149,11 +151,12 @@ namespace Promethium.Patches.Mechanics
             int total = 0;
             if(relicManager != null)
             {
-                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_C))
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_EQUIP))
                     total += 1;
-                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_C))
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_EQUIP))
                     total += 1;
-
+                if (relicManager.RelicEffectActive(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
+                    total += 1;
             }
             return total;
         }

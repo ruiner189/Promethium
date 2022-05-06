@@ -5,6 +5,7 @@ using HarmonyLib;
 using I2.Loc;
 using Promethium.Patches.Orbs;
 using Promethium.Patches.Relics;
+using Relics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +22,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.0.3";
+        public const String Version = "1.0.4";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -41,8 +42,12 @@ namespace Promethium
         // Config
         private static ConfigEntry<bool> EnemyAttackOnShuffleConfig;
         private static ConfigEntry<bool> CurseRunOnConfig;
+        private static ConfigEntry<bool> PruneRelicsOnNewCurseRunConfig;
+        private static ConfigEntry<bool> PruneOrbsOnNewCurseRunConfig;
         public static bool EnemyAttackOnReload => EnemyAttackOnShuffleConfig.Value;
         public static bool CurseRunOn => CurseRunOnConfig.Value;
+        public static bool PruneRelicsOnNewCurseRunOn => PruneRelicsOnNewCurseRunConfig.Value;
+        public static bool PruneOrbsOnNewCurseRunOn => PruneOrbsOnNewCurseRunConfig.Value;
 
         private void Awake()
         {
@@ -52,6 +57,7 @@ namespace Promethium
 
             LoadSprites();
             RegisterModifiedOrbs();
+            RegisterModifiedRelics();
             RegisterCustomRelics();
 
             _harmony = new Harmony(GUID);
@@ -59,6 +65,8 @@ namespace Promethium
 
             EnemyAttackOnShuffleConfig = Config.Bind<bool>("Mechanics","EnemyAttackOnShuffle", true, "Disabling this will prevent enemies from taking two turns in certain circumstances");
             CurseRunOnConfig = Config.Bind<bool>("Curse Run", "CurseRunOn", true, "Finish a game to increase your curse level. How far can you go?");
+            PruneRelicsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneRelicOnCurseRun", true, "Reduces the amount of relics when starting a new curse run. Disabling lets you keep all relics.");
+            PruneOrbsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneOrbsOnCurseRun", true, "Reduces the amount of orbs to four when starting a new curse run. Disabling lets you keep all orbs.");
 
             //SendOrbsToConsole();
         }
@@ -83,28 +91,33 @@ namespace Promethium
             ModifiedNosforbatu.Register();
         }
 
+        private void RegisterModifiedRelics()
+        {
+            ModifiedRelic.ModifiedRelics.Add(RelicEffect.DAMAGE_BONUS_PLANT_FLAT); // Gardening Gloves
+            ModifiedRelic.ModifiedRelics.Add(RelicEffect.ALL_ORBS_BUFF);
+        }
+
         private void RegisterCustomRelics()
         {
-            CustomRelicBuilder.BuildAsCurse("curseOneA", CurseOne, CustomRelicEffect.CURSE_ONE_A, 1);
-            CustomRelicBuilder.BuildAsCurse("curseOneB", CurseOne, CustomRelicEffect.CURSE_ONE_B, 1);
-            CustomRelicBuilder.BuildAsCurse("curseOneC", CurseOne, CustomRelicEffect.CURSE_ONE_C, 1);
+            CustomRelicBuilder.BuildAsCurse("curse_one_balance", CurseOne, CustomRelicEffect.CURSE_ONE_BALANCE, 1);
+            CustomRelicBuilder.BuildAsCurse("curse_one_attack", CurseOne, CustomRelicEffect.CURSE_ONE_ATTACK, 1);
+            CustomRelicBuilder.BuildAsCurse("curse_one_crit", CurseOne, CustomRelicEffect.CURSE_ONE_CRIT, 1);
 
-            CustomRelicBuilder.BuildAsCurse("curseTwoA", CurseTwo, CustomRelicEffect.CURSE_TWO_A, 2);
-            CustomRelicBuilder.BuildAsCurse("curseTwoB", CurseTwo, CustomRelicEffect.CURSE_TWO_B, 2);
-            CustomRelicBuilder.BuildAsCurse("curseTwoC", CurseTwo, CustomRelicEffect.CURSE_TWO_C, 2);
+            CustomRelicBuilder.BuildAsCurse("curse_two_health", CurseTwo, CustomRelicEffect.CURSE_TWO_HEALTH, 2);
+            CustomRelicBuilder.BuildAsCurse("curse_two_armor", CurseTwo, CustomRelicEffect.CURSE_TWO_ARMOR, 2);
+            CustomRelicBuilder.BuildAsCurse("curse_two_equip", CurseTwo, CustomRelicEffect.CURSE_TWO_EQUIP, 2);
 
-            CustomRelicBuilder.BuildAsCurse("curseThreeA", CurseThree, CustomRelicEffect.CURSE_THREE_A, 3);
-            CustomRelicBuilder.BuildAsCurse("curseThreeB", CurseThree, CustomRelicEffect.CURSE_THREE_B, 3);
-            CustomRelicBuilder.BuildAsCurse("curseThreeC", CurseThree, CustomRelicEffect.CURSE_THREE_C, 3);
+            CustomRelicBuilder.BuildAsCurse("curse_three_bomb", CurseThree, CustomRelicEffect.CURSE_THREE_BOMB, 3);
+            CustomRelicBuilder.BuildAsCurse("curse_three_attack", CurseThree, CustomRelicEffect.CURSE_THREE_ATTACK, 3);
+            CustomRelicBuilder.BuildAsCurse("curse_three_crit", CurseThree, CustomRelicEffect.CURSE_THREE_CRIT, 3);
 
-            CustomRelicBuilder.BuildAsCurse("curseFourA", CurseFour, CustomRelicEffect.CURSE_FOUR_A, 4);
-            CustomRelicBuilder.BuildAsCurse("curseFourB", CurseFour, CustomRelicEffect.CURSE_FOUR_B, 4);
-            CustomRelicBuilder.BuildAsCurse("curseFourC", CurseFour, CustomRelicEffect.CURSE_FOUR_C, 4);
+            CustomRelicBuilder.BuildAsCurse("curse_four_health", CurseFour, CustomRelicEffect.CURSE_FOUR_HEALTH, 4);
+            CustomRelicBuilder.BuildAsCurse("curse_four_armor", CurseFour, CustomRelicEffect.CURSE_FOUR_ARMOR, 4);
+            CustomRelicBuilder.BuildAsCurse("curse_four_equip", CurseFour, CustomRelicEffect.CURSE_FOUR_EQUIP, 4);
 
             CustomRelicBuilder.BuildAsCurse("curseFiveA", CurseFive, CustomRelicEffect.CURSE_FIVE_A, 5);
             CustomRelicBuilder.BuildAsCurse("curseFiveB", CurseFive, CustomRelicEffect.CURSE_FIVE_B, 5);
             CustomRelicBuilder.BuildAsCurse("curseFiveC", CurseFive, CustomRelicEffect.CURSE_FIVE_C, 5);
-
         }
 
         public List<String[]> ReadTSVFile(String filePath)
@@ -194,10 +207,6 @@ namespace Promethium
                 }
             }
         }
-
-
-
-
     }
 
     [HarmonyPatch(typeof(VersionDisplay), "Start")]
