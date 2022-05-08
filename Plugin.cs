@@ -22,7 +22,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.0.4";
+        public const String Version = "1.0.5";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -44,10 +44,15 @@ namespace Promethium
         private static ConfigEntry<bool> CurseRunOnConfig;
         private static ConfigEntry<bool> PruneRelicsOnNewCurseRunConfig;
         private static ConfigEntry<bool> PruneOrbsOnNewCurseRunConfig;
+        private static ConfigEntry<float> TierOneCurseHealth;
+        private static ConfigEntry<float> ExponentialCurseHealth;
         public static bool EnemyAttackOnReload => EnemyAttackOnShuffleConfig.Value;
         public static bool CurseRunOn => CurseRunOnConfig.Value;
         public static bool PruneRelicsOnNewCurseRunOn => PruneRelicsOnNewCurseRunConfig.Value;
         public static bool PruneOrbsOnNewCurseRunOn => PruneOrbsOnNewCurseRunConfig.Value;
+        public static float TierOneHealthMultiplier => TierOneCurseHealth.Value;
+        public static float ExponentialCurseHealthMultiplier => ExponentialCurseHealth.Value;
+
 
         private void Awake()
         {
@@ -65,8 +70,10 @@ namespace Promethium
 
             EnemyAttackOnShuffleConfig = Config.Bind<bool>("Mechanics","EnemyAttackOnShuffle", true, "Disabling this will prevent enemies from taking two turns in certain circumstances");
             CurseRunOnConfig = Config.Bind<bool>("Curse Run", "CurseRunOn", true, "Finish a game to increase your curse level. How far can you go?");
-            PruneRelicsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneRelicOnCurseRun", true, "Reduces the amount of relics when starting a new curse run. Disabling lets you keep all relics.");
-            PruneOrbsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneOrbsOnCurseRun", true, "Reduces the amount of orbs to four when starting a new curse run. Disabling lets you keep all orbs.");
+            PruneRelicsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneRelicOnCurseRun", false, "Reduces the amount of relics when starting a new curse run. Disabling lets you keep all relics.");
+            PruneOrbsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneOrbsOnCurseRun", false, "Reduces the amount of orbs to four when starting a new curse run. Disabling lets you keep all orbs.");
+            TierOneCurseHealth = Config.Bind<float>("Curse Run", "TierOneHealthMultiplier", 3f, "Amount of health to multiply for tier 1 of chaos relics");
+            ExponentialCurseHealth = Config.Bind<float>("Curse Run", "ExponentialCurseHealth", 2f, "Amount of health to multiple after tier 1. This is exponential");
 
             //SendOrbsToConsole();
         }

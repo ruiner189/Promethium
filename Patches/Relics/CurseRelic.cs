@@ -62,7 +62,7 @@ namespace Promethium.Patches.Relics
             if (CurseRelic.IsCurseLevelActive(relicManager, 1))
             {
                 int amountOfCurse = CurseRelic.AmountOfCurseRelics(relicManager);
-                float multiplier = (amountOfCurse * 1.25f) + 0.75f;
+                float multiplier = (float)(Plugin.TierOneHealthMultiplier * Math.Pow(Plugin.ExponentialCurseHealthMultiplier,amountOfCurse - 1));
                 ____maxHealth *= multiplier;
                 __instance.CurrentHealth = ____maxHealth;
                 typeof(Enemy).GetMethod("UpdateHealthBar", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(__instance, new Object[] { });
