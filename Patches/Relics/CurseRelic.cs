@@ -151,7 +151,7 @@ namespace Promethium.Patches.Relics
         public static void Postfix(PlayerHealthController __instance, RelicManager ____relicManager, ref float __result)
         {
             if (CurseRelic.IsCurseLevelActive(____relicManager, 2))
-                __result = (float) Math.Round(__result * 0.5f);
+                __result = (float) __result * 0.5f;
         }
     }
 
