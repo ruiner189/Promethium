@@ -56,9 +56,6 @@ namespace Promethium
         public static float TierOneHealthMultiplier => TierOneCurseHealth.Value;
         public static float ExponentialCurseHealthMultiplier => ExponentialCurseHealth.Value;
 
-        public static Scene ClassScene;
-
-
         private void Awake()
         {
             Log = Logger;
