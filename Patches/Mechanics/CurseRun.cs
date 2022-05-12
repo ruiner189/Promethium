@@ -229,7 +229,6 @@ namespace Promethium.Patches.Mechanics
 					floatVariable2.Reset();
 				}
 
-
 				CurseRun.PruneRelics(____relicManager);
 				CurseRun.PruneDeck(____deckManager);
 

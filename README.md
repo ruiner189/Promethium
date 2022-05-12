@@ -19,14 +19,7 @@ If you want to help translate, feel free to!
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.x | v1.0.7 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.7/Promethium.dll) |
-| v0.7.x | v1.0.6 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.6/Promethium.dll) |
-| v0.7.x | v1.0.5 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.5/Promethium.dll) |
-| v0.7.x | v1.0.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.4/Promethium.dll) |
-| v0.7.x | v1.0.3 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.3/Promethium.dll) |
-| v0.7.x | v1.0.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.2/Promethium.dll) |
-| v0.7.x | v1.0.1 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.1/Promethium.dll) |
-| v0.7.x | v1.0.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.0/Promethium.dll) |
+| v0.7.x | v1.0.8 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.8/Promethium.dll) |
 
 
 ## Quality of Life Changes

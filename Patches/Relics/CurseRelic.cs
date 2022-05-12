@@ -139,7 +139,7 @@ namespace Promethium.Patches.Relics
                 foreach (MapNode node in ____nodes)
                 {
 
-                    if (node.RoomType == RoomType.TREASURE)
+                    if (node.RoomType == RoomType.TREASURE || node.RoomType == RoomType.PEG_MINIGAME || node.RoomType == RoomType.STORE)
                         node.RoomType = RoomType.MINI_BOSS;
                 }
         }
