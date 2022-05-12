@@ -18,13 +18,13 @@ namespace Promethium.Patches.Relics
         CURSE_TWO_HEALTH = 8020,
         CURSE_TWO_ARMOR,
         CURSE_TWO_EQUIP,
-        CURSE_THREE_BOMB = 8030,
+        CURSE_THREE_BOMB = 8040,
         CURSE_THREE_ATTACK,
         CURSE_THREE_CRIT,
-        CURSE_FOUR_HEALTH = 8040,
+        CURSE_FOUR_HEALTH = 8060,
         CURSE_FOUR_ARMOR,
         CURSE_FOUR_EQUIP,
-        CURSE_FIVE_A = 8050,
+        CURSE_FIVE_A = 8080,
         CURSE_FIVE_B,
         CURSE_FIVE_C
     }

@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Promethium.Patches.Language
 {
-    [HarmonyPatch(typeof(GameInit), "Start")]
-    public static class CreateLanguageTerms
+    public class LanguageLoader : MonoBehaviour
     {
-        public static void Postfix()
+        public void Start()
         {
             foreach(String[] term in Plugin.LocalizationTerms)
             {

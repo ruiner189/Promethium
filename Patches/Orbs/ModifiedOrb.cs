@@ -83,7 +83,10 @@ namespace Promethium.Patches.Orbs
 
         protected static void ReplaceDescription(Attack attack, String desc, int position)
         {
-            attack.locDescStrings[position] = desc;
+            if (attack.locDescStrings.Length < position)
+                attack.locDescStrings[position] = desc;
+            else
+                AddToDescription(attack, desc);
         }
 
         protected static void ReplaceDescription(Attack attack, String[] desc)
@@ -132,9 +135,9 @@ namespace Promethium.Patches.Orbs
         public static bool Prefix(Attack __instance, RelicManager ____relicManager, CruciballManager ____cruciballManager, ref String __result)
         {
             ModifiedOrb orb = ModifiedOrb.GetOrb(__instance.locName);
-            if (orb != null)
-                orb.ChangeDescription(__instance);
+            if (orb == null || ____relicManager == null) return true;
 
+            orb.ChangeDescription(__instance);
             string text = "";
             foreach (string str in __instance.locDescStrings)
             {
@@ -158,10 +161,6 @@ namespace Promethium.Patches.Orbs
             return str;
         }
     }
-
-
-
-
 
     [HarmonyPatch(typeof(Attack), nameof(Attack.SoftInit))]
     public static class AttackInit

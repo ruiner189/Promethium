@@ -10,7 +10,7 @@ Relics/curse_one_balance_desc	<color="red">Increases enemy health based on the a
 Relics/curse_one_attack_name	Curse I - Attack														
 Relics/curse_one_attack_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+2 /+0</style>.														
 Relics/curse_one_crit_name	Curse I - Crit														
-Relics/curse_one_equip_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+0 /+2</style>.														
+Relics/curse_one_crit_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+0 /+2</style>.														
 Relics/curse_two_health_name	Curse II - Health														
 Relics/curse_two_health_desc	<color="red">Healing is halved.</color> Max health increased by <style=heal>25</style>														
 Relics/curse_two_armor_name	Curse II - Sturdy Armor														

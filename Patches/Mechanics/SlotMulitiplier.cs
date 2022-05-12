@@ -16,16 +16,17 @@ namespace Promethium.Patches.Mechanics
     {
         public static void Prefix(SpecialSlotController __instance, float[] ____slotMultipliersRelicAmounts)
         {
-            if (__instance.relicManager.RelicEffectActive(RelicEffect.SLOT_MULTIPLIERS))
-            {
-                float[] multipliers = GetMultipliers();
-                multipliers.Shuffle<float>();
-                for (int i = 0; i < ____slotMultipliersRelicAmounts.Length; i++)
+            if(__instance.relicManager != null)
+                if (__instance.relicManager.RelicEffectActive(RelicEffect.SLOT_MULTIPLIERS))
                 {
-                    ____slotMultipliersRelicAmounts[i] = multipliers[i];
-                    __instance.slotTriggers[i].GetComponentInChildren<TextMeshProUGUI>().fontSize = 1;
+                    float[] multipliers = GetMultipliers();
+                    multipliers.Shuffle<float>();
+                    for (int i = 0; i < ____slotMultipliersRelicAmounts.Length; i++)
+                    {
+                        ____slotMultipliersRelicAmounts[i] = multipliers[i];
+                        __instance.slotTriggers[i].GetComponentInChildren<TextMeshProUGUI>().fontSize = 1;
+                    }
                 }
-            }
         }
 
         public static float[] GetMultipliers()

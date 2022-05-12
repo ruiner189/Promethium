@@ -2,7 +2,8 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
-using I2.Loc;
+using Promethium.Loaders;
+using Promethium.Patches.Language;
 using Promethium.Patches.Orbs;
 using Promethium.Patches.Relics;
 using Relics;
@@ -13,6 +14,8 @@ using System.Reflection;
 using TMPro;
 using UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Promethium
 {
@@ -22,7 +25,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.0.6";
+        public const String Version = "1.0.7";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -53,6 +56,8 @@ namespace Promethium
         public static float TierOneHealthMultiplier => TierOneCurseHealth.Value;
         public static float ExponentialCurseHealthMultiplier => ExponentialCurseHealth.Value;
 
+        public static Scene ClassScene;
+
 
         private void Awake()
         {
@@ -63,19 +68,22 @@ namespace Promethium
             LoadSprites();
             RegisterModifiedOrbs();
             RegisterModifiedRelics();
-            RegisterCustomRelics();
 
             _harmony = new Harmony(GUID);
             _harmony.PatchAll();
 
-            EnemyAttackOnShuffleConfig = Config.Bind<bool>("Mechanics","EnemyAttackOnShuffle", true, "Disabling this will prevent enemies from taking two turns in certain circumstances");
+            EnemyAttackOnShuffleConfig = Config.Bind<bool>("Mechanics", "EnemyAttackOnShuffle", true, "Disabling this will prevent enemies from taking two turns in certain circumstances");
             CurseRunOnConfig = Config.Bind<bool>("Curse Run", "CurseRunOn", true, "Finish a game to increase your curse level. How far can you go?");
             PruneRelicsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneRelicOnCurseRun", false, "Reduces the amount of relics when starting a new curse run. Disabling lets you keep all relics.");
             PruneOrbsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneOrbsOnCurseRun", false, "Reduces the amount of orbs to four when starting a new curse run. Disabling lets you keep all orbs.");
             TierOneCurseHealth = Config.Bind<float>("Curse Run", "TierOneHealthMultiplier", 3f, "Amount of health to multiply for tier 1 of chaos relics");
             ExponentialCurseHealth = Config.Bind<float>("Curse Run", "ExponentialCurseHealth", 2f, "Amount of health to multiple after tier 1. This is exponential");
 
-            //SendOrbsToConsole();
+            GameObject loader = new GameObject("Promethium Loader");
+            loader.AddComponent<LanguageLoader>();
+            loader.AddComponent<RelicLoader>();
+            DontDestroyOnLoad(loader);
+            loader.hideFlags = HideFlags.HideAndDontSave;
         }
 
         private void LoadSprites()
@@ -86,7 +94,6 @@ namespace Promethium
             CurseThree = LoadSprite("Relics.Curse_Three.png");
             CurseFour = LoadSprite("Relics.Curse_Four.png");
             CurseFive = LoadSprite("Relics.Curse_Five.png");
-
         }
 
         private void RegisterModifiedOrbs()
@@ -104,28 +111,7 @@ namespace Promethium
             ModifiedRelic.ModifiedRelics.Add(RelicEffect.ALL_ORBS_BUFF);
         }
 
-        private void RegisterCustomRelics()
-        {
-            CustomRelicBuilder.BuildAsCurse("curse_one_balance", CurseOne, CustomRelicEffect.CURSE_ONE_BALANCE, 1);
-            CustomRelicBuilder.BuildAsCurse("curse_one_attack", CurseOne, CustomRelicEffect.CURSE_ONE_ATTACK, 1);
-            CustomRelicBuilder.BuildAsCurse("curse_one_crit", CurseOne, CustomRelicEffect.CURSE_ONE_CRIT, 1);
 
-            CustomRelicBuilder.BuildAsCurse("curse_two_health", CurseTwo, CustomRelicEffect.CURSE_TWO_HEALTH, 2);
-            CustomRelicBuilder.BuildAsCurse("curse_two_armor", CurseTwo, CustomRelicEffect.CURSE_TWO_ARMOR, 2);
-            CustomRelicBuilder.BuildAsCurse("curse_two_equip", CurseTwo, CustomRelicEffect.CURSE_TWO_EQUIP, 2);
-
-            CustomRelicBuilder.BuildAsCurse("curse_three_bomb", CurseThree, CustomRelicEffect.CURSE_THREE_BOMB, 3);
-            CustomRelicBuilder.BuildAsCurse("curse_three_attack", CurseThree, CustomRelicEffect.CURSE_THREE_ATTACK, 3);
-            CustomRelicBuilder.BuildAsCurse("curse_three_crit", CurseThree, CustomRelicEffect.CURSE_THREE_CRIT, 3);
-
-            CustomRelicBuilder.BuildAsCurse("curse_four_health", CurseFour, CustomRelicEffect.CURSE_FOUR_HEALTH, 4);
-            CustomRelicBuilder.BuildAsCurse("curse_four_armor", CurseFour, CustomRelicEffect.CURSE_FOUR_ARMOR, 4);
-            CustomRelicBuilder.BuildAsCurse("curse_four_equip", CurseFour, CustomRelicEffect.CURSE_FOUR_EQUIP, 4);
-
-            CustomRelicBuilder.BuildAsCurse("curseFiveA", CurseFive, CustomRelicEffect.CURSE_FIVE_A, 5);
-            CustomRelicBuilder.BuildAsCurse("curseFiveB", CurseFive, CustomRelicEffect.CURSE_FIVE_B, 5);
-            CustomRelicBuilder.BuildAsCurse("curseFiveC", CurseFive, CustomRelicEffect.CURSE_FIVE_C, 5);
-        }
 
         public List<String[]> ReadTSVFile(String filePath)
         {
@@ -222,7 +208,7 @@ namespace Promethium
         public static void Postfix(VersionDisplay __instance)
         {
             TMP_Text text = __instance.GetComponent<TMP_Text>();
-            text.text  = $"Peglin {text.text}\n{Plugin.Name} v{Plugin.Version}";
+            text.text = $"Peglin {text.text}\n{Plugin.Name} v{Plugin.Version}";
             __instance.transform.position += new Vector3(0, 0.5f, 0);
         }
     }

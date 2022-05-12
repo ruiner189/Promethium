@@ -54,6 +54,7 @@ namespace Promethium.Patches.Relics
         public CurseRelic BuildAsCurse(int CurseLevel)
         {
             CurseRelic relic = ScriptableObject.CreateInstance<CurseRelic>();
+            relic.name = _name;
             relic.locKey = _name;
             relic.sprite = _sprite;
             relic.effect = (RelicEffect) _effect;
