@@ -25,7 +25,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.0.7";
+        public const String Version = "1.0.8";
 
         private Harmony _harmony;
         public static ManualLogSource Log;

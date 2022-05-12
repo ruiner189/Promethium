@@ -14,26 +14,26 @@ Relics/curse_one_crit_desc	<color="red">Increases enemy health based on the amou
 Relics/curse_two_health_name	Curse II - Health														
 Relics/curse_two_health_desc	<color="red">Healing is halved.</color> Max health increased by <style=heal>25</style>														
 Relics/curse_two_armor_name	Curse II - Sturdy Armor														
-Relics/curse_two_armor_desc	<color="red">Healing is halved. </color> Max <color="purple">Armor</color> increased by 5														
+Relics/curse_two_armor_desc	<color="red">Healing is halved.</color> Max <color="purple">Armor</color> increased by 5														
 Relics/curse_two_equip_name	Curse II - Fast Equip														
 Relics/curse_two_equip_desc	<color="red">Healing is halved.</color> Gain 1 <color="purple">Armor</color> every turn														
 Relics/curse_three_bomb_name	Curse III - Bomb														
-Relics/curse_three_bomb_desc	<color="red">Enemies regenerate 5% max health each turn.<color="red"> Pegboards start with +2 <sprite name="BOMB">														
+Relics/curse_three_bomb_desc	<color="red">Enemies can regenerate 5% max health each turn.</color> Pegboards start with +2 <sprite name="BOMB">														
 Relics/curse_three_attack_name	Curse III - Attack														
-Relics/curse_three_attack_desc	<color="red">Enemies regenerate 5% max health each turn.<color="red"> All attacks get <style=dmg_bonus>+2 /+0</style>.														
+Relics/curse_three_attack_desc	<color="red">Enemies can regenerate 5% max health each turn.</color> All attacks get <style=dmg_bonus>+2 /+0</style>.														
 Relics/curse_three_crit_name	Curse III - Crit														
-Relics/curse_three_crit_desc	<color="red">Enemies regenerate 5% max health each turn.<color="red"> All attacks get <style=dmg_bonus>+0 /+2</style>.														
+Relics/curse_three_crit_desc	<color="red">Enemies can regenerate 5% max health each turn.</color> All attacks get <style=dmg_bonus>+0 /+2</style>.														
 Relics/curse_four_health_name	Curse IV - Health														
-Relics/curse_four_health_desc	<color="red">Enemies gain 1 attack each turn.</color> Max health increased by <style=heal>25</style>														
+Relics/curse_four_health_desc	<color="red">Enemies can now gain attack damage on their turn.</color> Max health increased by <style=heal>25</style>														
 Relics/curse_four_armor_name	Curse IV - Sturdy Armor														
-Relics/curse_four_armor_desc	<color="red">Enemies gain 1 attack each turn.</color> Max <color="purple">Armor</color> increased by 5														
+Relics/curse_four_armor_desc	<color="red">Enemies can now gain attack damage on their turn.</color> Max <color="purple">Armor</color> increased by 5														
 Relics/curse_four_equip_name	Curse IV - Fast Equip														
-Relics/curse_four_equip_desc	<color="red">Enemies gain 1 attack each turn.</color> Gain 1 <color="purple">Armor</color> every turn														
+Relics/curse_four_equip_desc	<color="red">Enemies can now gain attack damage on their turn.</color> Gain 1 <color="purple">Armor</color> every turn														
 Relics/curseFiveA_name	Curse V														
-Relics/curseFiveA_desc	<color="red">Chests are replaced with Elites</color>														
+Relics/curseFiveA_desc	<color="red">Increases the amount of Elite Fights</color>														
 Relics/curseFiveB_name	Curse V														
-Relics/curseFiveB_desc	<color="red">Chests are replaced with <color="red">Elites</color>														
+Relics/curseFiveB_desc	<color="red">Increases the amount of Elite Fights</color>														
 Relics/curseFiveC_name	Curse V														
-Relics/curseFiveC_desc	<color="red">Chests are replaced with <color="red">Elites</color>														
+Relics/curseFiveC_desc	<color="red">Increases the amount of Elite Fights</color>														
 Relics/damage_bonus_plant_flat_desc_promethium	Attacks deal <style=dmg_bonus>+{[ADDITIONAL_PLANT_DAMAGE]} damage</style> to plants. Increases <color="purple">Maximum Armor</color> by <color="purple">5</color> and gain <color="purple">1 Armor</color> every turn														
 Relics/all_orbs_buff_desc_promethium	Every <sprite name=PEG> popped gets upgraded <style=dmg_bonus>(+{[ALL_ORBS_BUFF_AMOUNT]} damage)</style>.														

@@ -16,7 +16,7 @@ namespace Promethium.Patches.Mechanics
     {
         public static void Prefix(SpecialSlotController __instance, float[] ____slotMultipliersRelicAmounts)
         {
-            if(__instance.relicManager != null)
+            if(__instance.relicManager != null && __instance.slotTriggers != null && ____slotMultipliersRelicAmounts != null)
                 if (__instance.relicManager.RelicEffectActive(RelicEffect.SLOT_MULTIPLIERS))
                 {
                     float[] multipliers = GetMultipliers();
