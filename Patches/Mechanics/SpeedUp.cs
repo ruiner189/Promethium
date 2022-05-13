@@ -11,23 +11,27 @@ namespace Promethium.Patches.Mechanics
         private static bool speedUpActive = false;
         public static void Postfix(BattleController __instance, int ____battleState) 
         {
-            if(____battleState == 3)
+            if (Plugin.SpeedUpOn)
             {
-                int secondsTillSpeedUp = 10;
-                timeElapsed += Time.deltaTime;
+                if (____battleState == 3)
+                {
+                    timeElapsed += Time.deltaTime;
 
-                if(timeElapsed > secondsTillSpeedUp)
-                {
-                    float speedUp = Math.Min((float)(1f + Math.Log10(timeElapsed - (secondsTillSpeedUp - 1))),3);
-                    speedUpActive = true;
-                    Time.timeScale = speedUp;
+                    if (timeElapsed > Plugin.SpeedUpDelay)
+                    {
+                        float speedUp = Math.Min((float)(1f + Math.Log10((timeElapsed - (Plugin.SpeedUpDelay - 1)) * Plugin.SpeedUpRate)), Plugin.SpeedUpMax);
+                        speedUpActive = true;
+                        Time.timeScale = speedUp;
+                    }
                 }
-            } else
-            {
-                timeElapsed = 0f;
-                if (speedUpActive)
+                else
                 {
-                    Time.timeScale = 1f;
+                    timeElapsed = 0f;
+                    if (speedUpActive)
+                    {
+                        Time.timeScale = 1f;
+                        speedUpActive = false;
+                    }
                 }
             }
         }

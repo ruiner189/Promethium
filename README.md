@@ -19,7 +19,7 @@ If you want to help translate, feel free to!
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.x | v1.0.8 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.8/Promethium.dll) |
+| v0.7.x | v1.0.9 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.9/Promethium.dll) |
 
 
 ## Quality of Life Changes

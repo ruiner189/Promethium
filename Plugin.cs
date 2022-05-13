@@ -25,7 +25,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.0.8";
+        public const String Version = "1.0.9";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -40,7 +40,7 @@ namespace Promethium
 
         //Localization
         public static List<String[]> LocalizationTerms;
-
+        public static List<String> LocalizationKeys = new List<string>();
 
         // Config
         private static ConfigEntry<bool> EnemyAttackOnShuffleConfig;
@@ -49,12 +49,23 @@ namespace Promethium
         private static ConfigEntry<bool> PruneOrbsOnNewCurseRunConfig;
         private static ConfigEntry<float> TierOneCurseHealth;
         private static ConfigEntry<float> ExponentialCurseHealth;
+        private static ConfigEntry<bool> SpeedUpOnConfig;
+        private static ConfigEntry<float> SpeedUpDelayConfig;
+        private static ConfigEntry<float> SpeedUpMaxConfig;
+        private static ConfigEntry<float> SpeedUpRateConfig;
+
+
         public static bool EnemyAttackOnReload => EnemyAttackOnShuffleConfig.Value;
         public static bool CurseRunOn => CurseRunOnConfig.Value;
         public static bool PruneRelicsOnNewCurseRunOn => PruneRelicsOnNewCurseRunConfig.Value;
         public static bool PruneOrbsOnNewCurseRunOn => PruneOrbsOnNewCurseRunConfig.Value;
         public static float TierOneHealthMultiplier => TierOneCurseHealth.Value;
         public static float ExponentialCurseHealthMultiplier => ExponentialCurseHealth.Value;
+
+        public static bool SpeedUpOn => SpeedUpOnConfig.Value;
+        public static float SpeedUpDelay => SpeedUpDelayConfig.Value;
+        public static float SpeedUpMax => SpeedUpMaxConfig.Value;
+        public static float SpeedUpRate => SpeedUpRateConfig.Value;
 
         private void Awake()
         {
@@ -70,6 +81,12 @@ namespace Promethium
             _harmony.PatchAll();
 
             EnemyAttackOnShuffleConfig = Config.Bind<bool>("Mechanics", "EnemyAttackOnShuffle", true, "Disabling this will prevent enemies from taking two turns in certain circumstances");
+            SpeedUpOnConfig = Config.Bind<bool>("Mechanics", "SpeedUpOn", true, "Speeds up game after a set amount of time");
+            SpeedUpDelayConfig = Config.Bind<float>("Mechanics", "SpeedUpDelay", 10, "Delay for speed up. In seconds");
+            SpeedUpMaxConfig = Config.Bind<float>("Mechanics", "SpeedUpMax", 3, "How much it speeds up the game at max value");
+            SpeedUpRateConfig = Config.Bind<float>("Mechanics", "SpeedUpRate", 1, "How fast the mod transitions the speed-up. Higher values means the game will speed up faster");
+
+
             CurseRunOnConfig = Config.Bind<bool>("Curse Run", "CurseRunOn", true, "Finish a game to increase your curse level. How far can you go?");
             PruneRelicsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneRelicOnCurseRun", false, "Reduces the amount of relics when starting a new curse run. Disabling lets you keep all relics.");
             PruneOrbsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneOrbsOnCurseRun", false, "Reduces the amount of orbs to four when starting a new curse run. Disabling lets you keep all orbs.");
@@ -119,7 +136,12 @@ namespace Promethium
                 while (!reader.EndOfStream)
                 {
                     String line = reader.ReadLine();
-                    results.Add(line.Split('\t'));
+                    String[] split = line.Split('\t');
+                    results.Add(split);
+                    if(split.Length > 1 && !LocalizationKeys.Contains(split[0]))
+                    {
+                        LocalizationKeys.Add(split[0]);
+                    }
                 }
             }
             return results;
