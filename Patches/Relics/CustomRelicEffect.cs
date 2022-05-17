@@ -10,7 +10,7 @@ namespace Promethium.Patches.Relics
     public enum CustomRelicEffect
     {
         NONE = 7588,
-
+        HOLSTER,
         // Leaving room between each curse set, just in case there are more added in. This allows future compatibility
         CURSE_ONE_BALANCE = 8000,
         CURSE_ONE_ATTACK,

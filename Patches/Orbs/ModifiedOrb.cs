@@ -38,10 +38,11 @@ namespace Promethium.Patches.Orbs
         }
 
         public virtual void OnDiscard(RelicManager relicManager, BattleController battleController, GameObject orb, Attack attack) { }
+        public virtual void ShotWhileInHolster(RelicManager relicManager, BattleController battleController, GameObject attackingOrb, GameObject heldOrb) { }
 
         public virtual void OnShotFired(BattleController battleController, GameObject orb, Attack attack) { }
 
-        public virtual void ChangeDescription(Attack attack) { }
+        public virtual void ChangeDescription(Attack attack, RelicManager relicManager) { }
         public virtual int GetAttackValue(CruciballManager cruciballManager, Attack attack)
         {
             return int.MinValue;
@@ -114,8 +115,9 @@ namespace Promethium.Patches.Orbs
     [HarmonyPatch(typeof(BattleController), "AttemptOrbDiscard")]
     public static class OnDiscard
     {
-        public static void Prefix(BattleController __instance, RelicManager ____relicManager, int ____battleState, GameObject ____ball) {
-            if (____battleState == 9) return;
+        [HarmonyPriority(Priority.LowerThanNormal)]
+        public static void Prefix(BattleController __instance, bool __runOriginal, RelicManager ____relicManager, int ____battleState, GameObject ____ball) {
+            if (____battleState == 9 || !__runOriginal) return;
             if (____ball != null && ____ball.GetComponent<PachinkoBall>().available && !DeckInfoManager.populatingDisplayOrb && !GameBlockingWindow.windowOpen && __instance.NumShotsDiscarded < __instance.MaxDiscardedShots)
             {
                 Attack attack = ____ball.GetComponent<Attack>();
@@ -135,9 +137,13 @@ namespace Promethium.Patches.Orbs
         public static bool Prefix(Attack __instance, RelicManager ____relicManager, CruciballManager ____cruciballManager, ref String __result)
         {
             ModifiedOrb orb = ModifiedOrb.GetOrb(__instance.locName);
+            if (____relicManager == null) ____relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
+            if (____cruciballManager == null) ____cruciballManager = Resources.FindObjectsOfTypeAll<CruciballManager>().FirstOrDefault();
+
+
             if (orb == null || ____relicManager == null) return true;
 
-            orb.ChangeDescription(__instance);
+            orb.ChangeDescription(__instance, ____relicManager);
             string text = "";
             foreach (string str in __instance.locDescStrings)
             {
@@ -154,8 +160,10 @@ namespace Promethium.Patches.Orbs
                 if (str.Contains("%am")) str = str.Replace("%am", "" + Armor.GetArmorMaxFromOrb(attack, cruciballManager));
                 if (str.Contains("%ar")) str = str.Replace("%ar", "" + Armor.GetArmorReloadFromOrb(attack, cruciballManager));
                 if (str.Contains("%ad")) str = str.Replace("%ad", "" + Armor.GetArmorDiscardFromOrb(attack, relicManager, cruciballManager));
+                if (str.Contains("%ah")) str = str.Replace("%ah", "" + Armor.GetArmorHoldFromOrb(attack, relicManager, cruciballManager));
                 if (str.Contains("%ma")) str = str.Replace("%ma", "" + Armor.GetTotalMaximumArmor(relicManager, cruciballManager));
                 if (str.Contains("%md")) str = str.Replace("%md", "" + (Armor.GetArmorDamageMultiplier(attack, cruciballManager) + 1) + "x");
+                if (str.Contains("%mh")) str = str.Replace("%mh", "" + ((Armor.GetArmorDamageMultiplier(attack, cruciballManager) / 2)+ 1) + "x");
                 if (str.Contains("%ac")) str = str.Replace("%ac", "" + Armor.currentArmor);
             }
             return str;
@@ -179,5 +187,19 @@ namespace Promethium.Patches.Orbs
             }
         }
         
+    }
+
+    [HarmonyPatch(typeof(Attack), nameof(Attack.SetId))]
+    public static class FixMirrorOrb
+    {
+        public static void Postfix(Attack __instance)
+        {
+            DeckManager deckManager = Resources.FindObjectsOfTypeAll<DeckManager>().FirstOrDefault();
+            RelicManager relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
+            CruciballManager cruciballManager = Resources.FindObjectsOfTypeAll<CruciballManager>().FirstOrDefault();
+
+
+            __instance.SoftInit(deckManager, relicManager, cruciballManager);
+        }
     }
 }

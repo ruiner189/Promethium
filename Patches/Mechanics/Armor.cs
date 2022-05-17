@@ -28,7 +28,13 @@ namespace Promethium.Patches.Mechanics
 
             if(_controller != null)
                 _controller.ApplyStatusEffect(armorEffect);
+        }
 
+        public static void ChangeArmorValue(int change, RelicManager relicManager, CruciballManager cruciballManager, PlayerStatusEffectController controller = null)
+        {
+            int originalArmor = Armor.currentArmor;
+            Armor.currentArmor = Mathf.Clamp(originalArmor - change, 0, Armor.GetTotalMaximumArmor(relicManager, cruciballManager));
+            ChangeArmorDisplay(Armor.currentArmor - originalArmor, controller);
         }
 
 
@@ -69,6 +75,22 @@ namespace Promethium.Patches.Mechanics
             return amount;
         }
 
+        public static int GetArmorHoldFromOrb(Attack ball, RelicManager relicManager, CruciballManager cruciballManager)
+        {
+            String orbName = ball.locName;
+            int orbLevel = ball.Level;
+            int cruciballLevel = cruciballManager != null ? cruciballManager.currentCruciballLevel : -1;
+
+            int amount = 0;
+
+            if (orbName == "Bouldorb")
+            {
+                amount = 3;
+            }
+
+            return amount;
+        }
+
         public static int GetArmorDiscardFromOrb(Attack ball, RelicManager relicManager, CruciballManager cruciballManager)
         {
             String orbName = ball.locName;
@@ -79,7 +101,7 @@ namespace Promethium.Patches.Mechanics
 
             if(orbName == "Bouldorb")
             {
-                amount = GetTotalMaximumArmor(relicManager, cruciballManager);
+                amount = 10;
             }
 
             return amount;

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using TMPro;
+using ToolBox.Serialization;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,7 +26,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.0.9";
+        public const String Version = "1.0.10";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -37,6 +38,7 @@ namespace Promethium
         public static Sprite CurseThree;
         public static Sprite CurseFour;
         public static Sprite CurseFive;
+        public static Sprite Holster;
 
         //Localization
         public static List<String[]> LocalizationTerms;
@@ -77,21 +79,20 @@ namespace Promethium
             RegisterModifiedOrbs();
             RegisterModifiedRelics();
 
-            _harmony = new Harmony(GUID);
-            _harmony.PatchAll();
-
             EnemyAttackOnShuffleConfig = Config.Bind<bool>("Mechanics", "EnemyAttackOnShuffle", true, "Disabling this will prevent enemies from taking two turns in certain circumstances");
             SpeedUpOnConfig = Config.Bind<bool>("Mechanics", "SpeedUpOn", true, "Speeds up game after a set amount of time");
             SpeedUpDelayConfig = Config.Bind<float>("Mechanics", "SpeedUpDelay", 10, "Delay for speed up. In seconds");
             SpeedUpMaxConfig = Config.Bind<float>("Mechanics", "SpeedUpMax", 3, "How much it speeds up the game at max value");
             SpeedUpRateConfig = Config.Bind<float>("Mechanics", "SpeedUpRate", 1, "How fast the mod transitions the speed-up. Higher values means the game will speed up faster");
 
-
             CurseRunOnConfig = Config.Bind<bool>("Curse Run", "CurseRunOn", true, "Finish a game to increase your curse level. How far can you go?");
             PruneRelicsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneRelicOnCurseRun", false, "Reduces the amount of relics when starting a new curse run. Disabling lets you keep all relics.");
             PruneOrbsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneOrbsOnCurseRun", false, "Reduces the amount of orbs to four when starting a new curse run. Disabling lets you keep all orbs.");
             TierOneCurseHealth = Config.Bind<float>("Curse Run", "TierOneHealthMultiplier", 3f, "Amount of health to multiply for tier 1 of chaos relics");
             ExponentialCurseHealth = Config.Bind<float>("Curse Run", "ExponentialCurseHealth", 2f, "Amount of health to multiple after tier 1. This is exponential");
+
+            _harmony = new Harmony(GUID);
+            _harmony.PatchAll();
 
             GameObject loader = new GameObject("Promethium Loader");
             loader.AddComponent<LanguageLoader>();
@@ -103,6 +104,7 @@ namespace Promethium
         private void LoadSprites()
         {
             ArmorEffect = LoadSprite("ArmorEffect.png");
+            Holster = LoadSprite("Relics.Holster.png");
             CurseOne = LoadSprite("Relics.Curse_One.png");
             CurseTwo = LoadSprite("Relics.Curse_Two.png");
             CurseThree = LoadSprite("Relics.Curse_Three.png");

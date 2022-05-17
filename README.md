@@ -19,7 +19,7 @@ If you want to help translate, feel free to!
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.x | v1.0.9 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.9/Promethium.dll) |
+| v0.7.x | v1.0.10 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.10/Promethium.dll) |
 
 
 ## Quality of Life Changes
@@ -85,7 +85,7 @@ Level 3
 ![Bouldorb](Docs/Images/Bouldorb.png)
 
 All Levels
-* Replenishes Armor to maximum value if discarded
+* Restores 10 Armor if discarded
 ----------
 ### Orbelisk
 ![Orbelisk](Docs/Images/Orbelisk3.png)

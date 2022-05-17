@@ -13,5 +13,10 @@ namespace Promethium.Extensions
         public static bool RelicEffectActive(this RelicManager relicManager, CustomRelicEffect effect){
             return relicManager.RelicEffectActive((RelicEffect)effect);
         }
+
+        public static bool AttemptUseRelic(this RelicManager relicManager, CustomRelicEffect effect)
+        {
+            return relicManager.AttemptUseRelic((RelicEffect)effect);
+        }
     }
 }

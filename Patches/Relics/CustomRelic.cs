@@ -44,7 +44,10 @@ namespace Promethium.Patches.Relics
     {
         public static bool Prefix(Attack __instance, RelicManager ____relicManager, CruciballManager ____cruciballManager, PlayerStatusEffectController ____playerStatusEffectController, DeckManager ____deckManager, int critCount, ref float __result)
         {
-            if (____relicManager == null) return false;
+			if (____relicManager == null) ____relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
+			if (____cruciballManager == null) ____cruciballManager = Resources.FindObjectsOfTypeAll<CruciballManager>().FirstOrDefault();
+
+			if (____relicManager == null) return false;
             bool isCrit = critCount > 0;
 
 			__result = isCrit ? __instance.CritDamagePerPeg : __instance.DamagePerPeg;

@@ -17,9 +17,15 @@ namespace Promethium.Patches.Orbs
         private static ModifiedOrbelisk _instance;
         private ModifiedOrbelisk() : base("Orbelisk"){}
 
-        public override void ChangeDescription(Attack attack)
+        public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
-            ReplaceDescription(attack, new string[] { "attacks_flying_and_ground", "armor_damage_multiplier", "armor_damage_discard_multiplier"});
+            if (relicManager != null && relicManager.RelicEffectActive(Relics.CustomRelicEffect.HOLSTER))
+            {
+                ReplaceDescription(attack, new string[] { "attacks_flying_and_ground", "armor_damage_multiplier", "armor_damage_hold_multiplier" });
+            } else
+            {
+                ReplaceDescription(attack, new string[] { "attacks_flying_and_ground", "armor_damage_multiplier", "armor_damage_discard_multiplier" });
+            }
         }
 
         public override void OnShotFired(BattleController battleController, GameObject orb, Attack attack)
@@ -28,7 +34,21 @@ namespace Promethium.Patches.Orbs
             float multiplier = Armor.GetArmorDamageMultiplier(attack, cruciballManager);
             if (multiplier > 0)
                 battleController.GetDamageMultipliers().Add(multiplier + 1);
-            
+        }
+
+        public override void ShotWhileInHolster(RelicManager relicManager, BattleController battleController, GameObject attackingOrb, GameObject heldOrb)
+        {
+            CruciballManager cruciballManager = battleController.GetCruciballManager();
+            float multiplier = (Armor.GetArmorDamageMultiplier(heldOrb.GetComponent<Attack>(), cruciballManager) / 2);
+            if (multiplier > 0)
+            {
+                PlayerStatusEffectController playerStatusEffectController = battleController.GetPlayerStatusEffectController();
+                battleController.GetDamageMultipliers().Add(multiplier + 1);
+                int originalArmor = Armor.currentArmor;
+                int armorDamage = 4;
+                Armor.currentArmor = Mathf.Max(Armor.currentArmor - armorDamage, 0);
+                Armor.ChangeArmorDisplay(Armor.currentArmor - originalArmor, playerStatusEffectController);
+            }
         }
 
         public override void OnDiscard(RelicManager relicManager, BattleController battleController, GameObject orb, Attack attack)

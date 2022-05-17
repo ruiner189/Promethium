@@ -16,9 +16,16 @@ namespace Promethium.Patches.Orbs
         private static ModifiedBouldorb _instance;
         private ModifiedBouldorb() : base("Bouldorb"){ }
 
-        public override void ChangeDescription(Attack attack)
+        public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
-            AddToDescription(attack, "armor_discard_max", 3);
+            if (relicManager != null && relicManager.RelicEffectActive(Relics.CustomRelicEffect.HOLSTER))
+            {
+                ReplaceDescription(attack, "armor_hold", 3);
+            }
+            else
+            {
+                ReplaceDescription(attack, "armor_discard", 3);
+            }
         }
 
         public override void OnDiscard(RelicManager relicManager, BattleController battleController, GameObject orb, Attack attack)
@@ -26,11 +33,20 @@ namespace Promethium.Patches.Orbs
             CruciballManager cruciballManager = battleController.GetCruciballManager();
             PlayerStatusEffectController playerStatusEffectController = battleController.GetPlayerStatusEffectController();
             int original = Armor.currentArmor;
-            int max = Armor.GetTotalMaximumArmor(relicManager, cruciballManager);
-            Armor.currentArmor = max;
-            Plugin.Log.LogMessage($"Bouldorb discarded. Armor set to { Armor.currentArmor } / {max}");
+            int add = Armor.GetArmorDiscardFromOrb(attack, relicManager, cruciballManager);
+            Armor.currentArmor = Mathf.Clamp(original + add, 0, Armor.GetTotalMaximumArmor(relicManager, cruciballManager));
             Armor.ChangeArmorDisplay(Armor.currentArmor - original, playerStatusEffectController);
         }
+
+        public override void ShotWhileInHolster(RelicManager relicManager, BattleController battleController, GameObject attackingOrb, GameObject heldOrb) {
+            CruciballManager cruciballManager = battleController.GetCruciballManager();
+            PlayerStatusEffectController playerStatusEffectController = battleController.GetPlayerStatusEffectController();
+            int original = Armor.currentArmor;
+            int add = Armor.GetArmorHoldFromOrb(heldOrb.GetComponent<Attack>(), relicManager, cruciballManager);
+            Armor.currentArmor = Mathf.Clamp(original + add, 0, Armor.GetTotalMaximumArmor(relicManager, cruciballManager));
+            Armor.ChangeArmorDisplay(Armor.currentArmor - original, playerStatusEffectController);
+        }
+
 
         public static ModifiedBouldorb Register()
         {

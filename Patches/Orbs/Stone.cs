@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Relics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Promethium.Patches.Orbs
         private static ModifiedStone _instance;
         private ModifiedStone() : base("Stone"){}
 
-        public override void ChangeDescription(Attack attack)
+        public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
             if(attack.Level > 1)
             {

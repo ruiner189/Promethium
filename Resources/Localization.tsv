@@ -1,39 +1,43 @@
 Keys	English	Français [fr]	Español [es]	Deutsch [de]	Nederlands [nl]	Italiano [it]	Português do Brasil [pt-BR]	Русский [ru]	简体中文 [zh-CN]	繁体中文 [zh-TW]	日本語 [ja]	한국어 [ko]	Svenska [sv]	Polski [pl]	Türkçe [tr]
-Orbs/armor_damage_multiplier	Multiplies damage based on current <color="purple">Armor</color>. Current multiplier: <color="purple">%md</color>														
-Orbs/armor_max	Increases Maximum <color="purple">Armor</color> by <color="purple">%am</color>														
-Orbs/armor_turn	Restores <color="purple">%ar Armor</color> every reload														
-Orbs/armor_discard_max	Restores <color="purple">Armor</color> to max if discarded														
-Orbs/armor_discard	Restores <color="purple">Armor</color> by <color="purple">%ad</color> if discarded														
-Orbs/armor_damage_discard_multiplier	Discard to transfer multiplier to the next orb. Takes away all <color="purple">Armor</color> and damages you for <color="red">%ac</color>														
-Relics/curse_one_balance_name	Curse I - Balance														
-Relics/curse_one_balance_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+1 /+1</style>.														
-Relics/curse_one_attack_name	Curse I - Attack														
-Relics/curse_one_attack_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+2 /+0</style>.														
-Relics/curse_one_crit_name	Curse I - Crit														
-Relics/curse_one_crit_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+0 /+2</style>.														
-Relics/curse_two_health_name	Curse II - Health														
-Relics/curse_two_health_desc	<color="red">Healing is halved.</color> Max health increased by <style=heal>25</style>														
-Relics/curse_two_armor_name	Curse II - Sturdy Armor														
-Relics/curse_two_armor_desc	<color="red">Healing is halved.</color> Max <color="purple">Armor</color> increased by 5														
-Relics/curse_two_equip_name	Curse II - Fast Equip														
-Relics/curse_two_equip_desc	<color="red">Healing is halved.</color> Gain 1 <color="purple">Armor</color> every turn														
-Relics/curse_three_bomb_name	Curse III - Bomb														
-Relics/curse_three_bomb_desc	<color="red">Enemies can regenerate 5% max health each turn.</color> Pegboards start with +2 <sprite name="BOMB">														
-Relics/curse_three_attack_name	Curse III - Attack														
-Relics/curse_three_attack_desc	<color="red">Enemies can regenerate 5% max health each turn.</color> All attacks get <style=dmg_bonus>+2 /+0</style>.														
-Relics/curse_three_crit_name	Curse III - Crit														
-Relics/curse_three_crit_desc	<color="red">Enemies can regenerate 5% max health each turn.</color> All attacks get <style=dmg_bonus>+0 /+2</style>.														
-Relics/curse_four_health_name	Curse IV - Health														
-Relics/curse_four_health_desc	<color="red">Enemies can now gain attack damage on their turn.</color> Max health increased by <style=heal>25</style>														
-Relics/curse_four_armor_name	Curse IV - Sturdy Armor														
-Relics/curse_four_armor_desc	<color="red">Enemies can now gain attack damage on their turn.</color> Max <color="purple">Armor</color> increased by 5														
-Relics/curse_four_equip_name	Curse IV - Fast Equip														
-Relics/curse_four_equip_desc	<color="red">Enemies can now gain attack damage on their turn.</color> Gain 1 <color="purple">Armor</color> every turn														
-Relics/curseFiveA_name	Curse V														
-Relics/curseFiveA_desc	<color="red">Increases the amount of Elite Fights</color>														
-Relics/curseFiveB_name	Curse V														
-Relics/curseFiveB_desc	<color="red">Increases the amount of Elite Fights</color>														
-Relics/curseFiveC_name	Curse V														
-Relics/curseFiveC_desc	<color="red">Increases the amount of Elite Fights</color>														
-Relics/damage_bonus_plant_flat_desc_promethium	Attacks deal <style=dmg_bonus>+{[ADDITIONAL_PLANT_DAMAGE]} damage</style> to plants. Increases <color="purple">Maximum Armor</color> by <color="purple">5</color> and gain <color="purple">1 Armor</color> every turn														
-Relics/all_orbs_buff_desc_promethium	Every <sprite name=PEG> popped gets upgraded <style=dmg_bonus>(+{[ALL_ORBS_BUFF_AMOUNT]} damage)</style>.														
+Orbs/armor_damage_multiplier	Multiplies damage based on current <color="purple">Armor</color>. Current multiplier: <color="purple">%md</color>	Multiplie les dégâts par l'<color="purple">Armure</color> actuelle.													
+Orbs/armor_max	Increases Maximum <color="purple">Armor</color> by <color="purple">%am</color>	Multiplicateur actuel : <color="purple">%md</color>													
+Orbs/armor_turn	Restores <color="purple">%ar Armor</color> every reload	Restaure <color="purple">%ar Armure</color> à chaque rechargement.													
+Orbs/armor_discard_max	Restores <color="purple">Armor</color> to max if discarded	Restaure l'<color="purple">Armure</color> à son maximum si défaussée.													
+Orbs/armor_hold	Restores <color="purple">Armor</color> by <color="purple">%ah</color> while held														
+Orbs/armor_discard	Restores <color="purple">Armor</color> by <color="purple">%ad</color> if discarded	Restaure l'<color="purple">Armure</color> de <color="purple">%ad</color> si défaussée.													
+Orbs/armor_damage_discard_multiplier	Discard to transfer multiplier to the next orb. Takes away all <color="purple">Armor</color> and damages you for <color="red">%ac</color>	Défausser pour transférer le multiplicateur à la prochaine orbe. Retire toute l'<color="purple">Armure</color> puis vous inflige <color="purple">%ac</color> dégâts.													
+Orbs/armor_damage_hold_multiplier	Hold to transfer half the multiplier (<color="purple">%mh</color>). Takes away <color="red">3</color> <color="purple">Armor</color> per use.														
+Relics/curse_one_balance_name	Curse I - Balance	Malédiction I - Équilibre													
+Relics/curse_one_balance_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+1 /+1</style>.	<color="red">Augmente la vie des ennemis en fonction du nombre de reliques maudites que vous avez.</color> Toutes vos attaques ont <style=dmg_bonus>+1/+1<style>.													
+Relics/curse_one_attack_name	Curse I - Attack	Malédiction I - Attaque													
+Relics/curse_one_attack_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+2 /+0</style>.	<color="red">Augmente la vie des ennemis en fonction du nombre de reliques maudites que vous avez.</color> Toutes vos attaques ont <style=dmg_bonus>+2/+0<style>.													
+Relics/curse_one_crit_name	Curse I - Crit	Malédiction I - Critique													
+Relics/curse_one_crit_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+0 /+2</style>.	<color="red">Augmente la vie des ennemis en fonction du nombre de reliques maudites que vous avez.</color> Toutes vos attaques ont <style=dmg_bonus>+0/+2<style>.													
+Relics/curse_two_health_name	Curse II - Health	Malédiction II - Vie													
+Relics/curse_two_health_desc	<color="red">Healing is halved.</color> Max health increased by <style=heal>25</style>	<color="red">Soins divisés par 2.</color> Vie maximum augmentée de <style=heal>25<style>.													
+Relics/curse_two_armor_name	Curse II - Sturdy Armor	Malédiction II - Armure Robuste													
+Relics/curse_two_armor_desc	<color="red">Healing is halved.</color> Max <color="purple">Armor</color> increased by 5	<color="red">Soins divisés par 2.</color> <color="purple">Armure</color> maximum augmentée de 5.													
+Relics/curse_two_equip_name	Curse II - Fast Equip	Malédiction II - Équipement Rapide													
+Relics/curse_two_equip_desc	<color="red">Healing is halved.</color> Gain 1 <color="purple">Armor</color> every turn	<color="red">Soins divisés par 2.</color> Ganez 1 d'<color="purple">Armure</color> à chaque tour.													
+Relics/curse_three_bomb_name	Curse III - Bomb	Malédiction III - Bombes													
+Relics/curse_three_bomb_desc	<color="red">Enemies can regenerate 5% max health each turn.</color> Pegboards start with +2 <sprite name="BOMB">	<color="red">Les ennemis régénèrent 5% de leur vie maximum à chaque tour.</color> Le tableau commence avec +2 <sprite name="BOMB">													
+Relics/curse_three_attack_name	Curse III - Attack	Malédiction III - Attaque													
+Relics/curse_three_attack_desc	<color="red">Enemies can regenerate 5% max health each turn.</color> All attacks get <style=dmg_bonus>+2 /+0</style>.	<color="red">Les ennemis régénèrent 5% de leur vie maximum à chaque tour.</color> Toutes les attaques ont <style=dmg_bonus>+2/+0</style>													
+Relics/curse_three_crit_name	Curse III - Crit	Malédiction III - Critique													
+Relics/curse_three_crit_desc	<color="red">Enemies can regenerate 5% max health each turn.</color> All attacks get <style=dmg_bonus>+0 /+2</style>.	<color="red">Les ennemis régénèrent 5% de leur vie maximum à chaque tour.</color> Toutes les attaques ont <style=dmg_bonus>+0/+2</style>													
+Relics/curse_four_health_name	Curse IV - Health	Malédiction IV - Vie													
+Relics/curse_four_health_desc	<color="red">Enemies can now gain attack damage on their turn.</color> Max health increased by <style=heal>25</style>	<color="red">Les ennemis augmente leurs dégâts pendant leur tour.</color> Vie maximum augmentée de <style=heal>25</style>													
+Relics/curse_four_armor_name	Curse IV - Sturdy Armor	Malédiction IV - Armure Robuste													
+Relics/curse_four_armor_desc	<color="red">Enemies can now gain attack damage on their turn.</color> Max <color="purple">Armor</color> increased by 5	<color="red">Les ennemis augmente leurs dégâts pendant leur tour.</color> <color="purple">Armure</color> maximum augmentée de 5.													
+Relics/curse_four_equip_name	Curse IV - Fast Equip	Malédiction IV - Équipement Rapide													
+Relics/curse_four_equip_desc	<color="red">Enemies can now gain attack damage on their turn.</color> Gain 1 <color="purple">Armor</color> every turn	<color="red">Les ennemis augmente leurs dégâts pendant leur tour.</color> Gagne 1 d'<color="purple">Armure</color> à chaque tour.													
+Relics/curseFiveA_name	Curse V	Malédiction V													
+Relics/curseFiveA_desc	<color="red">Increases the amount of Elite Fights</color>	<color="red">Augmente le nombre de Mini-Boss</color>													
+Relics/curseFiveB_name	Curse V	Malédiction V													
+Relics/curseFiveB_desc	<color="red">Increases the amount of Elite Fights</color>	<color="red">Augmente le nombre de Mini-Boss</color>													
+Relics/curseFiveC_name	Curse V	Malédiction V													
+Relics/curseFiveC_desc	<color="red">Increases the amount of Elite Fights</color>	<color="red">Augmente le nombre de Mini-Boss</color>													
+Relics/holster_name	Holster														
+Relics/holster_desc	Removes the ability to discard and instead allows you to hold orbs														
+Relics/damage_bonus_plant_flat_desc_promethium	Attacks deal <style=dmg_bonus>+{[ADDITIONAL_PLANT_DAMAGE]} damage</style> to plants. Increases <color="purple">Maximum Armor</color> by <color="purple">5</color> and gain <color="purple">1 Armor</color> every turn	Les attaques font <style=dmg_bonus>+{[ADDITIONAL_PLANT_DAMAGE]} dégâts</style> aux plantes. Augmente l'<color="purple">Armure Maximum</color> de <color="purple">5</color> et régénère <color="purple">1 Armor</color> à chaque tour.													
+Relics/all_orbs_buff_desc_promethium	Every <sprite name=PEG> popped gets upgraded <style=dmg_bonus>(+{[ALL_ORBS_BUFF_AMOUNT]} damage)</style>.	Chaque <sprite name=PEG> éclaté est amélioré de <style=dmg_bonus>(+{[ALL_ORBS_BUFF_AMOUNT]} dégâts)</style>.													

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ToolBox.Serialization;
 using UnityEngine;
 
 namespace Promethium.Patches.Language
@@ -33,7 +34,10 @@ namespace Promethium.Patches.Language
                 String[] values = new string[term.Length - 1];
                 for (int i = 1; i < term.Length; i++)
                 {
-                    values[i - 1] = term[i];
+                    if (term[i] != "")
+                        values[i - 1] = term[i];
+                    else
+                        values[i - 1] = null;
                 }
                 LocalizationManager.Sources[0].AddTerm(key).Languages = values;
             }
