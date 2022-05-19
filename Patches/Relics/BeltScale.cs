@@ -29,8 +29,6 @@ namespace Promethium.Patches.Relics
             {
                 if (____relicManager == null) return;
                 Scale = ____ball.transform.localScale;
-                Plugin.Log.LogMessage("How many calls?");
-
 
                 if (____relicManager.RelicEffectActive(CustomRelicEffect.WUMBO) && !____relicManager.RelicEffectActive(CustomRelicEffect.MINI)){
                     ____relicManager.AttemptUseRelic(CustomRelicEffect.WUMBO);

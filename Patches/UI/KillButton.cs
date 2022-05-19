@@ -28,7 +28,6 @@ namespace Promethium.Extensions.UI
         
         public void OnButtonPress()
         {
-            Plugin.Log.LogMessage("Test Button Click");
             if(battleController != null)
             {
                 if(State == 3)
