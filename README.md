@@ -48,17 +48,17 @@ Curse runs too easy? Check the configs to make them harder. You can make it so y
 ## New Relics
 Excluding the curse relics, Promethium currently offers 4 new relics. 1 Boss relic, 2 Rare relics, and 1 Common relic.
 ### Holster
-    * Removes Discarding and allows you to hold orbs instead.
-    * Some orbs have special mechanics while held, and many more are to come!
+* Removes Discarding and allows you to hold orbs instead.
+* Some orbs have special mechanics while held, and many more are to come!
 ### Wumbo Belt
-    * Doubles the size of your orb.
-    * Has a special interaction with Mini Belt if you have both relics
+* Doubles the size of your orb.
+* Has a special interaction with Mini Belt if you have both relics
 ### Mini Belt
-    * Halves the size of your orb.
-    * Has a special interaction with Wumbo Belt if you have both relics
+* Halves the size of your orb.
+* Has a special interaction with Wumbo Belt if you have both relics
 ### Kill Button
-    * Allows you to end your shot early
-    * Can only do once per reload
+* Allows you to end your shot early
+* Can only be used once per reload
 
 ## Relic Changes
 ### Gardener's Glove
@@ -80,6 +80,9 @@ Excluding the curse relics, Promethium currently offers 4 new relics. 1 Boss rel
 ![Stone](https://raw.githubusercontent.com/ruiner189/Promethium/main/Docs/Images/Stone3.png)
 
 #### Normal Gameplay
+Level 1
+* Does nothing
+
 Level 2
 * Increases Maximum Armor by 3
 * Replenishes Armor by 2 every reload
@@ -97,8 +100,6 @@ Level 3
 * Replenishes Armor by 2 every reload
 ----------
 ### Bouldorb
-![Bouldorb](https://raw.githubusercontent.com/ruiner189/Promethium/main/Docs/Images/Bouldorb.png)
-
 All Levels
 * Restores 10 Armor if discarded
 ----------
