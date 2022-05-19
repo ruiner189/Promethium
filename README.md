@@ -38,7 +38,9 @@ Are you ready to test your pachinko skills? If you make it to the final boss, co
 Each curse relic will make the enemies stronger in different ways. It'll also give the player a small buff so they might survive...
 
 #### Starting a Curse Run
-At the end of your current run (if you defeat the last boss), choose "Restart" to begin or increase your curse level. Each run will give you three choices of curse relics. The negative effect is the same, while you get to choose the benefit. Your relics from the previous run will be reduced according to your curse level. The higher the curse, the more relics you get to keep. However, you are only allowed to keep 4 orbs between runs.
+At the end of your current run (if you defeat the last boss), choose "Restart" to begin or increase your curse level. Each run will give you three choices of curse relics. The negative effect is the same, while you get to choose the benefit. 
+
+Curse runs too easy? Check the configs to make them harder. You can make it so you lose some relics, reset orbs back to four, or event change the health scaling! 
 
 ## Relic Changes
 ### Gardener's Glove
