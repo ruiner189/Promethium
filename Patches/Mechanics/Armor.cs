@@ -8,6 +8,7 @@ using Promethium.Extensions;
 using Relics;
 using System;
 using UnityEngine;
+using Promethium.Patches.Orbs;
 
 namespace Promethium.Patches.Mechanics
 {
@@ -40,13 +41,13 @@ namespace Promethium.Patches.Mechanics
 
         public static int GetArmorMaxFromOrb(Attack ball, CruciballManager cruciballManager)
         {
-            String orbName = ball.locName;
+            String orbName = ball.locNameString;
             int orbLevel = ball.Level;
             int cruciballLevel = cruciballManager != null ? cruciballManager.currentCruciballLevel : -1;
 
             int amount = 0;
 
-            if(orbName == "Stone" && orbLevel > 1)
+            if(orbName == OrbNames.StoneOrb && orbLevel > 1)
             {
                 amount = (orbLevel - 1) * 3;
 
@@ -58,13 +59,13 @@ namespace Promethium.Patches.Mechanics
 
         public static int GetArmorReloadFromOrb(Attack ball, CruciballManager cruciballManager)
         {
-            String orbName = ball.locName;
+            String orbName = ball.locNameString;
             int orbLevel = ball.Level;
             int cruciballLevel = cruciballManager != null ? cruciballManager.currentCruciballLevel : -1;
 
             int amount = 0;
 
-            if (orbName == "Stone" && orbLevel > 1)
+            if (orbName == OrbNames.StoneOrb && orbLevel > 1)
             {
                 amount = (orbLevel - 1) * 2;
 
@@ -77,13 +78,13 @@ namespace Promethium.Patches.Mechanics
 
         public static int GetArmorHoldFromOrb(Attack ball, RelicManager relicManager, CruciballManager cruciballManager)
         {
-            String orbName = ball.locName;
+            String orbName = ball.locNameString;
             int orbLevel = ball.Level;
             int cruciballLevel = cruciballManager != null ? cruciballManager.currentCruciballLevel : -1;
 
             int amount = 0;
 
-            if (orbName == "Bouldorb")
+            if (orbName == OrbNames.Bouldorb)
             {
                 amount = 3;
             }
@@ -93,13 +94,13 @@ namespace Promethium.Patches.Mechanics
 
         public static int GetArmorDiscardFromOrb(Attack ball, RelicManager relicManager, CruciballManager cruciballManager)
         {
-            String orbName = ball.locName;
+            String orbName = ball.locNameString;
             int orbLevel = ball.Level;
             int cruciballLevel = cruciballManager != null ? cruciballManager.currentCruciballLevel : -1;
 
             int amount = 0;
 
-            if(orbName == "Bouldorb")
+            if(orbName == OrbNames.Bouldorb)
             {
                 amount = 10;
             }
@@ -109,11 +110,11 @@ namespace Promethium.Patches.Mechanics
 
         public static float GetArmorDamageMultiplier(Attack ball, CruciballManager cruciballManager)
         {
-            String orbName = ball.locName;
+            String orbName = ball.locNameString;
             int orbLevel = ball.Level;
             int cruciballLevel = cruciballManager != null ? cruciballManager.currentCruciballLevel : -1;
 
-            if(orbName == "Orbelisk")
+            if(orbName == OrbNames.Orbelisk)
             {
                 if(orbLevel == 1)
                     return currentArmor * 0.08f;

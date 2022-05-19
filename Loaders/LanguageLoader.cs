@@ -45,7 +45,6 @@ namespace Promethium.Patches.Language
         }
     }
 
-
     // This is used just in case the localization was overwritten at any point.
     [HarmonyPatch(typeof(LocalizationManager), nameof(LocalizationManager.GetTranslation))]
     public static class MissingTerms

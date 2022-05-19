@@ -25,7 +25,7 @@
     <EmbeddedResource Include="Resources\Relics\*" />
 
   </ItemGroup>
-  
+
   <Target Name="Copy" AfterTargets="Build">
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="$(peglin)\BepInEx\plugins\$(AssemblyName).dll" />
   </Target>

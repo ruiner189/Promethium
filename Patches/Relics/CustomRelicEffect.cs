@@ -11,6 +11,9 @@ namespace Promethium.Patches.Relics
     {
         NONE = 7588,
         HOLSTER,
+        MINI,
+        WUMBO,
+        KILL_BUTTON,
         // Leaving room between each curse set, just in case there are more added in. This allows future compatibility
         CURSE_ONE_BALANCE = 8000,
         CURSE_ONE_ATTACK,

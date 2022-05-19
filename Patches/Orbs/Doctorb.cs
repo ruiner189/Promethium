@@ -13,7 +13,7 @@ namespace Promethium.Patches.Orbs
     public sealed class ModifiedDoctorb : ModifiedOrb
     {
         private static ModifiedDoctorb _instance;
-        public ModifiedDoctorb() : base("Doctorb") { }
+        public ModifiedDoctorb() : base(OrbNames.Doctorb) { }
 
         public static ModifiedDoctorb Register()
         {

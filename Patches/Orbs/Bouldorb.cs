@@ -14,7 +14,7 @@ namespace Promethium.Patches.Orbs
     public sealed class ModifiedBouldorb : ModifiedOrb
     {
         private static ModifiedBouldorb _instance;
-        private ModifiedBouldorb() : base("Bouldorb"){ }
+        private ModifiedBouldorb() : base(OrbNames.Bouldorb){ }
 
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {

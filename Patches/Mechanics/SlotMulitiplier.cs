@@ -43,7 +43,4 @@ namespace Promethium.Patches.Mechanics
             return new float[] { 0.25f, 0.5f, 1, 2, 2 };
         }
     }
-
-
-
 }

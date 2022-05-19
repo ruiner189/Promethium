@@ -84,7 +84,7 @@ namespace Promethium.Patches.Orbs
 
         protected static void ReplaceDescription(Attack attack, String desc, int position)
         {
-            if (attack.locDescStrings.Length < position)
+            if (attack.locDescStrings.Length > position)
                 attack.locDescStrings[position] = desc;
             else
                 AddToDescription(attack, desc);
@@ -105,7 +105,7 @@ namespace Promethium.Patches.Orbs
             Attack attack = ____ball.GetComponent<Attack>();
             if (attack != null)
             {
-                ModifiedOrb orb = ModifiedOrb.GetOrb(attack.locName);
+                ModifiedOrb orb = ModifiedOrb.GetOrb(attack.locNameString);
                 if (orb != null) orb.OnShotFired(__instance, ____ball, attack);
             }
 
@@ -123,7 +123,7 @@ namespace Promethium.Patches.Orbs
                 Attack attack = ____ball.GetComponent<Attack>();
                 if (attack != null)
                 {
-                    ModifiedOrb orb = ModifiedOrb.GetOrb(attack.locName);
+                    ModifiedOrb orb = ModifiedOrb.GetOrb(attack.locNameString);
                     if (orb != null) orb.OnDiscard(____relicManager, __instance, ____ball, attack);
                 }
             }
@@ -136,7 +136,7 @@ namespace Promethium.Patches.Orbs
 
         public static bool Prefix(Attack __instance, RelicManager ____relicManager, CruciballManager ____cruciballManager, ref String __result)
         {
-            ModifiedOrb orb = ModifiedOrb.GetOrb(__instance.locName);
+            ModifiedOrb orb = ModifiedOrb.GetOrb(__instance.locNameString);
             if (____relicManager == null) ____relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
             if (____cruciballManager == null) ____cruciballManager = Resources.FindObjectsOfTypeAll<CruciballManager>().FirstOrDefault();
 
@@ -175,7 +175,7 @@ namespace Promethium.Patches.Orbs
     {
         public static void Postfix(Attack __instance, CruciballManager ____cruciballManager)
         {
-            ModifiedOrb orb = ModifiedOrb.GetOrb(__instance.locName);
+            ModifiedOrb orb = ModifiedOrb.GetOrb(__instance.locNameString);
             if(orb != null)
             {
                 int damage = orb.GetAttackValue(____cruciballManager, __instance);

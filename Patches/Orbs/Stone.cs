@@ -11,7 +11,7 @@ namespace Promethium.Patches.Orbs
     public sealed class ModifiedStone : ModifiedOrb
     {
         private static ModifiedStone _instance;
-        private ModifiedStone() : base("Stone"){}
+        private ModifiedStone() : base(OrbNames.StoneOrb){}
 
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {

@@ -3,10 +3,12 @@ Orbs/armor_damage_multiplier	Multiplies damage based on current <color="purple">
 Orbs/armor_max	Increases Maximum <color="purple">Armor</color> by <color="purple">%am</color>	Multiplicateur actuel : <color="purple">%md</color>													
 Orbs/armor_turn	Restores <color="purple">%ar Armor</color> every reload	Restaure <color="purple">%ar Armure</color> à chaque rechargement.													
 Orbs/armor_discard_max	Restores <color="purple">Armor</color> to max if discarded	Restaure l'<color="purple">Armure</color> à son maximum si défaussée.													
-Orbs/armor_hold	Restores <color="purple">Armor</color> by <color="purple">%ah</color> while held														
+Orbs/armor_hold	Restores <color="purple">Armor</color> by <color="purple">%ah</color> while held	Restaure l'<color="purple">Armure</color> de <color="purple">%ah</color> tant que tenue													
 Orbs/armor_discard	Restores <color="purple">Armor</color> by <color="purple">%ad</color> if discarded	Restaure l'<color="purple">Armure</color> de <color="purple">%ad</color> si défaussée.													
 Orbs/armor_damage_discard_multiplier	Discard to transfer multiplier to the next orb. Takes away all <color="purple">Armor</color> and damages you for <color="red">%ac</color>	Défausser pour transférer le multiplicateur à la prochaine orbe. Retire toute l'<color="purple">Armure</color> puis vous inflige <color="purple">%ac</color> dégâts.													
-Orbs/armor_damage_hold_multiplier	Hold to transfer half the multiplier (<color="purple">%mh</color>). Takes away <color="red">3</color> <color="purple">Armor</color> per use.														
+Orbs/refresh_on_hold	Refreshes the board while held														
+Orbs/shuffle_on_hold	Shuffle <sprite name="CRIT_PEG"> and <sprite name="REFRESH_PEG"> while held														
+Orbs/armor_damage_hold_multiplier	Hold to transfer a <color="purple">%mh</color> multipler instead. Takes away <color="red">4</color> <color="purple">Armor</color> per use	Tenir pour transférer un multiplicateur de <color="purple">%mh</color> à la place. Retire <color="red">4</color> <color="purple">Armure</color> par utilisation													
 Relics/curse_one_balance_name	Curse I - Balance	Malédiction I - Équilibre													
 Relics/curse_one_balance_desc	<color="red">Increases enemy health based on the amount of curse relics you have.</color> All attacks get <style=dmg_bonus>+1 /+1</style>.	<color="red">Augmente la vie des ennemis en fonction du nombre de reliques maudites que vous avez.</color> Toutes vos attaques ont <style=dmg_bonus>+1/+1<style>.													
 Relics/curse_one_attack_name	Curse I - Attack	Malédiction I - Attaque													
@@ -37,7 +39,14 @@ Relics/curseFiveB_name	Curse V	Malédiction V
 Relics/curseFiveB_desc	<color="red">Increases the amount of Elite Fights</color>	<color="red">Augmente le nombre de Mini-Boss</color>													
 Relics/curseFiveC_name	Curse V	Malédiction V													
 Relics/curseFiveC_desc	<color="red">Increases the amount of Elite Fights</color>	<color="red">Augmente le nombre de Mini-Boss</color>													
-Relics/holster_name	Holster														
-Relics/holster_desc	Removes the ability to discard and instead allows you to hold orbs														
+Relics/holster_name	Holster	Étui 													
+Relics/holster_desc	Removes the ability to discard and instead allows you to hold orbs	Retire la possibilité de jeter une orbe, mais vous pouvez dorénavant les "tenir".													
+Relics/wumbo_name	Wumbo Belt														
+Relics/wumbo_desc	Enlarges your orb														
+Relics/mini_name	Mini Belt														
+Relics/mini_desc	Shrinks your orb														
+Relics/kill_button_name	Kill Button														
+Relics/kill_button_desc	Press to end your turn early. Recharges every reload														
 Relics/damage_bonus_plant_flat_desc_promethium	Attacks deal <style=dmg_bonus>+{[ADDITIONAL_PLANT_DAMAGE]} damage</style> to plants. Increases <color="purple">Maximum Armor</color> by <color="purple">5</color> and gain <color="purple">1 Armor</color> every turn	Les attaques font <style=dmg_bonus>+{[ADDITIONAL_PLANT_DAMAGE]} dégâts</style> aux plantes. Augmente l'<color="purple">Armure Maximum</color> de <color="purple">5</color> et régénère <color="purple">1 Armor</color> à chaque tour.													
 Relics/all_orbs_buff_desc_promethium	Every <sprite name=PEG> popped gets upgraded <style=dmg_bonus>(+{[ALL_ORBS_BUFF_AMOUNT]} damage)</style>.	Chaque <sprite name=PEG> éclaté est amélioré de <style=dmg_bonus>(+{[ALL_ORBS_BUFF_AMOUNT]} dégâts)</style>.													
+Relics/no_discard_desc_promethium	All attacks get <style=dmg_bonus>+{[NO_DISCARD_DAMAGE_INCREASE]} / +{[NO_DISCARD_DAMAGE_INCREASE]}</style> but you can no longer discard orbs or exhange held orbs.														

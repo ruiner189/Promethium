@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 
-
 namespace Promethium.Patches
 {
     [HarmonyPatch(typeof(BattleController), "ChooseShuffleOrDrawAtEndOfTurn")]

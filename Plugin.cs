@@ -26,7 +26,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.0.10";
+        public const String Version = "1.1.0";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -39,6 +39,10 @@ namespace Promethium
         public static Sprite CurseFour;
         public static Sprite CurseFive;
         public static Sprite Holster;
+        public static Sprite WumboBelt;
+        public static Sprite MiniBelt;
+        public static Sprite KillButtonRelic;
+        public static Sprite KillButton;
 
         //Localization
         public static List<String[]> LocalizationTerms;
@@ -105,11 +109,17 @@ namespace Promethium
         {
             ArmorEffect = LoadSprite("ArmorEffect.png");
             Holster = LoadSprite("Relics.Holster.png");
+            WumboBelt = LoadSprite("Relics.WumboBelt.png");
+            MiniBelt = LoadSprite("Relics.MiniBelt.png");
+
             CurseOne = LoadSprite("Relics.Curse_One.png");
             CurseTwo = LoadSprite("Relics.Curse_Two.png");
             CurseThree = LoadSprite("Relics.Curse_Three.png");
             CurseFour = LoadSprite("Relics.Curse_Four.png");
             CurseFive = LoadSprite("Relics.Curse_Five.png");
+
+            KillButtonRelic = LoadSprite("Relics.KillButton.png");
+            KillButton = LoadSprite("KillButton.png");
         }
 
         private void RegisterModifiedOrbs()
@@ -119,12 +129,15 @@ namespace Promethium
             ModifiedStone.Register();
             ModifiedDoctorb.Register();
             ModifiedNosforbatu.Register();
+            ModifiedRefreshOrb.Register();
+            ModifiedShuffleOrb.Register();
         }
 
         private void RegisterModifiedRelics()
         {
             ModifiedRelic.ModifiedRelics.Add(RelicEffect.DAMAGE_BONUS_PLANT_FLAT); // Gardening Gloves
-            ModifiedRelic.ModifiedRelics.Add(RelicEffect.ALL_ORBS_BUFF);
+            //ModifiedRelic.ModifiedRelics.Add(RelicEffect.ALL_ORBS_BUFF);
+            ModifiedRelic.ModifiedRelics.Add(RelicEffect.NO_DISCARD);
         }
 
 
@@ -217,7 +230,7 @@ namespace Promethium
                 Attack attack = obj.GetComponent<Attack>();
                 if(attack != null)
                 {
-                    Logger.LogInfo($"{obj.name} ({attack.locName})");
+                    Logger.LogInfo($"{obj.name} ({attack.locNameString})");
                 }
             }
         }

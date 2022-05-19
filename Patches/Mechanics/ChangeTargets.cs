@@ -23,6 +23,4 @@ namespace Promethium.Patches
             _canTarget.SetValue(____targetingManager, ____battleState == 2 || ____battleState == 3);
         }
     }
-
-
 }

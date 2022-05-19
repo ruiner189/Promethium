@@ -21,7 +21,10 @@ namespace Promethium.Loaders
 
         private void RegisterCustomRelics()
         {
-            //CustomRelicBuilder.Build("holster", Plugin.Holster, CustomRelicEffect.HOLSTER, RelicPool.BOSS);
+            CustomRelicBuilder.Build("holster", Plugin.Holster, CustomRelicEffect.HOLSTER, RelicPool.BOSS);
+            CustomRelicBuilder.Build("mini", Plugin.MiniBelt, CustomRelicEffect.MINI, RelicPool.RARE);
+            CustomRelicBuilder.Build("wumbo", Plugin.WumboBelt, CustomRelicEffect.WUMBO, RelicPool.RARE);
+            CustomRelicBuilder.Build("kill_button", Plugin.KillButtonRelic, CustomRelicEffect.KILL_BUTTON, RelicPool.COMMON);
 
             CustomRelicBuilder.BuildAsCurse("curse_one_balance", Plugin.CurseOne, CustomRelicEffect.CURSE_ONE_BALANCE, 1);
             CustomRelicBuilder.BuildAsCurse("curse_one_attack", Plugin.CurseOne, CustomRelicEffect.CURSE_ONE_ATTACK, 1);

@@ -19,6 +19,7 @@ If you want to help translate, feel free to!
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| v0.7.x | v1.1.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.0/Promethium.dll) |
 | v0.7.x | v1.0.10 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.10/Promethium.dll) |
 
 
@@ -32,7 +33,9 @@ If you want to help translate, feel free to!
 ### Armor
 Armor acts as a second resource for health. It is used up first, and has unique ways of replenishing it. The amount of armor you currently have is indicated by a status effect.
 ### Curse
-![Curse1](Resources/Relics/Curse_One.png)![Curse2](Resources/Relics/Curse_Two.png)![Curse3](Resources/Relics/Curse_Three.png)![Curse4](Resources/Relics/Curse_Four.png)![Curse5](Resources/Relics/Curse_Five.png)
+**As of v0.7.18 of Peglin Curse runs no longer work. If you want to do a curse run, please use an earlier version**
+
+![Curse1](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_One.png)![Curse2](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Two.png)![Curse3](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Three.png)![Curse4](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Four.png)![Curse5](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Five.png)
 
 Are you ready to test your pachinko skills? If you make it to the final boss, continuing the game will start a Cursed run. There are a total of 5 tiers. Can you make it to the end?
 Each curse relic will make the enemies stronger in different ways. It'll also give the player a small buff so they might survive...
@@ -42,14 +45,24 @@ At the end of your current run (if you defeat the last boss), choose "Restart" t
 
 Curse runs too easy? Check the configs to make them harder. You can make it so you lose some relics, reset orbs back to four, or even change the health scaling! 
 
+## New Relics
+Excluding the curse relics, Promethium currently offers 4 new relics. 1 Boss relic, 2 Rare relics, and 1 Common relic.
+### Holster
+    * Removes Discarding and allows you to hold orbs instead.
+    * Some orbs have special mechanics while held, and many more are to come!
+### Wumbo Belt
+    * Doubles the size of your orb.
+    * Has a special interaction with Mini Belt if you have both relics
+### Mini Belt
+    * Halves the size of your orb.
+    * Has a special interaction with Wumbo Belt if you have both relics
+### Kill Button
+    * Allows you to end your shot early
+    * Can only do once per reload
+
 ## Relic Changes
 ### Gardener's Glove
-![Garderner's Glove](Docs/Images/GardenerGlove.png)
-
-----------
-
-### Glorious SuffeRing
-![Glorious SuffeRing](Docs/Images/GloriousSuffeRing.png)
+![Garderner's Glove](https://raw.githubusercontent.com/ruiner189/Promethium/main/Docs/Images/GardenerGlove.png)
 
 ----------
 ### Weighted Chip
@@ -64,7 +77,7 @@ Curse runs too easy? Check the configs to make them harder. You can make it so y
 
 ## Orb Changes
 ### Stone
-![Stone](Docs/Images/Stone3.png)
+![Stone](https://raw.githubusercontent.com/ruiner189/Promethium/main/Docs/Images/Stone3.png)
 
 #### Normal Gameplay
 Level 2
@@ -84,13 +97,13 @@ Level 3
 * Replenishes Armor by 2 every reload
 ----------
 ### Bouldorb
-![Bouldorb](Docs/Images/Bouldorb.png)
+![Bouldorb](https://raw.githubusercontent.com/ruiner189/Promethium/main/Docs/Images/Bouldorb.png)
 
 All Levels
 * Restores 10 Armor if discarded
 ----------
 ### Orbelisk
-![Orbelisk](Docs/Images/Orbelisk3.png)
+![Orbelisk](https://raw.githubusercontent.com/ruiner189/Promethium/main/Docs/Images/Orbelisk3.png)
 
 Level 1
 * Attack: 1 | Crit: 3

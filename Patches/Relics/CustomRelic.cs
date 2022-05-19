@@ -7,6 +7,7 @@ using Relics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -36,84 +37,64 @@ namespace Promethium.Patches.Relics
         {
             return _pool;
         }
-    }
 
-	// This is very messy. However, because the original method uses Mathf.Max, we must add our code to it. This needs to be switched to a transpiler for compatability and future game updates.
-    [HarmonyPatch(typeof(Attack), nameof(Attack.GetModifiedDamagePerPeg))]
-    public static class AddAttackPerPeg
-    {
-        public static bool Prefix(Attack __instance, RelicManager ____relicManager, CruciballManager ____cruciballManager, PlayerStatusEffectController ____playerStatusEffectController, DeckManager ____deckManager, int critCount, ref float __result)
+		public static float GetDamageModifier(RelicManager relicManager, CruciballManager cruciballManager, int critCount, float currentValue)
         {
-			if (____relicManager == null) ____relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
-			if (____cruciballManager == null) ____cruciballManager = Resources.FindObjectsOfTypeAll<CruciballManager>().FirstOrDefault();
+			if(relicManager != null)
+            {
+				bool isCrit = critCount > 0;
 
-			if (____relicManager == null) return false;
-            bool isCrit = critCount > 0;
-
-			__result = isCrit ? __instance.CritDamagePerPeg : __instance.DamagePerPeg;
-
-			if (____relicManager.RelicEffectActive(RelicEffect.INCREASE_STRENGTH_SMALL))
-			{
-				__result += 1f;
+				if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_BALANCE))
+					currentValue += 1;
+				if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_ATTACK) && !isCrit)
+					currentValue += 2;
+				if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_CRIT) && isCrit)
+					currentValue += 2;
+				if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_ATTACK) && !isCrit)
+					currentValue += 2;
+				if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_CRIT) && isCrit)
+					currentValue += 2;
 			}
-			if (____relicManager.RelicEffectActive(RelicEffect.CONFUSION_RELIC))
-			{
-				__result += (float)(isCrit ? 3 : 2);
-			}
-			if (____relicManager.RelicEffectActive(RelicEffect.NO_DISCARD))
-			{
-				__result += 2f;
-			}
-			if (____relicManager.RelicEffectActive(RelicEffect.MATRYOSHKA))
-			{
-				__result -= 2f;
-			}
-			if (critCount == 0 && ____relicManager.RelicEffectActive(RelicEffect.NON_CRIT_BONUS_DMG))
-			{
-				__result += 1f;
-			}
-			if (__instance.IsStone)
-			{
-				if (____relicManager.RelicEffectActive(RelicEffect.BASIC_STONE_BONUS_DAMAGE))
-				{
-					__result += (float)((critCount > 0) ? 2 : 1);
-				}
-				if (____cruciballManager.WeakStones())
-				{
-					__result += (float)((critCount > 0) ? -1 : 0);
-				}
-			}
-			
-			if (____playerStatusEffectController != null)
-			{
-				__result += (float)____playerStatusEffectController.EffectStrength(StatusEffectType.DmgBuff);
-			}
-			if (__instance.gameObject != null)
-			{
-				AttackBaseDamageModifier[] components = __instance.GetComponents<AttackBaseDamageModifier>();
-				if (components != null && components.Length != 0)
-				{
-					foreach (AttackBaseDamageModifier attackBaseDamageModifier in components)
-					{
-						__result += attackBaseDamageModifier.GetDamageMod(____deckManager, ____relicManager, critCount);
-					}
-				}
-			}
-			if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_BALANCE))
-                __result += 1;
-            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_ATTACK) && !isCrit)
-                __result += 2;
-            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_CRIT) && isCrit)
-                __result += 2;
-            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_ATTACK) && !isCrit)
-                __result += 2;
-            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_CRIT) && isCrit)
-                __result += 2;
-
-			__result = Mathf.Max(__result, 0);
-
-            return false;
-        }
+			return currentValue;
+		}
     }
 
+	[HarmonyPatch(typeof(Attack), nameof(Attack.GetModifiedDamagePerPeg))]
+	public class ChangeAttackPerPeg
+	{
+		static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+		{
+			var code = new List<CodeInstruction>(instructions);
+			int insertionIndex = 0;
+			// Checking where the first relicManager is null. We can use that as an anchor for where we insert our code, as it is nearby.
+			for (int i = 0; i < code.Count; i++)
+			{
+				if (code[i].opcode == OpCodes.Ldfld && code[i].operand == (object) AccessTools.Field(typeof(Attack), "_relicManager"))
+				{
+					insertionIndex = i + 4;
+					break;
+				}
+			}
+
+			List<CodeInstruction> instructionsToInsert = new List<CodeInstruction>();
+
+			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldarg_0)); // Load this (attack)
+			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Attack), "_relicManager"))); // Loads _relicManager. Consumes this
+
+			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldarg_0)); // Load this (attack)
+			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Attack), "_cruciballManager"))); // Loads _cruciballManager. Consumes this
+
+			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldarg_1)); // Load critCount
+
+
+			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldloc_0)); // Load local variable num
+
+			instructionsToInsert.Add(new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(CustomRelic), nameof(CustomRelic.GetDamageModifier)))); // Call Method CustomRelic::GetDamageModifier
+			instructionsToInsert.Add(new CodeInstruction(OpCodes.Stloc_0)); // Set local variable num to the return of CustomRelic::DamageModifier
+
+			code.InsertRange(insertionIndex, instructionsToInsert);
+
+			return code;
+		}
+	}
 }

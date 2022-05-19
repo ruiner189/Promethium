@@ -16,7 +16,6 @@ namespace Promethium.Patches.Mechanics
                 if (____battleState == 3)
                 {
                     timeElapsed += Time.deltaTime;
-
                     if (timeElapsed > Plugin.SpeedUpDelay)
                     {
                         float speedUp = Math.Min((float)(1f + Math.Log10((timeElapsed - (Plugin.SpeedUpDelay - 1)) * Plugin.SpeedUpRate)), Plugin.SpeedUpMax);

@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Promethium.Patches.Status_Effect
 {
-
     [HarmonyPatch(typeof(StatusEffectData), nameof(StatusEffectData.GetStatusEffectIcon))]
     public static class GetIcon
     {

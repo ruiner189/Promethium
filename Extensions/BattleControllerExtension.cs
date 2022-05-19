@@ -53,6 +53,4 @@ namespace Promethium.Extensions
             return controller.GetPrivateFieldValue<PlayerHealthController>("_playerHealthController");
         }
     }
-
-
 }

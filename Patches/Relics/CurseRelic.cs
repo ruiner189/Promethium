@@ -49,10 +49,7 @@ namespace Promethium.Patches.Relics
         {
             return AllCurseRelics.Where(relic => relicManager.RelicEffectActive(relic.effect)).Count();
         }
-
-
     }
-
 
     [HarmonyPatch(typeof(Enemy), nameof(Enemy.Initialize))]
     public static class EnemyInit
@@ -166,6 +163,4 @@ namespace Promethium.Patches.Relics
             }
         }
     }
-
-
 }

@@ -19,5 +19,4 @@ namespace Promethium.Patches.Relics
             if (ModifiedRelics.Contains(__instance.effect)) __result += AltText;
         }
     }
-
 }

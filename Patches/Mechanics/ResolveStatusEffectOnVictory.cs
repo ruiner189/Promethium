@@ -15,9 +15,11 @@ namespace Promethium.Patches.Mechanics
         public static void Postfix(BattleController __instance, PlayerStatusEffectController ____playerStatusEffectController)
         {
             List<StatusEffect> effects = (List<StatusEffect>) typeof(PlayerStatusEffectController).GetField("_statusEffects", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(____playerStatusEffectController);
-            while(effects.Any(effect => StatusEffect.IsStatusEffectPerishable(effect.EffectType)))
+            int attempts = 99;
+            while(effects.Any(effect => StatusEffect.IsStatusEffectPerishable(effect.EffectType)) && attempts > 0)
             {
                 ____playerStatusEffectController.ResolveStatusEffects();
+                attempts--;
             }
         }
     }

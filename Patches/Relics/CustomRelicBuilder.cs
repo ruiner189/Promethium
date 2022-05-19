@@ -121,7 +121,4 @@ namespace Promethium.Patches.Relics
             }
         }
     }
-
-
-    
 }

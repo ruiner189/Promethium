@@ -15,7 +15,7 @@ namespace Promethium.Patches.Orbs
     public sealed class ModifiedOrbelisk : ModifiedOrb
     {
         private static ModifiedOrbelisk _instance;
-        private ModifiedOrbelisk() : base("Orbelisk"){}
+        private ModifiedOrbelisk() : base(OrbNames.Orbelisk){}
 
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
