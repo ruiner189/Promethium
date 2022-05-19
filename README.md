@@ -40,7 +40,7 @@ Each curse relic will make the enemies stronger in different ways. It'll also gi
 #### Starting a Curse Run
 At the end of your current run (if you defeat the last boss), choose "Restart" to begin or increase your curse level. Each run will give you three choices of curse relics. The negative effect is the same, while you get to choose the benefit. 
 
-Curse runs too easy? Check the configs to make them harder. You can make it so you lose some relics, reset orbs back to four, or event change the health scaling! 
+Curse runs too easy? Check the configs to make them harder. You can make it so you lose some relics, reset orbs back to four, or even change the health scaling! 
 
 ## Relic Changes
 ### Gardener's Glove
