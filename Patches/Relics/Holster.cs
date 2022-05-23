@@ -28,16 +28,6 @@ namespace Promethium.Patches.Relics
             }
         }
 
-        [HarmonyPatch(typeof(BattleController), nameof(BattleController.MaxDiscardedShots), MethodType.Getter)]
-        public static class NoDiscards
-        {
-            public static void Postfix(RelicManager ____relicManager, ref int __result)
-            {
-                if (____relicManager.RelicEffectActive(CustomRelicEffect.HOLSTER))
-                    __result = 0;
-            }
-        }
-
         [HarmonyPatch(typeof(BattleController), "ShotFired")]
         public static class OnShotFired
         {

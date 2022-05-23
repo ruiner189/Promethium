@@ -19,7 +19,7 @@ If you want to help translate, feel free to!
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.x | v1.1.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.0/Promethium.dll) |
+| v0.7.x | v1.1.1 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.1/Promethium.dll) |
 | v0.7.x | v1.0.10 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.10/Promethium.dll) |
 
 
@@ -33,8 +33,6 @@ If you want to help translate, feel free to!
 ### Armor
 Armor acts as a second resource for health. It is used up first, and has unique ways of replenishing it. The amount of armor you currently have is indicated by a status effect.
 ### Curse
-**As of v0.7.18 of Peglin Curse runs no longer work. If you want to do a curse run, please use an earlier version**
-
 ![Curse1](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_One.png)![Curse2](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Two.png)![Curse3](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Three.png)![Curse4](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Four.png)![Curse5](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Five.png)
 
 Are you ready to test your pachinko skills? If you make it to the final boss, continuing the game will start a Cursed run. There are a total of 5 tiers. Can you make it to the end?

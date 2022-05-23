@@ -137,9 +137,6 @@ namespace Promethium.Patches.Orbs
         public static bool Prefix(Attack __instance, RelicManager ____relicManager, CruciballManager ____cruciballManager, ref String __result)
         {
             ModifiedOrb orb = ModifiedOrb.GetOrb(__instance.locNameString);
-            if (____relicManager == null) ____relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
-            if (____cruciballManager == null) ____cruciballManager = Resources.FindObjectsOfTypeAll<CruciballManager>().FirstOrDefault();
-
 
             if (orb == null || ____relicManager == null) return true;
 
