@@ -38,7 +38,7 @@ namespace Promethium.Patches.Mechanics
 
 		public static void PruneRelics(RelicManager manager)
 		{
-			Dictionary<RelicEffect, Relic> relicDict = (Dictionary<RelicEffect, Relic>)typeof(RelicManager).GetField("_ownedRelics", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(manager);
+			Dictionary<RelicEffect, Relic> relicDict = manager._ownedRelics;
 			List<Relic> relics = relicDict.Values.ToList();
 
             if (!Plugin.PruneRelicsOnNewCurseRunOn)
@@ -136,7 +136,7 @@ namespace Promethium.Patches.Mechanics
             {
 				return new Relic[] {manager.consolationPrize, manager.consolationPrize, manager.consolationPrize}.ToList();
             }
-			Dictionary<RelicEffect, Relic> relicDict = (Dictionary<RelicEffect, Relic>)typeof(RelicManager).GetField("_ownedRelics", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(manager);
+			Dictionary<RelicEffect, Relic> relicDict = manager._ownedRelics;
 			List<Relic> relics = relicDict.Values.ToList();
 
 			int currentCurse = 0;
@@ -173,11 +173,11 @@ namespace Promethium.Patches.Mechanics
 
 			RelicSet relicPool = null;
 			if (rarity == RelicRarity.COMMON)
-				relicPool = (RelicSet)manager.GetType().GetField("_commonRelicPool", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(manager);
+				relicPool = manager._commonRelicPool;
 			else if (rarity == RelicRarity.RARE)
-				relicPool = (RelicSet)manager.GetType().GetField("_rareRelicPool", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(manager);
+				relicPool = manager._rareRelicPool;
 			else if (rarity == RelicRarity.BOSS)
-				relicPool = (RelicSet)manager.GetType().GetField("_bossRelicPool", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(manager);
+				relicPool = manager._bossRelicPool;
 
 			Relic relic = relics.Find(r => relicPool.relics.Contains(r));
 			if (relic == null && rarity != RelicRarity.COMMON)
@@ -187,9 +187,7 @@ namespace Promethium.Patches.Mechanics
 				else if (rarity == RelicRarity.BOSS)
 					return GetRelicOfRarity(manager, relics, RelicRarity.RARE);
 			}
-
 			return relic;
-
 		}
 
 		public static bool LoadCurseRunData;

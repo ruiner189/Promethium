@@ -8,24 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Promethium.Patches.Orbs
+namespace Promethium.Patches.Orbs.ModifiedOrbs
 {
-    public sealed class ModifiedNosforbatu : ModifiedOrb
+    public sealed class ModifiedDoctorb : ModifiedOrb
     {
-        private static ModifiedNosforbatu _instance;
-        public ModifiedNosforbatu() : base(OrbNames.VampireOrb) { }
+        private static ModifiedDoctorb _instance;
+        public ModifiedDoctorb() : base(OrbNames.Doctorb) { }
 
-        public static ModifiedNosforbatu Register()
+        public static ModifiedDoctorb Register()
         {
             if (_instance == null)
-                _instance = new ModifiedNosforbatu();
+                _instance = new ModifiedDoctorb();
             return _instance;
         }
 
         public override void OnShotFired(BattleController battleController, GameObject orb, Attack attack)
         {
-            RelicManager relicManager = battleController.GetRelicManager();
-            if (CurseRelic.IsCurseLevelActive(relicManager, 2))
+            RelicManager relicManager = battleController._relicManager;
+            if(CurseRelic.IsCurseLevelActive(relicManager, 2))
             {
                 battleController.AddDamageMultiplier(0.5f);
             }

@@ -8,6 +8,15 @@ Localization is being done at https://docs.google.com/spreadsheets/d/1r7o-GVIn6l
 If you want to help translate, feel free to!
 
 ## Installation
+### Thunderstore (ModManager)
+1. Download [Thunderstore](https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager)
+2. Choose Peglin for the Game Selection
+3. Create or select a profile
+4. Search "Promethium" in the search bar
+5. Click "Download with dependencies"
+6. Click "Start Modded" to begin playing!
+
+### Github (Manual)
 1. Download [Promethium](https://github.com/ruiner189/Promethium/releases)
 2. Download [BepInEx_x64_5.x.x.x.zip](https://github.com/BepInEx/BepInEx/releases)
 3. Go to your install directory for Peglin.
@@ -19,7 +28,7 @@ If you want to help translate, feel free to!
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.x | v1.1.1 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.1/Promethium.dll) |
+| v0.7.x | v1.1.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.2/Promethium.dll) |
 | v0.7.x | v1.0.10 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.10/Promethium.dll) |
 
 
@@ -74,6 +83,29 @@ Excluding the curse relics, Promethium currently offers 4 new relics. 1 Boss rel
    * 0x, 0x, 100x, 0x, 0x
 
 ## Orb Changes
+### Oreb
+Oreb has been redone to have a higher impact in the game. Not only is it back, but you can now upgrade it!
+
+Level 1
+* Attack: 1 | Crit: 2
+* Has a weird bounce
+* Every 3 hits a fragment gets sent off
+* Fragments last 2 hits before disappearing
+
+Level 2
+* Attack: 2 | Crit: 2
+* Has a weird bounce
+* Every 3 hits a fragment gets sent off
+* Fragments can split one time
+* After the last split, the next 2 hits will cause it to disappear
+
+Level 3
+* Attack: 2 | Crit: 3
+* Has a weird bounce
+* Every 2 hits a fragment gets sent off
+* Fragments can split twice
+* After the last split, the next 2 hits will cause it to disappear
+
 ### Stone
 ![Stone](https://raw.githubusercontent.com/ruiner189/Promethium/main/Docs/Images/Stone3.png)
 

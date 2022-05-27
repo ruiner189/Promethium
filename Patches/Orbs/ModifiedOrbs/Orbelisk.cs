@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Relics;
 
-namespace Promethium.Patches.Orbs
+namespace Promethium.Patches.Orbs.ModifiedOrbs
 {
 
     public sealed class ModifiedOrbelisk : ModifiedOrb
@@ -30,20 +30,20 @@ namespace Promethium.Patches.Orbs
 
         public override void OnShotFired(BattleController battleController, GameObject orb, Attack attack)
         {
-            CruciballManager cruciballManager = battleController.GetCruciballManager();
+            CruciballManager cruciballManager = battleController._cruciballManager;
             float multiplier = Armor.GetArmorDamageMultiplier(attack, cruciballManager);
             if (multiplier > 0)
-                battleController.GetDamageMultipliers().Add(multiplier + 1);
+                battleController._damageMultipliers.Add(multiplier + 1);
         }
 
         public override void ShotWhileInHolster(RelicManager relicManager, BattleController battleController, GameObject attackingOrb, GameObject heldOrb)
         {
-            CruciballManager cruciballManager = battleController.GetCruciballManager();
+            CruciballManager cruciballManager = battleController._cruciballManager;
             float multiplier = (Armor.GetArmorDamageMultiplier(heldOrb.GetComponent<Attack>(), cruciballManager) / 2);
             if (multiplier > 0)
             {
-                PlayerStatusEffectController playerStatusEffectController = battleController.GetPlayerStatusEffectController();
-                battleController.GetDamageMultipliers().Add(multiplier + 1);
+                PlayerStatusEffectController playerStatusEffectController = battleController._playerStatusEffectController;
+                battleController._damageMultipliers.Add(multiplier + 1);
                 int originalArmor = Armor.currentArmor;
                 int armorDamage = 4;
                 Armor.currentArmor = Mathf.Max(Armor.currentArmor - armorDamage, 0);
@@ -54,15 +54,15 @@ namespace Promethium.Patches.Orbs
         public override void OnDiscard(RelicManager relicManager, BattleController battleController, GameObject orb, Attack attack)
         {
 
-            CruciballManager cruciballManager = battleController.GetCruciballManager();
+            CruciballManager cruciballManager = battleController._cruciballManager;
 
             float multiplier = Armor.GetArmorDamageMultiplier(attack, cruciballManager);
             if (multiplier > 0)
             {
-                PlayerStatusEffectController playerStatusEffectController = battleController.GetPlayerStatusEffectController();
-                PlayerHealthController playerHealthController = battleController.GetPlayerHealthController();
+                PlayerStatusEffectController playerStatusEffectController = battleController._playerStatusEffectController;
+                PlayerHealthController playerHealthController = battleController._playerHealthController;
 
-                battleController.GetDamageMultipliers().Add(multiplier + 1);
+                battleController._damageMultipliers.Add(multiplier + 1);
                 int armorDamage = Armor.currentArmor;
                 Armor.currentArmor = 0;
                 Armor.ChangeArmorDisplay(-armorDamage, playerStatusEffectController);

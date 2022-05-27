@@ -3,9 +3,10 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using Promethium.Components;
+using Promethium.Components.Loaders;
 using Promethium.Loaders;
 using Promethium.Patches.Language;
-using Promethium.Patches.Orbs;
+using Promethium.Patches.Orbs.ModifiedOrbs;
 using Promethium.Patches.Relics;
 using Relics;
 using System;
@@ -13,11 +14,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using TMPro;
-using ToolBox.Serialization;
 using UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
 namespace Promethium
 {
@@ -27,7 +25,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.1.1";
+        public const String Version = "1.1.2";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -102,6 +100,7 @@ namespace Promethium
             GameObject loader = new GameObject("Promethium Mod");
             loader.AddComponent<LanguageLoader>();
             loader.AddComponent<RelicLoader>();
+            loader.AddComponent<OrbLoader>();
             loader.AddComponent<RestartButtonActivator>();
             DontDestroyOnLoad(loader);
             loader.hideFlags = HideFlags.HideAndDontSave;

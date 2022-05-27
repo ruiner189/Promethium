@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Promethium.Patches.Orbs
+namespace Promethium.Patches.Orbs.ModifiedOrbs
 {
     public abstract class ModifiedOrb
     {
@@ -194,9 +194,17 @@ namespace Promethium.Patches.Orbs
             DeckManager deckManager = Resources.FindObjectsOfTypeAll<DeckManager>().FirstOrDefault();
             RelicManager relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
             CruciballManager cruciballManager = Resources.FindObjectsOfTypeAll<CruciballManager>().FirstOrDefault();
-
-
             __instance.SoftInit(deckManager, relicManager, cruciballManager);
+        }
+    }
+
+    [HarmonyPatch(typeof(BattleController), nameof(BattleController.ArmBallForShot))]
+    public static class ArmBall
+    {
+        [HarmonyPriority(Priority.First)]
+        public static void Prefix(GameObject ____ball)
+        {
+            ____ball.SetActive(true);
         }
     }
 }

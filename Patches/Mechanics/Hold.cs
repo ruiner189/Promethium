@@ -60,12 +60,9 @@ namespace Promethium.Patches.Mechanics
                     _lastDraw = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                     ____ball.SetActive(false);
 
-
                     DeckInfoManager info = GameObject.Find("OrbDisplay").GetComponent<DeckInfoManager>();
-                    GameObject displayOrb = (GameObject)typeof(DeckInfoManager).GetField("_currentOrb", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(info);
+                    GameObject displayOrb = info._currentOrb;
                     ShotDetailsWidget widget = GameObject.Find("OrbDetails").GetComponent<ShotDetailsWidget>();
-
-
 
                     if (_heldObject != null)
                     {
@@ -100,7 +97,7 @@ namespace Promethium.Patches.Mechanics
                                 ___currentBallIsPersistBonusOrb = true;
                             }
 
-                            typeof(DeckInfoManager).GetMethod("UpdatePersistentInfo", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(info, new System.Object[] { persist });
+                            info.UpdatePersistentInfo(persist);
 
                             newPersist.remainingPersistence = persist;
                             if (persist >= 0)
@@ -112,20 +109,20 @@ namespace Promethium.Patches.Mechanics
 
                         ____ball.SetActive(true);
 
-                        typeof(DeckInfoManager).GetField("_nextOrb", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(info, _heldInfo);
+                        info._nextOrb = _heldInfo;
                         _heldInfo = CreateShotDetails(info, GameObject.Find("OrbDisplay").transform, _heldObject);
                         AddOrbToBattleDeck(____deckManager, ____ball);
                         ____deckManager.RemoveOrbFromBattleDeck(_heldObject);
 
-                        ((GameObject)typeof(DeckInfoManager).GetField("_currentOrb", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(info)).SetActive(false);
-                        typeof(BattleController).GetMethod("InitializeAttack", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(__instance, new System.Object[] { ____ball });
+                        info._currentOrb.SetActive(false);
+                        __instance.InitializeAttack(____ball);
                         Action onBallCreationComplete = BattleController.OnBallCreationComplete;
                         if (onBallCreationComplete != null)
                         {
                             onBallCreationComplete();
                         }
 
-                        typeof(DeckInfoManager).GetMethod("BallDrawFinished", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(info, new System.Object[] { });
+                        info.BallDrawFinished();
                         return false;
                     }
                     else
@@ -133,12 +130,12 @@ namespace Promethium.Patches.Mechanics
                         _heldObject = ____ball;
                         _heldObject.SetActive(false);
                         _heldInfo = CreateShotDetails(info, GameObject.Find("OrbDisplay").transform, _heldObject);
-                        GameObject.Destroy((GameObject)typeof(DeckInfoManager).GetField("_currentOrb", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(info));
+                        GameObject.Destroy(info._currentOrb);
                         ____deckManager.RemoveOrbFromBattleDeck(_heldObject);
                         ____ball = null;
                         if (____deckManager.shuffledDeck.Count == 0)
                         {
-                            typeof(BattleController).GetMethod("ShuffleDeck", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(__instance, new System.Object[] { });
+                            __instance.ShuffleDeck();
                         }
                         else
                         {
@@ -151,8 +148,7 @@ namespace Promethium.Patches.Mechanics
                                     _heldDeckObject =  ____deckManager.shuffledDeck.Pop();
                                 }
                             }
-                            typeof(BattleController).GetMethod("DrawBall", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(__instance, new System.Object[] { });
-                            //typeof(DeckInfoManager).GetMethod("DrawNextOrb", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(info, new System.Object[] {null});
+                            __instance.DrawBall();
                         }
                         return false;
                     }
@@ -163,16 +159,15 @@ namespace Promethium.Patches.Mechanics
 
             private static GameObject CreateShotDetails(DeckInfoManager manager, Transform parent, GameObject ball)
             {
-                MethodInfo method = typeof(DeckInfoManager).GetMethod("CreatePreviewSprite", BindingFlags.NonPublic | BindingFlags.Instance);
-                GameObject gameObject = (GameObject)method.Invoke(manager, new System.Object[] { ball, 0.0f });
-                gameObject.transform.SetParent(parent); //
+                GameObject gameObject = manager.CreatePreviewSprite(ball, 0.0f);
+                gameObject.transform.SetParent(parent);
                 gameObject.transform.position = new Vector3(-8.4f, 4.6f, gameObject.transform.position.z);
                 return gameObject;
             }
 
             private static void AddOrbToBattleDeck(DeckManager manager, GameObject orb)
             {
-                GameObject container = ((BattleDeckOrbContainer)typeof(DeckManager).GetField("battleDeckOrbContainerInstance", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(manager)).gameObject;
+                GameObject container = manager.battleDeckOrbContainerInstance.gameObject;
                 foreach (Transform child in container.transform)
                 {
                     GameObject gameObject = child.gameObject;
@@ -184,22 +179,6 @@ namespace Promethium.Patches.Mechanics
                         break;
                     }
                 }
-            }
-
-            private static GameObject GetOrbPrefab(DeckManager manager, GameObject orb)
-            {
-                GameObject container = ((BattleDeckOrbContainer)typeof(DeckManager).GetField("battleDeckOrbContainerInstance", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(manager)).gameObject;
-                foreach (Transform child in container.transform)
-                {
-                    GameObject gameObject = child.gameObject;
-                    Attack component = gameObject.GetComponent<Attack>();
-                    Attack component2 = orb.GetComponent<Attack>();
-                    if (Attack.IsEquivalent(component, component2))
-                    {
-                        return gameObject;
-                    }
-                }
-                return null;
             }
         }
     }

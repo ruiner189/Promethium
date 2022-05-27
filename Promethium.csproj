@@ -20,18 +20,15 @@
     <Reference Include="$(peglin)\BepInEx\core\Mono.Cecil.Rocks.dll" />
     <Reference Include="$(peglin)\BepInEx\core\MonoMod.RuntimeDetour.dll" />
     <Reference Include="$(peglin)\BepInEx\core\MonoMod.Utils.dll" />
-    <Reference Include="$(peglin)\Peglin_Data\Managed\*.dll" />
+    <Reference Include="$(peglin)\Peglin_Data\Managed\*.dll" Exclude="$(peglin)\Peglin_Data\Managed\Assembly-CSharp.dll" />
+    <Reference Include="$(peglin)\Assembly-CSharp.dll" />
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="Resources\Relics\*" />
 
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Objects\" />
-  </ItemGroup>
-
   <Target Name="Copy" AfterTargets="Build">
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="$(peglin)\BepInEx\plugins\$(AssemblyName).dll" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="$(appdata)\Thunderstore Mod Manager\DataFolder\Peglin\profiles\Development\BepInEx\plugins\Promethium-Promethium\$(AssemblyName).dll" />
   </Target>
 
 </Project>

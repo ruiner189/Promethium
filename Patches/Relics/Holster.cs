@@ -1,13 +1,8 @@
 ﻿using HarmonyLib;
 using Promethium.Extensions;
 using Promethium.Patches.Mechanics;
-using Promethium.Patches.Orbs;
+using Promethium.Patches.Orbs.ModifiedOrbs;
 using Relics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Promethium.Patches.Relics
