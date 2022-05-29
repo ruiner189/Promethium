@@ -30,7 +30,7 @@ namespace Promethium.Patches.Status_Effect
         }
     }
 
-    [HarmonyPatch(typeof(StatusEffectIcon), nameof(StatusEffectIcon.SetData), new[] {typeof(int)})] 
+    [HarmonyPatch(typeof(StatusEffectIcon), nameof(StatusEffectIcon.SetData), new[] { typeof(int) })]
     public static class SetDataOnly
     {
         public static bool Prefix(int intensity, TextMeshProUGUI ____intensityText)

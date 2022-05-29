@@ -20,10 +20,11 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             int level = attack.Level;
             if (relicManager.RelicEffectActive(CustomRelicEffect.HOLSTER))
             {
-                if(level == 2)
+                if (level == 2)
                 {
                     ReplaceDescription(attack, "refresh_on_hold", 1);
-                } else if (level == 3)
+                }
+                else if (level == 3)
                 {
                     ReplaceDescription(attack, "refresh_on_hold", 2);
                 }
@@ -39,7 +40,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
         public override void ShotWhileInHolster(RelicManager relicManager, BattleController battleController, GameObject attackingOrb, GameObject heldOrb)
         {
             Attack attack = heldOrb.GetComponent<Attack>();
-            if(attack != null && attack.Level > 1)
+            if (attack != null && attack.Level > 1)
             {
                 Peg.OnPegDestroyedMutable?.Invoke(Peg.PegType.RESET);
                 battleController.ResetField(false);

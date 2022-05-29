@@ -7,6 +7,8 @@ using Promethium.Patches.Orbs;
 using System;
 using UnityEngine;
 using Relics;
+using Promethium.Components;
+using I2.Loc;
 
 namespace Promethium.Patches.Orbs.ModifiedOrbs
 {
@@ -14,7 +16,18 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     public sealed class ModifiedBouldorb : ModifiedOrb
     {
         private static ModifiedBouldorb _instance;
-        private ModifiedBouldorb() : base(OrbNames.Bouldorb){ }
+
+
+        private ModifiedBouldorb() : base(OrbNames.Bouldorb)
+        {
+            LocalVariables = true;
+        }
+
+        public override void SetLocalVariables(LocalizationParamsManager localParams, GameObject orb, Attack attack)
+        {
+            localParams.SetParameterValue(ParamKeys.ARMOR_DISCARD, $"{GetArmorOnDiscard()}", true);
+            localParams.SetParameterValue(ParamKeys.ARMOR_WHILE_HELD, $"{GetArmorWhileInHolster()}", true);
+        }
 
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
@@ -28,23 +41,32 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             }
         }
 
-        public override void OnDiscard(RelicManager relicManager, BattleController battleController, GameObject orb, Attack attack)
+        public float GetArmorOnDiscard()
         {
-            CruciballManager cruciballManager = battleController._cruciballManager;
-            PlayerStatusEffectController playerStatusEffectController = battleController._playerStatusEffectController;
-            int original = Armor.currentArmor;
-            int add = Armor.GetArmorDiscardFromOrb(attack, relicManager, cruciballManager);
-            Armor.currentArmor = Mathf.Clamp(original + add, 0, Armor.GetTotalMaximumArmor(relicManager, cruciballManager));
-            Armor.ChangeArmorDisplay(Armor.currentArmor - original, playerStatusEffectController);
+            return 10;
         }
 
-        public override void ShotWhileInHolster(RelicManager relicManager, BattleController battleController, GameObject attackingOrb, GameObject heldOrb) {
-            CruciballManager cruciballManager = battleController._cruciballManager;
-            PlayerStatusEffectController playerStatusEffectController = battleController._playerStatusEffectController;
-            int original = Armor.currentArmor;
-            int add = Armor.GetArmorHoldFromOrb(heldOrb.GetComponent<Attack>(), relicManager, cruciballManager);
-            Armor.currentArmor = Mathf.Clamp(original + add, 0, Armor.GetTotalMaximumArmor(relicManager, cruciballManager));
-            Armor.ChangeArmorDisplay(Armor.currentArmor - original, playerStatusEffectController);
+        public float GetArmorWhileInHolster()
+        {
+            return 3;
+        }
+
+        public override void OnDiscard(RelicManager relicManager, BattleController battleController, GameObject orb, Attack attack)
+        {
+            ArmorManager armor = Plugin.PromethiumManager.GetComponent<ArmorManager>();
+            if (armor != null)
+            {
+                armor.AddArmor(10);
+            }
+        }
+
+        public override void ShotWhileInHolster(RelicManager relicManager, BattleController battleController, GameObject attackingOrb, GameObject heldOrb)
+        {
+            ArmorManager armor = Plugin.PromethiumManager.GetComponent<ArmorManager>();
+            if (armor != null)
+            {
+                armor.AddArmor(3);
+            }
         }
 
 

@@ -25,10 +25,13 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.1.2";
+        public const String Version = "1.1.3";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
+        public static ConfigFile ConfigFile;
+
+        public static GameObject PromethiumManager;
 
         // Sprites
         public static Sprite ArmorEffect;
@@ -75,6 +78,7 @@ namespace Promethium
         private void Awake()
         {
             Log = Logger;
+            ConfigFile = Config;
 
             LocalizationTerms = ReadTSVFile("Localization.tsv");
 
@@ -97,13 +101,14 @@ namespace Promethium
             _harmony = new Harmony(GUID);
             _harmony.PatchAll();
 
-            GameObject loader = new GameObject("Promethium Mod");
-            loader.AddComponent<LanguageLoader>();
-            loader.AddComponent<RelicLoader>();
-            loader.AddComponent<OrbLoader>();
-            loader.AddComponent<RestartButtonActivator>();
-            DontDestroyOnLoad(loader);
-            loader.hideFlags = HideFlags.HideAndDontSave;
+            PromethiumManager = new GameObject("Promethium Mod");
+            PromethiumManager.AddComponent<LanguageLoader>();
+            PromethiumManager.AddComponent<RelicLoader>();
+            PromethiumManager.AddComponent<OrbLoader>();
+            PromethiumManager.AddComponent<RestartButtonActivator>();
+            PromethiumManager.AddComponent<ArmorManager>();
+            DontDestroyOnLoad(PromethiumManager);
+            PromethiumManager.hideFlags = HideFlags.HideAndDontSave;
         }
 
         private void LoadSprites()
@@ -136,9 +141,8 @@ namespace Promethium
 
         private void RegisterModifiedRelics()
         {
-            ModifiedRelic.ModifiedRelics.Add(RelicEffect.DAMAGE_BONUS_PLANT_FLAT); // Gardening Gloves
-            //ModifiedRelic.ModifiedRelics.Add(RelicEffect.ALL_ORBS_BUFF);
-            ModifiedRelic.ModifiedRelics.Add(RelicEffect.NO_DISCARD);
+            ModifiedRelic.AddRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT); // Gardening Gloves
+            ModifiedRelic.AddRelic(RelicEffect.NO_DISCARD, true);
         }
 
 
@@ -154,7 +158,7 @@ namespace Promethium
                     String line = reader.ReadLine();
                     String[] split = line.Split('\t');
                     results.Add(split);
-                    if(split.Length > 1 && !LocalizationKeys.Contains(split[0]))
+                    if (split.Length > 1 && !LocalizationKeys.Contains(split[0]))
                     {
                         LocalizationKeys.Add(split[0]);
                     }
@@ -226,10 +230,10 @@ namespace Promethium
 
         private void SendOrbsToConsole()
         {
-            foreach(GameObject obj in Resources.LoadAll<GameObject>("Prefabs/Orbs/"))
+            foreach (GameObject obj in Resources.LoadAll<GameObject>("Prefabs/Orbs/"))
             {
                 Attack attack = obj.GetComponent<Attack>();
-                if(attack != null)
+                if (attack != null)
                 {
                     Logger.LogInfo($"{obj.name} ({attack.locNameString})");
                 }
@@ -243,8 +247,11 @@ namespace Promethium
         public static void Postfix(VersionDisplay __instance)
         {
             TMP_Text text = __instance.GetComponent<TMP_Text>();
-            text.text = $"Peglin {text.text}\n{Plugin.Name} v{Plugin.Version}";
-            __instance.transform.position += new Vector3(0, 0.5f, 0);
+            if (text.text.StartsWith("v"))
+            {
+                text.text = $"Peglin {text.text}\n{Plugin.Name} v{Plugin.Version}";
+                __instance.transform.position += new Vector3(0, 0.5f, 0);
+            }
         }
     }
 }

@@ -38,75 +38,48 @@ namespace Promethium.Patches.Relics
             return _pool;
         }
 
-		public static float GetDamageModifier(RelicManager relicManager, CruciballManager cruciballManager, int critCount, float currentValue)
+        public bool IsEnabled()
         {
-			if(relicManager != null)
-            {
-				bool isCrit = critCount > 0;
-
-				if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_BALANCE))
-					currentValue += 1;
-				if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_ATTACK) && !isCrit)
-					currentValue += 2;
-				if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_CRIT) && isCrit)
-					currentValue += 2;
-				if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_ATTACK) && !isCrit)
-					currentValue += 2;
-				if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_CRIT) && isCrit)
-					currentValue += 2;
-			}
-			return currentValue;
-		}
+            if (this is CurseRelic) return true;
+            return Plugin.ConfigFile.Bind<bool>("Custom Relics", locKey, true, "Disable to remove from relic pool. The relic itself is still in the game.").Value;
+        }
     }
 
-	[HarmonyPatch(typeof(Attack), nameof(Attack.GetModifiedDamagePerPeg))]
-	public class ChangeAttackPerPeg
-	{
-		static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-		{
-			var code = new List<CodeInstruction>(instructions);
-			int insertionIndex = 0;
-			// Checking where the first relicManager is null. We can use that as an anchor for where we insert our code, as it is nearby.
-			for (int i = 0; i < code.Count; i++)
-			{
-				if (code[i].opcode == OpCodes.Ldfld && code[i].operand == (object) AccessTools.Field(typeof(Attack), "_relicManager"))
-				{
-					insertionIndex = i + 4;
-					break;
-				}
-			}
+    [HarmonyPatch(typeof(Attack), nameof(Attack.GetModifiedDamagePerPeg))]
+    public class ChangeAttackPerPeg
+    {
+        public static void Postfix(Attack __instance, int critCount, ref float __result)
+        {
+            RelicManager relicManager = __instance._relicManager;
+            if (__instance._relicManager != null)
+            {
+                int currentValue = 0;
+                bool isCrit = critCount > 0;
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_BALANCE))
+                    currentValue += 1;
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_ATTACK) && !isCrit)
+                    currentValue += 2;
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_ONE_CRIT) && isCrit)
+                    currentValue += 2;
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_ATTACK) && !isCrit)
+                    currentValue += 2;
+                if (relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_CRIT) && isCrit)
+                    currentValue += 2;
 
-			List<CodeInstruction> instructionsToInsert = new List<CodeInstruction>();
+                __result += currentValue;
+            }
+        }
+    }
 
-			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldarg_0)); // Load this (attack)
-			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Attack), "_relicManager"))); // Loads _relicManager. Consumes this
-
-			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldarg_0)); // Load this (attack)
-			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Attack), "_cruciballManager"))); // Loads _cruciballManager. Consumes this
-
-			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldarg_1)); // Load critCount
-
-
-			instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldloc_0)); // Load local variable num
-
-			instructionsToInsert.Add(new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(CustomRelic), nameof(CustomRelic.GetDamageModifier)))); // Call Method CustomRelic::GetDamageModifier
-			instructionsToInsert.Add(new CodeInstruction(OpCodes.Stloc_0)); // Set local variable num to the return of CustomRelic::DamageModifier
-
-			code.InsertRange(insertionIndex, instructionsToInsert);
-
-			return code;
-		}
-	}
-
-	[HarmonyPatch(typeof(BattleController), nameof(BattleController.MaxDiscardedShots), MethodType.Getter)]
-	public static class ChangeDiscards
-	{
-		public static void Postfix(RelicManager ____relicManager, ref int __result)
-		{
-			if (____relicManager.RelicEffectActive(CustomRelicEffect.HOLSTER))
-				__result = 0;
-			if (____relicManager.RelicEffectActive(RelicEffect.NO_DISCARD))
-				__result = 0;
-		}
-	}
+    [HarmonyPatch(typeof(BattleController), nameof(BattleController.MaxDiscardedShots), MethodType.Getter)]
+    public static class ChangeDiscards
+    {
+        public static void Postfix(RelicManager ____relicManager, ref int __result)
+        {
+            if (____relicManager.RelicEffectActive(CustomRelicEffect.HOLSTER))
+                __result = 0;
+            if (____relicManager.RelicEffectActive(RelicEffect.NO_DISCARD))
+                __result = 0;
+        }
+    }
 }

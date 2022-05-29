@@ -9,7 +9,7 @@ namespace Promethium.Patches.Mechanics
     {
         private static float timeElapsed = 0f;
         private static bool speedUpActive = false;
-        public static void Postfix(BattleController __instance, int ____battleState) 
+        public static void Postfix(BattleController __instance, int ____battleState)
         {
             if (Plugin.SpeedUpOn)
             {

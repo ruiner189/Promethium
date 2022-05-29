@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Promethium.Patches.Relics
 {
-    
+
     public enum CustomRelicEffect
     {
         NONE = 7588,

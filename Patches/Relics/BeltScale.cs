@@ -24,7 +24,8 @@ namespace Promethium.Patches.Relics
                 if (____relicManager == null) return;
                 Scale = ____ball.transform.localScale;
 
-                if (____relicManager.RelicEffectActive(CustomRelicEffect.WUMBO) && !____relicManager.RelicEffectActive(CustomRelicEffect.MINI)){
+                if (____relicManager.RelicEffectActive(CustomRelicEffect.WUMBO) && !____relicManager.RelicEffectActive(CustomRelicEffect.MINI))
+                {
                     ____relicManager.AttemptUseRelic(CustomRelicEffect.WUMBO);
                     ____ball.transform.DOScale(new Vector3(Scale.x * TargetEnlarge, Scale.y * TargetEnlarge, Scale.z), Time);
                 }

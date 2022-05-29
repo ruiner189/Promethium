@@ -16,7 +16,7 @@ namespace Promethium.Patches.Mechanics
     {
         public static void Prefix(SpecialSlotController __instance, float[] ____slotMultipliersRelicAmounts)
         {
-            if(__instance.relicManager != null && __instance.slotTriggers != null && ____slotMultipliersRelicAmounts != null)
+            if (__instance.relicManager != null && __instance.slotTriggers != null && ____slotMultipliersRelicAmounts != null)
                 if (__instance.relicManager.RelicEffectActive(RelicEffect.SLOT_MULTIPLIERS))
                 {
                     float[] multipliers = GetMultipliers();
@@ -34,11 +34,11 @@ namespace Promethium.Patches.Mechanics
             Random rand = new Random();
             int choice = rand.Next(0, 56);
             if (choice >= 0 && choice < 10) return new float[] { 0.5f, 0.5f, 1, 1, 2 };
-            if (choice >= 10 && choice < 20) return new float[] {0.25f, 0.25f, 0.5f, 1.5f, 3};
+            if (choice >= 10 && choice < 20) return new float[] { 0.25f, 0.25f, 0.5f, 1.5f, 3 };
             if (choice >= 20 && choice < 30) return new float[] { 0.25f, 0.5f, 1, 2, 2 };
             if (choice >= 30 && choice < 40) return new float[] { 1, 1, 1, 1, 1 };
             if (choice >= 40 && choice < 50) return new float[] { 1.25f, 1.25f, 1, 0.75f, 0.75f };
-            if (choice >= 50 && choice < 55) return new float[] { 10, 0, 0, 0, 10};
+            if (choice >= 50 && choice < 55) return new float[] { 10, 0, 0, 0, 10 };
             if (choice >= 56 && choice < 57) return new float[] { 0, 0, 100, 0, 0 };
             return new float[] { 0.25f, 0.5f, 1, 2, 2 };
         }

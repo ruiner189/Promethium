@@ -34,7 +34,8 @@ namespace Promethium.Components
 
         public void Update()
         {
-            if (IsShrinking) {
+            if (IsShrinking)
+            {
                 Vector3 targetScale = new Vector3(StartScale.x * TargetShrink, StartScale.y * TargetShrink);
                 Vector3 step = new Vector3(((targetScale.x - EndScale.x) / Duration) * Time.deltaTime, ((targetScale.y - EndScale.y) / Duration) * Time.deltaTime);
                 transform.localScale += step;
@@ -55,7 +56,6 @@ namespace Promethium.Components
                     IsShrinking = true;
                 }
             }
-
         }
     }
 }

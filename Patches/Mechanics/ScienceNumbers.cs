@@ -37,7 +37,7 @@ namespace Promethium.Patches.Mechanics
     {
         private static bool Prefix(DamageCountDisplay __instance, float damage, Vector2 position)
         {
-            if(damage > 1000000)
+            if (damage > 1000000)
                 __instance.CreateText(damage.ToString("0.###e0"), position, Color.white, false);
             else
                 __instance.CreateText(damage.ToString(), position, Color.white, false);

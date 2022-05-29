@@ -13,7 +13,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
         private static GameObject _levelThree;
         private static Oreb _instance;
 
-        public const String Name = "Oreb";
+        public const String Name = "oreb";
 
         private Oreb() : base(Name) { }
         public static Oreb GetInstance()

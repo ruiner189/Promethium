@@ -1,6 +1,7 @@
 ﻿using Promethium.Patches.Relics;
 using Relics;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,12 @@ namespace Promethium.Loaders
         {
             if (!_relicsRegistered)
                 RegisterCustomRelics();
+            StartCoroutine(DelayedStart());
+        }
+
+        public IEnumerator DelayedStart()
+        {
+            yield return new WaitForEndOfFrame();
             AddRelicsToPools();
         }
 
@@ -58,7 +65,7 @@ namespace Promethium.Loaders
             RelicSet bossPool = null;
             RelicSet rareScenarioPool = null;
 
-            foreach(RelicSet pool in pools)
+            foreach (RelicSet pool in pools)
             {
                 if (pool.name == "CommonRelics") commonPool = pool;
                 else if (pool.name == "RareRelics") rarePool = pool;
@@ -68,26 +75,33 @@ namespace Promethium.Loaders
 
             foreach (CustomRelic relic in relics)
             {
+                if (!relic.IsEnabled())
+                {
+                    if (rareScenarioPool != null)
+                    {
+                        rareScenarioPool.relics.Add(relic);
+                    }
+                }
                 switch (relic.GetPoolType())
                 {
                     case RelicPool.COMMON:
-                        if(commonPool != null)
+                        if (commonPool != null)
                             if (!commonPool.relics.Contains(relic))
                                 commonPool.relics.Add(relic);
                         break;
                     case RelicPool.RARE:
-                        if(rarePool != null)
+                        if (rarePool != null)
                             if (!rarePool.relics.Contains(relic))
                                 rarePool.relics.Add(relic);
                         break;
                     case RelicPool.BOSS:
-                        if(bossPool != null)
+                        if (bossPool != null)
                             if (!bossPool.relics.Contains(relic))
                                 bossPool.relics.Add(relic);
                         break;
                     case RelicPool.RARE_SCENARIO:
                     case RelicPool.CURSE:
-                        if(rareScenarioPool != null)
+                        if (rareScenarioPool != null)
                             if (!rareScenarioPool.relics.Contains(relic))
                                 rareScenarioPool.relics.Add(relic);
                         break;

@@ -17,14 +17,21 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
 {
     public abstract class ModifiedOrb
     {
-        private static List<ModifiedOrb> AllModifiedOrbs = new List<ModifiedOrb>();
+        public static readonly List<ModifiedOrb> AllModifiedOrbs = new List<ModifiedOrb>();
 
         private String _name;
+        public bool LocalVariables = false;
+        public readonly bool Registered = false;
+
         public ModifiedOrb(String orbName)
         {
             _name = orbName;
-            AllModifiedOrbs.Add(this);
-            Plugin.Log.LogMessage($"{_name} was successfully registered.");
+            if (Plugin.ConfigFile.Bind<bool>("Orbs", orbName, true, "Disable to remove modifications").Value)
+            {
+                AllModifiedOrbs.Add(this);
+                Registered = true;
+                Plugin.Log.LogMessage($"{_name} was successfully registered.");
+            }
         }
 
         public static ModifiedOrb GetOrb(String name)
@@ -37,7 +44,16 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             return _name;
         }
 
+        public virtual void SetLocalVariables(LocalizationParamsManager localParams, GameObject orb, Attack attack) { }
+
         public virtual void OnDiscard(RelicManager relicManager, BattleController battleController, GameObject orb, Attack attack) { }
+        public virtual void OnAddedToDeck(DeckManager deckManager, CruciballManager cruciballManager, GameObject orb, Attack attack) { }
+        public virtual void OnRemovedFromBattleDeck(DeckManager deckManager, CruciballManager cruciballManager, GameObject orb, Attack attack) { }
+        public virtual void OnRemovedFromDeck(DeckManager deckManager, GameObject orb, Attack attack) { }
+        public virtual void OnDeckShuffle(BattleController battleController, GameObject orb, Attack attack) { }
+        public virtual void OnEnemyTurnEnd(BattleController battleController, GameObject orb, Attack attack) { }
+        public virtual void OnBattleStart(BattleController battleController, GameObject orb, Attack attack) { }
+
         public virtual void ShotWhileInHolster(RelicManager relicManager, BattleController battleController, GameObject attackingOrb, GameObject heldOrb) { }
 
         public virtual void OnShotFired(BattleController battleController, GameObject orb, Attack attack) { }
@@ -116,7 +132,8 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     public static class OnDiscard
     {
         [HarmonyPriority(Priority.LowerThanNormal)]
-        public static void Prefix(BattleController __instance, bool __runOriginal, RelicManager ____relicManager, int ____battleState, GameObject ____ball) {
+        public static void Prefix(BattleController __instance, bool __runOriginal, RelicManager ____relicManager, int ____battleState, GameObject ____ball)
+        {
             if (____battleState == 9 || !__runOriginal) return;
             if (____ball != null && ____ball.GetComponent<PachinkoBall>().available && !DeckInfoManager.populatingDisplayOrb && !GameBlockingWindow.windowOpen && __instance.NumShotsDiscarded < __instance.MaxDiscardedShots)
             {
@@ -141,29 +158,14 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             if (orb == null || ____relicManager == null) return true;
 
             orb.ChangeDescription(__instance, ____relicManager);
-            string text = "";
-            foreach (string str in __instance.locDescStrings)
+            if (orb.LocalVariables)
             {
-                text = text + "<sprite name=\"BULLET\"><indent=8%>" + GetStringWithVariables(__instance, ____relicManager, ____cruciballManager, LocalizationManager.GetTranslation("Orbs/" + str, true, 0, true, true, __instance.gameObject, null, true)) + "</indent>\n";
+                LocalizationParamsManager localParams = __instance.GetComponent<LocalizationParamsManager>();
+                if (localParams == null) localParams = __instance.gameObject.AddComponent<LocalizationParamsManager>();
+                if (localParams != null)
+                    orb.SetLocalVariables(localParams, __instance.gameObject, __instance);
             }
-            __result = text;
-            return false;
-        }
-
-        private static String GetStringWithVariables(Attack attack, RelicManager relicManager, CruciballManager cruciballManager, String str)
-        {
-            if (str.Contains("%"))
-            {
-                if (str.Contains("%am")) str = str.Replace("%am", "" + Armor.GetArmorMaxFromOrb(attack, cruciballManager));
-                if (str.Contains("%ar")) str = str.Replace("%ar", "" + Armor.GetArmorReloadFromOrb(attack, cruciballManager));
-                if (str.Contains("%ad")) str = str.Replace("%ad", "" + Armor.GetArmorDiscardFromOrb(attack, relicManager, cruciballManager));
-                if (str.Contains("%ah")) str = str.Replace("%ah", "" + Armor.GetArmorHoldFromOrb(attack, relicManager, cruciballManager));
-                if (str.Contains("%ma")) str = str.Replace("%ma", "" + Armor.GetTotalMaximumArmor(relicManager, cruciballManager));
-                if (str.Contains("%md")) str = str.Replace("%md", "" + (Armor.GetArmorDamageMultiplier(attack, cruciballManager) + 1) + "x");
-                if (str.Contains("%mh")) str = str.Replace("%mh", "" + ((Armor.GetArmorDamageMultiplier(attack, cruciballManager) / 2)+ 1) + "x");
-                if (str.Contains("%ac")) str = str.Replace("%ac", "" + Armor.currentArmor);
-            }
-            return str;
+            return true;
         }
     }
 
@@ -173,7 +175,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
         public static void Postfix(Attack __instance, CruciballManager ____cruciballManager)
         {
             ModifiedOrb orb = ModifiedOrb.GetOrb(__instance.locNameString);
-            if(orb != null)
+            if (orb != null)
             {
                 int damage = orb.GetAttackValue(____cruciballManager, __instance);
                 if (damage != int.MinValue)
@@ -183,7 +185,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
                     __instance.CritDamagePerPeg = crit;
             }
         }
-        
+
     }
 
     [HarmonyPatch(typeof(Attack), nameof(Attack.SetId))]
@@ -207,4 +209,153 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             ____ball.SetActive(true);
         }
     }
+
+    [HarmonyPatch(typeof(DeckManager), nameof(DeckManager.AddOrbToDeck))]
+    [HarmonyPatch(typeof(DeckManager), nameof(DeckManager.AddOrbToDeckSilent))]
+    public static class AddOrb
+    {
+        public static void Postfix(DeckManager __instance, GameObject orbPrefab)
+        {
+            Attack attack = orbPrefab.GetComponent<Attack>();
+            if (attack != null)
+            {
+                ModifiedOrb orb = ModifiedOrb.GetOrb(attack.locNameString);
+                if (orb != null)
+                {
+                    orb.OnAddedToDeck(__instance, attack._cruciballManager, orbPrefab, attack);
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(DeckManager), nameof(DeckManager.RemoveOrbFromBattleDeck))]
+    public static class RemoveOrbFromBattleDeck
+    {
+        public static void Postfix(DeckManager __instance, GameObject orb)
+        {
+            Attack attack = orb.GetComponent<Attack>();
+            if (attack != null)
+            {
+                ModifiedOrb modifiedOrb = ModifiedOrb.GetOrb(attack.locNameString);
+                if (modifiedOrb != null)
+                {
+                    modifiedOrb.OnRemovedFromBattleDeck(__instance, attack._cruciballManager, orb, attack);
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(DeckManager), nameof(DeckManager.RemoveSpecifiedOrbFromDeck))]
+    [HarmonyPatch(typeof(DeckManager), nameof(DeckManager.SoftRemoveSpecifiedOrbFromDeck))]
+    public static class RemoveOrbFromDeck
+    {
+        public static void Postfix(DeckManager __instance, GameObject orb)
+        {
+            Attack attack = orb.GetComponent<Attack>();
+            if (attack != null)
+            {
+                ModifiedOrb modifiedOrb = ModifiedOrb.GetOrb(attack.locNameString);
+                if (orb != null)
+                {
+                    modifiedOrb.OnRemovedFromDeck(__instance, orb, attack);
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(DeckManager), nameof(DeckManager.RemoveRandomOrbFromDeck))]
+    public static class RemoveRandomOrbFromDeck
+    {
+        public static void Prefix(DeckManager __instance, out List<GameObject> __state)
+        {
+            __state = new List<GameObject>(DeckManager.completeDeck);
+        }
+
+        public static void Postfix(DeckManager __instance, List<GameObject> __state)
+        {
+
+            foreach (GameObject orb in DeckManager.completeDeck)
+            {
+                __state.Remove(orb);
+            }
+
+            foreach (GameObject orb in __state)
+            {
+                Attack attack = orb.GetComponent<Attack>();
+                if (attack != null)
+                {
+                    ModifiedOrb modifiedOrb = ModifiedOrb.GetOrb(attack.locNameString);
+                    if (orb != null)
+                    {
+                        modifiedOrb.OnRemovedFromDeck(__instance, orb, attack);
+                    }
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(BattleController), nameof(BattleController.ShuffleDeck))]
+    public static class DeckShuffle
+    {
+        public static void Postfix(BattleController __instance)
+        {
+
+            foreach (GameObject orb in DeckManager.completeDeck)
+            {
+                Attack attack = orb.GetComponent<Attack>();
+                if (attack != null)
+                {
+                    ModifiedOrb modifiedOrb = ModifiedOrb.GetOrb(attack.locNameString);
+                    if (modifiedOrb != null)
+                    {
+                        modifiedOrb.OnDeckShuffle(__instance, orb, attack);
+                    }
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(BattleController), nameof(BattleController.EnemyTurnComplete))]
+    public static class EnemyTurnEnd
+    {
+        public static void Postfix(BattleController __instance)
+        {
+            foreach (GameObject orb in DeckManager.completeDeck)
+            {
+                Attack attack = orb.GetComponent<Attack>();
+                if (attack != null)
+                {
+                    ModifiedOrb modifiedOrb = ModifiedOrb.GetOrb(attack.locNameString);
+                    if (modifiedOrb != null)
+                    {
+                        modifiedOrb.OnEnemyTurnEnd(__instance, orb, attack);
+                    }
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(BattleController), "Start")]
+    public static class BattleStart
+    {
+        public static void Postfix(BattleController __instance)
+        {
+            foreach (GameObject orb in DeckManager.completeDeck)
+            {
+                Attack attack = orb.GetComponent<Attack>();
+                if (attack != null)
+                {
+                    ModifiedOrb modifiedOrb = ModifiedOrb.GetOrb(attack.locNameString);
+                    if (modifiedOrb != null)
+                    {
+                        modifiedOrb.OnBattleStart(__instance, orb, attack);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
 }

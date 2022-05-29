@@ -13,9 +13,9 @@ namespace Promethium.Patches.Mechanics
     {
         public static void Prefix(PegManager __instance)
         {
-            foreach(var Peg in __instance._allPegs)
+            foreach (var Peg in __instance._allPegs)
             {
-                if(Peg is LongPeg)
+                if (Peg is LongPeg)
                 {
                     LongPeg longPeg = Peg as LongPeg;
                     longPeg._beingHit = false;

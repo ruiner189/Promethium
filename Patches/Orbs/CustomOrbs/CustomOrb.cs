@@ -10,9 +10,13 @@ namespace Promethium.Patches.Orbs.CustomOrbs
     public abstract class CustomOrb : ModifiedOrb
     {
         public static List<CustomOrb> AllCustomOrbs = new List<CustomOrb>();
-        public CustomOrb(String orbName) : base(orbName){
-            AllCustomOrbs.Add(this);
-            CreatePrefabs();
+        public CustomOrb(String orbName) : base(orbName)
+        {
+            if (Registered)
+            {
+                AllCustomOrbs.Add(this);
+                CreatePrefabs();
+            }
         }
 
         public static CustomOrb GetCustomOrbByName(String name)
@@ -63,7 +67,8 @@ namespace Promethium.Patches.Orbs.CustomOrbs
                         Plugin.Log.LogWarning($"Could not load the orb {str}. Perhaps this is a different version or a mod is missing?");
                     }
                 }
-                catch (Exception e){
+                catch (Exception e)
+                {
                     Plugin.Log.LogError(e.StackTrace);
                 }
             }

@@ -18,7 +18,7 @@ namespace Promethium.Patches
     {
         public static void Prefix(BattleController __instance, TargetingManager ____targetingManager)
         {
-            __instance._targetingManager._canTarget = 
+            __instance._targetingManager._canTarget =
                 BattleController._battleState == BattleController.BattleState.AWAITING_SHOT ||
                 BattleController._battleState == BattleController.BattleState.AWAITING_SHOT_COMPLETION;
         }

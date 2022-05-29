@@ -25,7 +25,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
         public override void OnShotFired(BattleController battleController, GameObject orb, Attack attack)
         {
             RelicManager relicManager = battleController._relicManager;
-            if(CurseRelic.IsCurseLevelActive(relicManager, 2))
+            if (CurseRelic.IsCurseLevelActive(relicManager, 2))
             {
                 battleController.AddDamageMultiplier(0.5f);
             }

@@ -16,18 +16,20 @@ namespace Promethium.Components
 
         public void Update()
         {
-            if(SceneManager.GetActiveScene().name == "FinalWinScene")
+            if (SceneManager.GetActiveScene().name == "FinalWinScene")
             {
                 if (_restartButton == null) _restartButton = GameObject.Find("ButtonPanel").transform.GetChild(0).gameObject;
-                if(_restartButton != null && !_restartButton.gameObject.activeInHierarchy)
+                if (_restartButton != null && !_restartButton.gameObject.activeInHierarchy)
                 {
                     Plugin.Log.LogMessage("Found restart button. Activating");
                     _restartButton.SetActive(true);
-                } else
+                }
+                else
                 {
                     //Plugin.Log.LogMessage("Could not find restart button.");
                 }
-            } else
+            }
+            else
             {
                 _restartButton = null;
             }

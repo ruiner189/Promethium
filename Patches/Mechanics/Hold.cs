@@ -32,7 +32,7 @@ namespace Promethium.Patches.Mechanics
                 _heldDeckObject = null;
                 _heldPersists = -1;
 
-                if(____relicManager != null && ____relicManager.AttemptUseRelic(CustomRelicEffect.HOLSTER))
+                if (____relicManager != null && ____relicManager.AttemptUseRelic(CustomRelicEffect.HOLSTER))
                 {
                     GameObject mask = GameObject.Find("OrbCountMask");
                     GameObject maskClone = GameObject.Instantiate(mask);
@@ -70,7 +70,7 @@ namespace Promethium.Patches.Mechanics
                         GameObject oldBall = ____ball;
                         ____ball = _heldObject;
                         _heldObject = oldBall;
- 
+
 
                         // And again for persist
                         PersistentOrb newPersist = ____ball.GetComponent<PersistentOrb>();
@@ -81,11 +81,11 @@ namespace Promethium.Patches.Mechanics
                         // And the deck object...
                         GameObject oldDeckObject = _heldDeckObject;
 
-                        if(oldPersist != null)
+                        if (oldPersist != null)
                         {
                             _heldPersists = oldPersist.remainingPersistence;
-                            if(_heldPersists >= 0)
-                               _heldDeckObject = ____deckManager.shuffledDeck.Pop();
+                            if (_heldPersists >= 0)
+                                _heldDeckObject = ____deckManager.shuffledDeck.Pop();
                         }
 
                         if (newPersist != null)
@@ -140,12 +140,12 @@ namespace Promethium.Patches.Mechanics
                         else
                         {
                             PersistentOrb persist = _heldObject.GetComponent<PersistentOrb>();
-                            if(persist != null)
+                            if (persist != null)
                             {
                                 _heldPersists = persist.remainingPersistence;
                                 if (____deckManager.shuffledDeck.Count > 0 && persist.remainingPersistence >= 0 && persist.remainingPersistence < persist.modifiedPersistLevel)
                                 {
-                                    _heldDeckObject =  ____deckManager.shuffledDeck.Pop();
+                                    _heldDeckObject = ____deckManager.shuffledDeck.Pop();
                                 }
                             }
                             __instance.DrawBall();

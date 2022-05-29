@@ -14,6 +14,27 @@ namespace Promethium.Patches.Relics
         public static List<RelicEffect> ModifiedRelics = new List<RelicEffect>();
         public static readonly String AltText = $"_{Plugin.Name.ToLower()}";
 
+        public static void AddRelic(RelicEffect relic, bool alwaysEnabled = false)
+        {
+            if (alwaysEnabled)
+            {
+                ModifiedRelics.Add(relic);
+                Plugin.Log.LogMessage($"{relic} Successfully modified.");
+                return;
+            }
+
+            if (Plugin.ConfigFile.Bind<bool>("Modified Relics", relic.ToString(), true, "Disable to remove modifications of this relic. Will revert to vanilla behavior").Value)
+            {
+                ModifiedRelics.Add(relic);
+                Plugin.Log.LogMessage($"{relic} Successfully modified.");
+            }
+        }
+
+        public static bool HasRelicEffect(RelicEffect effect)
+        {
+            return ModifiedRelics.Contains(effect);
+        }
+
         public static void Postfix(Relic __instance, ref String __result)
         {
             if (ModifiedRelics.Contains(__instance.effect)) __result += AltText;

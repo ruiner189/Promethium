@@ -33,11 +33,12 @@ namespace Promethium.Patches.Relics
 
         public static bool IsCurseLevelActive(RelicManager relicManager, int curseLevel)
         {
-            foreach(CurseRelic relic in AllCurseRelics)
+            foreach (CurseRelic relic in AllCurseRelics)
             {
-                if(relic.CurseLevel == curseLevel)
+                if (relic.CurseLevel == curseLevel)
                 {
-                    if (relicManager.RelicEffectActive(relic.effect)){
+                    if (relicManager.RelicEffectActive(relic.effect))
+                    {
                         return true;
                     }
                 }
@@ -59,7 +60,7 @@ namespace Promethium.Patches.Relics
             if (CurseRelic.IsCurseLevelActive(relicManager, 1))
             {
                 int amountOfCurse = CurseRelic.AmountOfCurseRelics(relicManager);
-                float multiplier = (float)(Plugin.TierOneHealthMultiplier * Math.Pow(Plugin.ExponentialCurseHealthMultiplier,amountOfCurse - 1));
+                float multiplier = (float)(Plugin.TierOneHealthMultiplier * Math.Pow(Plugin.ExponentialCurseHealthMultiplier, amountOfCurse - 1));
                 ____maxHealth *= multiplier;
                 __instance.CurrentHealth = ____maxHealth;
                 typeof(Enemy).GetMethod("UpdateHealthBar", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(__instance, new Object[] { });
@@ -73,7 +74,7 @@ namespace Promethium.Patches.Relics
         public static void Prefix(Relic relic, FloatVariable ____maxPlayerHealth, FloatVariable ____playerHealth)
         {
             if (relic == null) return;
-            CustomRelicEffect effect = (CustomRelicEffect) relic.effect;
+            CustomRelicEffect effect = (CustomRelicEffect)relic.effect;
             if (effect == CustomRelicEffect.CURSE_TWO_HEALTH)
             {
                 ____maxPlayerHealth?.Add(25f);
@@ -148,12 +149,13 @@ namespace Promethium.Patches.Relics
         public static void Postfix(PlayerHealthController __instance, RelicManager ____relicManager, ref float __result)
         {
             if (CurseRelic.IsCurseLevelActive(____relicManager, 2))
-                __result = (float) __result * 0.5f;
+                __result = (float)__result * 0.5f;
         }
     }
 
     [HarmonyPatch(typeof(BattleController), "CheckRelicsForStartingBombCount")]
-    public static class AdditionalBombs {
+    public static class AdditionalBombs
+    {
 
         public static void Postfix(PegManager ____pegManager, RelicManager ____relicManager)
         {
