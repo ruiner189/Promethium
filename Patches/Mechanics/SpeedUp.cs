@@ -18,7 +18,7 @@ namespace Promethium.Patches.Mechanics
                     timeElapsed += Time.deltaTime;
                     if (timeElapsed > Plugin.SpeedUpDelay)
                     {
-                        float speedUp = Math.Min((float)(1f + Math.Log10((timeElapsed - (Plugin.SpeedUpDelay - 1)) * Plugin.SpeedUpRate)), Plugin.SpeedUpMax);
+                        float speedUp = Math.Min((float)Math.Pow(1 + (0.05 * Plugin.SpeedUpRate), timeElapsed - (Plugin.SpeedUpDelay - 1)), Plugin.SpeedUpMax);
                         speedUpActive = true;
                         Time.timeScale = speedUp;
                     }

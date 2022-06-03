@@ -13,7 +13,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     public sealed class ModifiedNosforbatu : ModifiedOrb
     {
         private static ModifiedNosforbatu _instance;
-        public ModifiedNosforbatu() : base(OrbNames.VampireOrb) { }
+        private ModifiedNosforbatu() : base(OrbNames.VampireOrb) { }
 
         public static ModifiedNosforbatu Register()
         {

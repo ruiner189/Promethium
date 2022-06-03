@@ -28,15 +28,19 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             _name = orbName;
             if (Plugin.ConfigFile.Bind<bool>("Orbs", orbName, true, "Disable to remove modifications").Value)
             {
-                AllModifiedOrbs.Add(this);
                 Registered = true;
                 Plugin.Log.LogMessage($"{_name} was successfully registered.");
             }
+
+            AllModifiedOrbs.Add(this);
         }
 
-        public static ModifiedOrb GetOrb(String name)
+        public static ModifiedOrb GetOrb(String name, bool includeAll = false)
         {
-            return AllModifiedOrbs.Find(orb => orb.GetName() == name);
+            if (includeAll)
+                return AllModifiedOrbs.Find(orb => orb.GetName() == name);
+            else
+                return AllModifiedOrbs.Find(orb => orb.GetName() == name && orb.Registered);
         }
 
         public String GetName()
@@ -76,7 +80,11 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             bool containsDesc = false;
             foreach (String s in attack.locDescStrings)
             {
-                if (s == desc) containsDesc = true;
+                if (s == desc)
+                {
+                    containsDesc = true;
+                    break;
+                }
             }
             if (!containsDesc)
             {

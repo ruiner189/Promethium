@@ -99,11 +99,11 @@ namespace Promethium.Components
             int total = 0;
             if (_relicManager != null)
             {
-                if (_relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_EQUIP))
+                if (_relicManager.AttemptUseRelic(CustomRelicEffect.CURSE_TWO_EQUIP))
                     total += 1;
-                if (_relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_EQUIP))
+                if (_relicManager.AttemptUseRelic(CustomRelicEffect.CURSE_FOUR_EQUIP))
                     total += 1;
-                if (ModifiedRelic.HasRelicEffect(RelicEffect.DAMAGE_BONUS_PLANT_FLAT) && _relicManager.RelicEffectActive(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
+                if (ModifiedRelic.HasRelicEffect(RelicEffect.DAMAGE_BONUS_PLANT_FLAT) && _relicManager.AttemptUseRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
                     total += 1;
             }
             return total;
@@ -114,11 +114,11 @@ namespace Promethium.Components
             int total = 0;
             if (_relicManager != null)
             {
-                if (_relicManager.RelicEffectActive(CustomRelicEffect.CURSE_TWO_ARMOR))
+                if (_relicManager.AttemptUseRelic(CustomRelicEffect.CURSE_TWO_ARMOR))
                     total += 5;
-                if (_relicManager.RelicEffectActive(CustomRelicEffect.CURSE_FOUR_ARMOR))
+                if (_relicManager.AttemptUseRelic(CustomRelicEffect.CURSE_FOUR_ARMOR))
                     total += 5;
-                if (ModifiedRelic.HasRelicEffect(RelicEffect.DAMAGE_BONUS_PLANT_FLAT) && _relicManager.RelicEffectActive(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
+                if (ModifiedRelic.HasRelicEffect(RelicEffect.DAMAGE_BONUS_PLANT_FLAT) && _relicManager.AttemptUseRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
                     total += 5;
             }
 

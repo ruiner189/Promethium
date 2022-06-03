@@ -49,7 +49,6 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             float multiplier = 0;
             ArmorManager armor = Plugin.PromethiumManager.GetComponent<ArmorManager>();
 
-
             if (armor != null)
             {
 
@@ -58,10 +57,10 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
                 else if (level == 3) multiplier = 0.12f;
 
                 if (!showMath)
-                    multiplier *= armor.CurrentArmor.Value;
+                    multiplier = (multiplier * armor.CurrentArmor.Value) + 1;
             }
 
-            return 1 + multiplier;
+            return multiplier;
         }
 
         public float GetDamageHoldMultiplier(Attack attack, bool showMath = false)
@@ -179,8 +178,13 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     {
         public static bool Prefix(ref float __result)
         {
-            __result = 0;
-            return false;
+            if (ModifiedOrb.GetOrb(OrbNames.Orbelisk, true).Registered)
+            {
+                __result = 0;
+                return false;
+            }
+
+            return true;
         }
     }
 }

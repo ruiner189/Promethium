@@ -17,7 +17,7 @@ If you want to help translate, feel free to!
 6. Click "Start Modded" to begin playing!
 
 ### Github (Manual)
-1. Download [Promethium](https://github.com/ruiner189/Promethium/releases)
+1. Download [Promethium.dll](https://github.com/ruiner189/Promethium/releases)
 2. Download [BepInEx_x64_5.x.x.x.zip](https://github.com/BepInEx/BepInEx/releases)
 3. Go to your install directory for Peglin.
     * For Steam go to your Steam Library and right click Peglin > Manage > Browse Local Files
@@ -28,7 +28,7 @@ If you want to help translate, feel free to!
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.21+ | v1.1.3 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.3/Promethium.dll) |
+| v0.7.21+ | v1.1.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.4/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.1.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.2/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.0.10 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.10/Promethium.dll) |
 
@@ -58,6 +58,8 @@ Excluding the curse relics, Promethium currently offers 4 new relics. 1 Boss rel
 ### Holster
 * Removes Discarding and allows you to hold orbs instead.
 * Some orbs have special mechanics while held, and many more are to come!
+### Plasma Ball
+* Zaps up to 3 additional pegs every 5 pegs hit
 ### Wumbo Belt
 * Doubles the size of your orb.
 * Has a special interaction with Mini Belt if you have both relics

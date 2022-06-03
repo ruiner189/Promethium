@@ -25,7 +25,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.1.3";
+        public const String Version = "1.1.4";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -45,6 +45,7 @@ namespace Promethium
         public static Sprite MiniBelt;
         public static Sprite KillButtonRelic;
         public static Sprite KillButton;
+        public static Sprite PlasmaBall;
 
         //Localization
         public static List<String[]> LocalizationTerms;
@@ -107,6 +108,7 @@ namespace Promethium
             PromethiumManager.AddComponent<OrbLoader>();
             PromethiumManager.AddComponent<RestartButtonActivator>();
             PromethiumManager.AddComponent<ArmorManager>();
+            
             DontDestroyOnLoad(PromethiumManager);
             PromethiumManager.hideFlags = HideFlags.HideAndDontSave;
         }
@@ -117,6 +119,7 @@ namespace Promethium
             Holster = LoadSprite("Relics.Holster.png");
             WumboBelt = LoadSprite("Relics.WumboBelt.png");
             MiniBelt = LoadSprite("Relics.MiniBelt.png");
+            PlasmaBall = LoadSprite("Relics.Plasmaball.png");
 
             CurseOne = LoadSprite("Relics.Curse_One.png");
             CurseTwo = LoadSprite("Relics.Curse_Two.png");
@@ -137,6 +140,8 @@ namespace Promethium
             ModifiedNosforbatu.Register();
             ModifiedRefreshOrb.Register();
             ModifiedShuffleOrb.Register();
+            ModifiedMatryoshka.Register();
+            ModifiedLightningBall.Register();
         }
 
         private void RegisterModifiedRelics()

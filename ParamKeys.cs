@@ -11,6 +11,9 @@ namespace Promethium
         public const String FRAGILE_FRAGMENTS = "FRAGILE_FRAGMENTS";
         public const String FRAGILE_HITS = "FRAGILE_HITS";
 
+        public const String ADDITIONAL_LIGHTNING_ZAPS = "ADDITIONAL_LIGHTNING_ZAPS";
+        public const String PLASMA_PEG_HITS = "PLASMA_PEG_HITS";
+
         public const String ARMOR_DISCARD = "ARMOR_DISCARD";
         public const String ARMOR_PER_TURN = "ARMOR_PER_TURN";
         public const String ARMOR_PER_RELOAD = "ARMOR_PER_RELOAD";
@@ -21,5 +24,6 @@ namespace Promethium
         public const String DISCARD_ARMOR_DAMAGE = "DISCARD_ARMOR_DAMAGE";
         public const String HOLD_DAMAGE_MULTIPLIER = "HOLD_DAMAGE_MULTIPLIER";
         public const String ARMOR_HOLD_DAMAGE = "ARMOR_HOLD_DAMAGE";
+        public const String MULTIBALL_HOLD_LEVEL = "MULTIBALL_HOLD_LEVEL";
     }
 }
