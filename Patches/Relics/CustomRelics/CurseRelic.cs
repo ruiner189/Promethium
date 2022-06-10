@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Worldmap;
 
 namespace Promethium.Patches.Relics
@@ -33,13 +34,16 @@ namespace Promethium.Patches.Relics
 
         public static bool IsCurseLevelActive(RelicManager relicManager, int curseLevel)
         {
-            foreach (CurseRelic relic in AllCurseRelics)
+            if(relicManager != null)
             {
-                if (relic.CurseLevel == curseLevel)
+                foreach (CurseRelic relic in AllCurseRelics)
                 {
-                    if (relicManager.RelicEffectActive(relic.effect))
+                    if (relic.CurseLevel == curseLevel)
                     {
-                        return true;
+                        if (relicManager.RelicEffectActive(relic.effect))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -63,7 +67,7 @@ namespace Promethium.Patches.Relics
                 float multiplier = (float)(Plugin.TierOneHealthMultiplier * Math.Pow(Plugin.ExponentialCurseHealthMultiplier, amountOfCurse - 1));
                 ____maxHealth *= multiplier;
                 __instance.CurrentHealth = ____maxHealth;
-                typeof(Enemy).GetMethod("UpdateHealthBar", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(__instance, new Object[] { });
+                __instance.UpdateHealthBar();
             }
         }
     }
@@ -130,9 +134,12 @@ namespace Promethium.Patches.Relics
 
     [HarmonyPatch(typeof(MapNode), nameof(MapNode.SetActiveState))]
     public static class ElitesReplaceTreasure
-    {        
+    {
+        private static RelicManager _relicManager;
         public static void Postfix(MapNode __instance)
         {
+            if (_relicManager == null) _relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
+            if (CurseRelic.IsCurseLevelActive(_relicManager, 5))
             if (__instance.RoomType == RoomType.TREASURE)
                 __instance.RoomType = RoomType.MINI_BOSS;
         }
