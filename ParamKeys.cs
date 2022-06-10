@@ -25,5 +25,9 @@ namespace Promethium
         public const String HOLD_DAMAGE_MULTIPLIER = "HOLD_DAMAGE_MULTIPLIER";
         public const String ARMOR_HOLD_DAMAGE = "ARMOR_HOLD_DAMAGE";
         public const String MULTIBALL_HOLD_LEVEL = "MULTIBALL_HOLD_LEVEL";
+
+        public const String MULTIBALL_RELIC_MULTIPLIER = "MULTIBALL_RELIC_MULTIPLIER";
+        public const String NO_DISCARD_MULTIPLIER = "NO_DISCARD_MULTIPLIER";
+        public const String NO_DISCARD_MULTIPLIER_VALUE = "NO_DISCARD_MULTIPLIER_VALUE";
     }
 }

@@ -28,9 +28,28 @@ If you want to help translate, feel free to!
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.21+ | v1.1.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.4/Promethium.dll) |
+| v0.7.24+ | v1.1.5 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.6/Promethium.dll) |
+| v0.7.21 - v0.7.23 | v1.1.5 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.6/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.1.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.2/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.0.10 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.10/Promethium.dll) |
+
+## Changelog
+<details>
+  <summary> v1.1.5 </summary>
+     <ul> <li>Experimental changes on Matroyshka Shell and Sealed Conviction. You can disable these changes in the config</li> </ul>
+     <ul> <li>Fixed pachinko relic minigame causing the game from being able to continue if there are no relics left in the relic pool</li> </ul>
+     <ul> <li>Fixed curse 5 not increasing the amount of elites correctly</li> </ul>
+     <ul> <li>Fixed curse modifiers not being calculated properly if other modifiers bring it less than 0</li> </ul>
+     <ul> <li>Localization Update</li> </ul>
+</details>
+<details>
+  <summary> v1.1.4 </summary>
+    <ul> <li>Added new relic: Plasma ball</li> </ul>
+    <ul> <li>Added hold effects for martrtorbshka and lightningorb</li> </ul>
+    <ul> <li>Changed speed up formula</li> </ul>
+    <ul> <li>Fixed orbelisk vanilla behavior being restored if the modifications are removed</li> </ul>
+    <ul> <li>Localization Update</li> </ul>
+</details>
 
 
 ## Quality of Life Changes

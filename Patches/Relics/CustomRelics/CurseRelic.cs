@@ -128,18 +128,13 @@ namespace Promethium.Patches.Relics
         }
     }
 
-    [HarmonyPatch(typeof(MapController), "Start")]
+    [HarmonyPatch(typeof(MapNode), nameof(MapNode.SetActiveState))]
     public static class ElitesReplaceTreasure
-    {
-        public static void Prefix(MapController __instance, MapNode[] ____nodes)
+    {        
+        public static void Postfix(MapNode __instance)
         {
-            if (CurseRun.LoadElite)
-                foreach (MapNode node in ____nodes)
-                {
-
-                    if (node.RoomType == RoomType.TREASURE || node.RoomType == RoomType.PEG_MINIGAME || node.RoomType == RoomType.STORE)
-                        node.RoomType = RoomType.MINI_BOSS;
-                }
+            if (__instance.RoomType == RoomType.TREASURE)
+                __instance.RoomType = RoomType.MINI_BOSS;
         }
     }
 

@@ -25,7 +25,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.1.4";
+        public const String Version = "1.1.5";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -147,7 +147,8 @@ namespace Promethium
         private void RegisterModifiedRelics()
         {
             ModifiedRelic.AddRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT); // Gardening Gloves
-            ModifiedRelic.AddRelic(RelicEffect.NO_DISCARD, true);
+            ModifiedRelic.AddRelic(RelicEffect.NO_DISCARD);
+            ModifiedRelic.AddRelic(RelicEffect.MATRYOSHKA);
         }
 
 
@@ -186,7 +187,8 @@ namespace Promethium
         {
             filePath = $"{Name}.Resources.{filePath}";
             Texture2D texture = LoadTexture(filePath);
-            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            Sprite sprite =  Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 16f);
+            return sprite;
         }
 
         private static byte[] ReadToEnd(Stream stream)

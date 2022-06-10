@@ -20,8 +20,20 @@ namespace Promethium.Patches.Mechanics
 
             if (availableRelics.Count < number)
             {
-                __result = availableRelics.ToArray();
-                return false;
+                if(availableRelics.Count > 0)
+                {
+                    __result = availableRelics.ToArray();
+                    return false;
+                } else
+                {
+                    for(int i = 0; i < number; i++)
+                    {
+                        availableRelics.Add(__instance.consolationPrize);
+                    }
+                    __result = availableRelics.ToArray();
+                    return false;
+                }
+
             }
             return true;
         }

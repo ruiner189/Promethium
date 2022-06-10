@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using I2.Loc;
 using Promethium.Components;
+using Promethium.Patches.Relics;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -63,8 +64,20 @@ namespace Promethium.Patches.Language
 
         public string GetParameterValue(string Param)
         {
-            if (Param == ParamKeys.ADDITIONAL_LIGHTNING_ZAPS) return $"{Plasma.AdditionalZaps}";
-            else if (Param == ParamKeys.PLASMA_PEG_HITS) return $"{Plasma.PegsToHit}";
+            if (Param == ParamKeys.ADDITIONAL_LIGHTNING_ZAPS) 
+                return $"{Plasma.AdditionalZaps}";
+            else if (Param == ParamKeys.PLASMA_PEG_HITS) 
+                return $"{Plasma.PegsToHit}";
+            else if (Param == ParamKeys.MULTIBALL_RELIC_MULTIPLIER) 
+                return $"<style=dmg_negative>{(1 - ModifiedRelic.MATRYOSHKA_SHELL_MULTIPLIER) * 100}%</style>";
+            else if (Param == ParamKeys.NO_DISCARD_MULTIPLIER) 
+                return $"<style=dmg_bonus>{ModifiedRelic.NO_DISCARD_RELIC_MULTIPLIER * 100}%</style>";
+            else if (Param == ParamKeys.NO_DISCARD_MULTIPLIER_VALUE)
+            {
+                float multiplier = ModifiedRelic.CalculateNoDiscardMultiplier() - 1;
+                if (multiplier == 0) return "";
+                return $"<style=dmg_bonus>({multiplier * 100}%)</style>";
+            }
             return null;
         }
     }
