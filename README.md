@@ -28,12 +28,16 @@ If you want to help translate, feel free to!
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.24+ | v1.1.5 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.5/Promethium.dll) |
+| v0.7.24+ | v1.1.6 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.6/Promethium.dll) |
 | v0.7.21 - v0.7.23 | v1.1.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.4/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.1.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.2/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.0.10 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.10/Promethium.dll) |
 
 ## Changelog
+<details>
+  <summary> v1.1.6 </summary>
+     <ul> <li>Fixed Localization typo</li> </ul>
+</details>
 <details>
   <summary> v1.1.5 </summary>
      <ul> <li>Experimental changes on Matroyshka Shell and Sealed Conviction. You can disable these changes in the config</li> </ul>
