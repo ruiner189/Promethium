@@ -10,7 +10,7 @@ namespace Promethium.Patches.Relics
 
         private String _name;
         private Sprite _sprite;
-        private CustomRelicEffect _effect = CustomRelicEffect.NONE;
+        private CustomRelicEffect _effect;
         private RelicPool _pool = RelicPool.RARE_SCENARIO;
         public CustomRelicBuilder SetName(String name)
         {
