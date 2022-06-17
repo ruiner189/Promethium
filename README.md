@@ -39,9 +39,9 @@ If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0t
 ## Changelog
 <details>
   <summary> v1.1.7 </summary>
-     <ul> <li>Added comptability checks for Endless Peglin and Custom Start Deck. They should now both work with Promethium without strange behavior</li> </ul>
+     <ul> <li>Added compatibility checks for Endless Peglin and Custom Start Deck. They should now both work with Promethium without strange behavior</li> </ul>
      <ul> <li>Added support to Custom Start Deck so that Promethium's relics work</li> </ul>
-     <ul> <li>Pruning relics now gives you a choice, and is now the default on the config, as this was the original intended way curse runs were supposed to work</li> </ul>
+     <ul> <li>Pruning relics now gives you a choice, and is now the default on the config</li> </ul>
      <ul> <li>Fixed a bug where Oreb was not being properly loaded in from a save file</li> </ul>
      <ul> <li>Fixed localization being loaded twice</li> </ul>
      <ul> <li>Fixed max health taken from Infernal Ingot being restored when starting another curse run while keeping Infernal Ingot</li> </ul>
@@ -90,7 +90,7 @@ At the end of your current run (if you defeat the last boss), choose "Restart" t
 Curse runs too easy? Check the configs to make them harder. You can make it so you lose some relics, reset orbs back to four, or even change the health scaling! 
 
 ## New Relics
-Excluding the curse relics, Promethium currently offers 4 new relics. 1 Boss relic, 2 Rare relics, and 1 Common relic.
+Excluding the curse relics, Promethium currently several new relics:
 ### Holster
 * Removes Discarding and allows you to hold orbs instead.
 * Some orbs have special mechanics while held, and many more are to come!
