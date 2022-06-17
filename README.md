@@ -39,6 +39,7 @@ If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0t
 ## Changelog
 <details>
   <summary> v1.1.7 </summary>
+  	 <ul> <li>German localization by Denny</li></ul>
      <ul> <li>Added compatibility checks for Endless Peglin and Custom Start Deck. They should now both work with Promethium without strange behavior</li> </ul>
      <ul> <li>Added support to Custom Start Deck so that Promethium's relics work</li> </ul>
      <ul> <li>Pruning relics now gives you a choice, and is now the default on the config</li> </ul>
