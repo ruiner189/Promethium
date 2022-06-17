@@ -7,6 +7,9 @@ The goal of the mod is to offer balance changes, new mechanics, and QoL features
 Localization is being done at https://docs.google.com/spreadsheets/d/1r7o-GVIn6ljL4DvOIRY4eTTo1OhWjd-P2HyBS9UB0OI/edit#gid=0
 If you want to help translate, feel free to!
 
+## Custom Start Deck
+If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0tzz/CustomStartDeck/), you can add Promethium's relics by using the names found [here](https://github.com/ruiner189/Promethium/blob/main/Patches/Relics/CustomRelics/CustomRelicEffect.cs)!
+
 ## Installation
 ### Thunderstore (ModManager)
 1. Download [Thunderstore](https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager)
@@ -28,12 +31,22 @@ If you want to help translate, feel free to!
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.24+ | v1.1.6 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.6/Promethium.dll) |
+| v0.7.24 | v1.1.7 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.7/Promethium.dll) |
 | v0.7.21 - v0.7.23 | v1.1.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.4/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.1.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.2/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.0.10 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.10/Promethium.dll) |
 
 ## Changelog
+<details>
+  <summary> v1.1.7 </summary>
+     <ul> <li>Added comptability checks for Endless Peglin and Custom Start Deck. They should now both work with Promethium without strange behavior</li> </ul>
+     <ul> <li>Added support to Custom Start Deck so that Promethium's relics work</li> </ul>
+     <ul> <li>Pruning relics now gives you a choice, and is now the default on the config, as this was the original intended way curse runs were supposed to work</li> </ul>
+     <ul> <li>Fixed a bug where Oreb was not being properly loaded in from a save file</li> </ul>
+     <ul> <li>Fixed localization being loaded twice</li> </ul>
+     <ul> <li>Fixed max health taken from Infernal Ingot being restored when starting another curse run while keeping Infernal Ingot</li> </ul>
+     <ul> <li>Fixed a vanilla bug where loading a save file with more than 100 hp would reset it back to 100</li> </ul>
+</details>
 <details>
   <summary> v1.1.6 </summary>
      <ul> <li>Fixed Localization typo</li> </ul>

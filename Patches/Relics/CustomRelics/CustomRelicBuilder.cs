@@ -1,10 +1,6 @@
 ﻿using HarmonyLib;
 using Relics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Promethium.Patches.Relics
@@ -48,7 +44,7 @@ namespace Promethium.Patches.Relics
             relic.sprite = _sprite;
             relic.effect = (RelicEffect)_effect;
             relic.SetPoolType(_pool);
-            Plugin.Log.LogMessage($"{relic.locKey} successfully registered.");
+            Plugin.Log.LogDebug($"{relic.locKey} successfully registered.");
             return relic;
         }
 

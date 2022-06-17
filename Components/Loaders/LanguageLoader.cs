@@ -4,17 +4,21 @@ using Promethium.Components;
 using Promethium.Patches.Relics;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ToolBox.Serialization;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace Promethium.Patches.Language
 {
     public class LanguageLoader : MonoBehaviour, ILocalizationParamsManager
     {
+        private bool _isRegistered = false;
+        public static LanguageLoader Instance {  get; private set; }
+
+        public void Awake()
+        {
+            Instance = this;
+        }
+
         public void Start()
         {
             StartCoroutine(LateStart());
@@ -40,11 +44,14 @@ namespace Promethium.Patches.Language
         private IEnumerator LateStart()
         {
             yield return new WaitForSeconds(2);
-            RegisterTerms();
+            if(!_isRegistered)
+                RegisterTerms();
         }
 
-        public static void RegisterTerms()
+        public void RegisterTerms()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             foreach (String[] term in Plugin.LocalizationTerms)
             {
                 String key = term[0];
@@ -59,7 +66,9 @@ namespace Promethium.Patches.Language
                 }
                 LocalizationManager.Sources[0].AddTerm(key).Languages = values;
             }
-            Plugin.Log.LogMessage("Localization loaded!");
+            _isRegistered = true;
+            stopwatch.Stop();
+            Plugin.Log.LogInfo($"Localization loaded! Took {stopwatch.ElapsedMilliseconds}ms");
         }
 
         public string GetParameterValue(string Param)
@@ -92,10 +101,10 @@ namespace Promethium.Patches.Language
             if (__result == null && _fallback && Plugin.LocalizationKeys.Contains(Term))
             {
                 _fallback = false;
-                LanguageLoader.RegisterTerms();
+                LanguageLoader.Instance.RegisterTerms();
                 __result = LocalizationManager.GetTranslation(Term, FixForRTL, maxLineLengthForRTL, ignoreRTLnumbers, applyParameters, localParametersRoot, overrideLanguage, allowLocalizedParameters);
                 _fallback = true;
-                if (__result == null) Plugin.Log.LogMessage($"Unable to find the term {Term}");
+                if (__result == null) Plugin.Log.LogWarning($"Unable to find the term {Term}");
             }
         }
     }

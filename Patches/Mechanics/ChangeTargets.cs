@@ -1,6 +1,5 @@
 ﻿using Battle;
 using HarmonyLib;
-using System.Reflection;
 
 namespace Promethium.Patches
 {

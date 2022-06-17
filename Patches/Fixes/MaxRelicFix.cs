@@ -1,12 +1,8 @@
 ﻿using HarmonyLib;
 using Relics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Promethium.Patches.Mechanics
+namespace Promethium.Patches.Fixes
 {
     [HarmonyPatch(typeof(RelicManager), nameof(RelicManager.GetMultipleRelicsOfRarity))]
     public static class MaxRelicFix

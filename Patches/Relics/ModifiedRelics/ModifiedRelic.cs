@@ -2,9 +2,6 @@
 using Relics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Promethium.Patches.Relics
@@ -30,14 +27,14 @@ namespace Promethium.Patches.Relics
             if (alwaysEnabled)
             {
                 ModifiedRelics.Add(relic);
-                Plugin.Log.LogMessage($"{relic} Successfully modified.");
+                Plugin.Log.LogDebug($"{relic} Successfully modified.");
                 return;
             }
 
             if (Plugin.ConfigFile.Bind<bool>("Modified Relics", relic.ToString(), true, "Disable to remove modifications of this relic. Will revert to vanilla behavior").Value)
             {
                 ModifiedRelics.Add(relic);
-                Plugin.Log.LogMessage($"{relic} Successfully modified.");
+                Plugin.Log.LogDebug($"{relic} Successfully modified.");
             }
         }
 

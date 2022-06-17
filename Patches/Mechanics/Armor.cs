@@ -2,13 +2,8 @@
 using Battle.StatusEffects;
 using Cruciball;
 using HarmonyLib;
-using Promethium.Patches.Relics;
-using Promethium.Patches.Status_Effect;
-using Promethium.Extensions;
 using Relics;
 using System;
-using UnityEngine;
-using Promethium.Patches.Orbs;
 using Promethium.Components;
 
 namespace Promethium.Patches.Mechanics
@@ -34,7 +29,7 @@ namespace Promethium.Patches.Mechanics
     public static class ResetArmorOnStart
     {
         [HarmonyPriority(Priority.First)]
-        private static void Postfix(RelicManager ____relicManager, CruciballManager ____cruciballManager, PlayerStatusEffectController ____playerStatusEffectController)
+        private static void Postfix(BattleController __instance, RelicManager ____relicManager, CruciballManager ____cruciballManager, PlayerStatusEffectController ____playerStatusEffectController)
         {
             Plugin.PromethiumManager.GetComponent<ArmorManager>()?.Init(____relicManager, ____cruciballManager, ____playerStatusEffectController);
         }

@@ -1,12 +1,6 @@
-﻿using Cruciball;
-using I2.Loc;
+﻿using I2.Loc;
 using Promethium.Components;
 using Relics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Promethium.Patches.Orbs.ModifiedOrbs

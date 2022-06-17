@@ -1,18 +1,17 @@
-﻿using Battle.Enemies;
-using Battle.StatusEffects;
-using Cruciball;
+﻿using Cruciball;
 using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 using HarmonyLib;
-using Promethium.Patches.Mechanics;
+using Promethium.Extensions;
 using Promethium.Patches.Relics;
 using Relics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Worldmap;
 using Random = System.Random;
 
@@ -23,6 +22,15 @@ namespace Promethium.Patches.Mechanics
     {
         public static bool Victory = false;
         public static bool LoadElite = false;
+
+        private static List<Relic> _oldRelics;
+        private static int _commonRelics = 3;
+        private static int _rareRelics = 3;
+        private static int _bossRelics = 3;
+
+        // Block other mods from modifiying the deck when we are keeping/pruning it.
+        public static bool BlockDeckInit = false;
+
 
         public static void PruneDeck(DeckManager manager)
         {
@@ -41,93 +49,88 @@ namespace Promethium.Patches.Mechanics
             Dictionary<RelicEffect, Relic> relicDict = manager._ownedRelics;
             List<Relic> relics = relicDict.Values.ToList();
 
-            if (!Plugin.PruneRelicsOnNewCurseRunOn)
-            {
-                manager.Reset();
-                relics.ForEach(manager.AddRelic);
-                return;
-            }
-
             Random rand = new Random();
             List<Relic> curses = relics.FindAll(relic => CurseRelic.AllCurseRelics.Contains(relic));
-            List<Relic> nonCurses = relics.FindAll(relic => !curses.Contains(relic)).OrderBy(relic => rand.Next()).ToList();
-            List<Relic> relicsToKeep = new List<Relic>();
+            _oldRelics = relics.FindAll(relic => !curses.Contains(relic)).OrderBy(relic => rand.Next()).ToList();
 
-            int commonRelics = 2;
-            int rareRelics = 2;
-            int bossRelics = 1;
+            _commonRelics = 3;
+            _rareRelics = 2;
+            _bossRelics = 1;
 
             if (CurseRelic.IsCurseLevelActive(manager, 1))
             {
-                commonRelics++;
-                rareRelics++;
+                _commonRelics++;
+                _rareRelics++;
             }
 
             if (CurseRelic.IsCurseLevelActive(manager, 2))
             {
-                commonRelics++;
-                rareRelics++;
+                _commonRelics+=2;
+                _rareRelics++;
             }
 
             if (CurseRelic.IsCurseLevelActive(manager, 3))
             {
-                bossRelics++;
+                _rareRelics++;
+                _bossRelics++;
             }
 
             if (CurseRelic.IsCurseLevelActive(manager, 4))
             {
-                commonRelics++;
-                rareRelics++;
+                _commonRelics+=2;
+                _rareRelics++;
             }
 
             if (CurseRelic.IsCurseLevelActive(manager, 5))
             {
-                commonRelics++;
-                rareRelics++;
-                bossRelics++;
+                _commonRelics++;
+                _rareRelics++;
+                _bossRelics++;
             }
 
-            int totalRelics = commonRelics + rareRelics + bossRelics;
-
-            for (int i = 0; i < commonRelics; i++)
-            {
-                Relic relic = GetRelicOfRarity(manager, nonCurses, RelicRarity.COMMON, 10);
-                if (relic != null)
-                {
-                    relicsToKeep.Add(relic);
-                    nonCurses.Remove(relic);
-                }
-            }
-
-            for (int i = 0; i < rareRelics; i++)
-            {
-                Relic relic = GetRelicOfRarity(manager, nonCurses, RelicRarity.RARE, 5);
-                if (relic != null)
-                {
-                    relicsToKeep.Add(relic);
-                    nonCurses.Remove(relic);
-                }
-            }
-
-            for (int i = 0; i < bossRelics; i++)
-            {
-                Relic relic = GetRelicOfRarity(manager, nonCurses, RelicRarity.BOSS);
-                if (relic != null)
-                {
-                    relicsToKeep.Add(relic);
-                    nonCurses.Remove(relic);
-                }
-            }
-
-            while (relicsToKeep.Count < totalRelics && nonCurses.Count > 0)
-            {
-                relicsToKeep.Add(nonCurses[0]);
-                nonCurses.RemoveAt(0);
-            }
-
-            manager.Reset();
+            manager.ResetSilently();
             curses.ForEach(manager.AddRelic);
-            relicsToKeep.ForEach(manager.AddRelic);
+        }
+
+        public static bool HasAnotherRelic()
+        {
+            if (_oldRelics == null) return false;
+            if (_commonRelics == 0 && _rareRelics == 0 && _bossRelics == 0) return false;
+            if (_oldRelics.Count >= 3) return true;
+            return false;
+        }
+
+        public static List<Relic> GetNextRelicSet(RelicManager relicManager)
+        {
+            if (_commonRelics == 0 && _rareRelics == 0 && _bossRelics == 0) 
+                return new List<Relic>();
+            if (_oldRelics.Count <= 3) 
+                return _oldRelics;
+
+            if(_commonRelics != 0)
+            {
+                _commonRelics--;
+                return GetRelicsOfRarity(relicManager, 3, _oldRelics, RelicRarity.COMMON, 100);
+            }
+
+            if(_rareRelics != 0)
+            {
+                _rareRelics--;
+                return GetRelicsOfRarity(relicManager, 3, _oldRelics, RelicRarity.RARE, 10);
+            }
+
+            if (_bossRelics != 0)
+            {
+                _bossRelics--;
+                return GetRelicsOfRarity(relicManager, 3, _oldRelics, RelicRarity.BOSS);
+            }
+
+            return new List<Relic>();
+        }
+
+        public static void RemoveRelicFromList(Relic relic)
+        {
+            _oldRelics.Remove(relic);
         }
 
         public static List<Relic> GetCurseRelics(RelicManager manager)
@@ -157,6 +160,23 @@ namespace Promethium.Patches.Mechanics
             return Victory && Plugin.CurseRunOn;
         }
 
+        public static List<Relic> GetRelicsOfRarity(RelicManager manager, int amount, List<Relic> relics, RelicRarity rarity, int upgradeChance = 0)
+        {
+            if (relics.Count <= amount)
+                return new List<Relic>(relics);
+
+            List<Relic> list = new List<Relic>();
+            List<Relic> pool = new List<Relic>(relics);
+
+            for(int i = 0; i < amount; i++)
+            {
+                Relic relic = GetRelicOfRarity(manager, pool, rarity, upgradeChance);
+                list.Add(relic);
+                pool.Remove(relic);
+            }
+            return list;
+        }
+
         public static Relic GetRelicOfRarity(RelicManager manager, List<Relic> relics, RelicRarity rarity, int upgradeChance = 0)
         {
             if (relics.Count == 0) return null;
@@ -164,7 +184,7 @@ namespace Promethium.Patches.Mechanics
             if (upgradeChance > 0)
             {
                 Random rand = new Random();
-                if (rand.Next(1, 1000) <= upgradeChance)
+                if (rand.Next(0, 1000) <= upgradeChance)
                 {
                     RelicRarity newRarity = RelicRarity.RARE;
                     if (rarity == RelicRarity.RARE) newRarity = RelicRarity.BOSS;
@@ -203,36 +223,59 @@ namespace Promethium.Patches.Mechanics
         }
     }
 
-    [HarmonyPriority(Priority.Last)]
-    [HarmonyPatch(typeof(GameInit), "Start")]
+    [HarmonyPatch(typeof(GameInit), nameof(GameInit.Start))]
     public static class GameInitPatch
     {
+        [HarmonyPriority(Priority.Last)]
         public static bool Prefix(GameInit __instance, DeckManager ____deckManager,
             DeckData ____initialDeck, RelicManager ____relicManager, CruciballManager ____cruciballManager,
             GameObject ____chooseRelicCanvas, float ____chooseRelicCanvasFadeInTime,
             ref List<Relic> ____chosenRelics, RelicIcon[] ____chooseRelicIcons)
         {
+            CanvasGroup component = GameObject.FindGameObjectWithTag("PersistentUI").GetComponent<CanvasGroup>();
+            CurseRun.BlockDeckInit = false;
+
+            if (CurseRun.HasAnotherRelic())
+            {
+                CurseRun.BlockDeckInit = true;
+                ____chooseRelicCanvas.GetComponent<CanvasGroup>().DOFade(1f, ____chooseRelicCanvasFadeInTime);
+                component.DOFade(1f, ____chooseRelicCanvasFadeInTime).From(0f, true, false);
+                ____chosenRelics = CurseRun.GetNextRelicSet(____relicManager);
+                while(____chosenRelics.Count == 0 && CurseRun.HasAnotherRelic())
+                {
+                    ____chosenRelics = CurseRun.GetNextRelicSet(____relicManager);
+                }
+
+                if(____chosenRelics.Count > 0)
+                {
+                    for (int j = 0; j < ____chosenRelics.Count; j++)
+                    {
+                        ____chooseRelicIcons[j].SetRelic(____chosenRelics[j]);
+                    }
+                    return false;
+                }
+            }
+
             CurseRun.LoadElite = false;
             if (CurseRun.ShouldStartNextCurseRun())
             {
                 CurseRun.Victory = false;
+                CurseRun.BlockDeckInit = true;
                 if (CurseRelic.IsCurseLevelActive(____relicManager, 4)) CurseRun.LoadElite = true;
-                FloatVariable floatVariable = __instance.playerHealth;
-                if (floatVariable != null)
-                {
-                    floatVariable.Reset();
-                }
-                FloatVariable floatVariable2 = __instance.maxPlayerHealth;
-                if (floatVariable2 != null)
-                {
-                    floatVariable2.Reset();
-                }
 
-                CurseRun.PruneRelics(____relicManager);
+                if (Plugin.PruneRelicsOnNewCurseRunOn)
+                {
+                    __instance.maxPlayerHealth.Reset();
+                    __instance.playerHealth.Reset();
+                    CurseRun.PruneRelics(____relicManager);
+                }
+                else
+                {
+                    __instance.playerHealth.Set(__instance.maxPlayerHealth.Value);
+                }
                 CurseRun.PruneDeck(____deckManager);
 
                 PopulateSuggestionOrbs.ShouldForceNewOrb = true;
-                CanvasGroup component = GameObject.FindGameObjectWithTag("PersistentUI").GetComponent<CanvasGroup>();
 
                 StaticGameData.hasReachedBoss = false;
                 StaticGameData.specificNodeOverride = null;
@@ -256,4 +299,47 @@ namespace Promethium.Patches.Mechanics
             return true;
         }
     }
+
+    [HarmonyPatch(typeof(GameInit), nameof(GameInit.ChooseRelic))]
+    public static class ChooseRelic
+    {
+        public static bool Prefix(GameInit __instance, int chosenIndex)
+        {
+            if (!CurseRun.HasAnotherRelic()) return true;
+
+
+            if (__instance._relicsAvailable)
+            {
+                Relic relic = __instance._chosenRelics[chosenIndex];
+                __instance._relicManager.AddRelic(relic);
+                CurseRun.RemoveRelicFromList(relic);
+                if (CurseRun.HasAnotherRelic())
+                {
+                    CanvasGroup component = __instance._chooseRelicCanvas.GetComponent<CanvasGroup>();
+                    component.GetComponent<GraphicRaycaster>().enabled = false;
+                    TweenerCore<float, float, FloatOptions> tweenerCore = component.DOFade(0f, __instance._chooseRelicCanvasFadeOutTime);
+                    tweenerCore.onComplete = (TweenCallback)Delegate.Combine(tweenerCore.onComplete, new TweenCallback(LoadPostMainMenu));
+                } else
+                {
+                    __instance.SkipRelic();
+                }
+            }
+            return false;
+        }
+
+        public static void LoadPostMainMenu()
+        {
+            SceneManager.LoadScene("PostMainMenu");
+        }
+    }
+
+    [HarmonyPatch(typeof(DeckManager), nameof(DeckManager.InstantiateDeck))]
+    public static class BlockDeckInit
+    {
+        public static bool Prefix()
+        {
+            return !CurseRun.BlockDeckInit;
+        }
+    }
+
 }

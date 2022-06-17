@@ -1,11 +1,8 @@
 ﻿using Promethium.Patches.Relics;
 using Relics;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace Promethium.Loaders
@@ -28,6 +25,8 @@ namespace Promethium.Loaders
 
         private void RegisterCustomRelics()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             CustomRelicBuilder.Build("holster", Plugin.Holster, CustomRelicEffect.HOLSTER, RelicPool.BOSS);
             CustomRelicBuilder.Build("mini", Plugin.MiniBelt, CustomRelicEffect.MINI, RelicPool.RARE);
             CustomRelicBuilder.Build("wumbo", Plugin.WumboBelt, CustomRelicEffect.WUMBO, RelicPool.RARE);
@@ -54,10 +53,16 @@ namespace Promethium.Loaders
             CustomRelicBuilder.BuildAsCurse("curseFiveB", Plugin.CurseFive, CustomRelicEffect.CURSE_FIVE_B, 5);
             CustomRelicBuilder.BuildAsCurse("curseFiveC", Plugin.CurseFive, CustomRelicEffect.CURSE_FIVE_C, 5);
             _relicsRegistered = true;
+
+            stopwatch.Stop();
+            Plugin.Log.LogInfo($"All Custom relics built! Took {stopwatch.ElapsedMilliseconds}ms");
         }
 
         private void AddRelicsToPools()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             List<CustomRelic> relics = CustomRelic.AllCustomRelics;
 
             RelicSet[] pools = Resources.FindObjectsOfTypeAll<RelicSet>();
@@ -108,6 +113,9 @@ namespace Promethium.Loaders
                         break;
                 }
             }
+
+            stopwatch.Stop();
+            Plugin.Log.LogInfo($"Custom relics injected into relic pool! Took {stopwatch.ElapsedMilliseconds}ms");
         }
     }
 }

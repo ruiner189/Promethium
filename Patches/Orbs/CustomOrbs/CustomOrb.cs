@@ -21,7 +21,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
 
         public static CustomOrb GetCustomOrbByName(String name)
         {
-            return AllCustomOrbs.Find(orb => orb.GetName() == name);
+            return AllCustomOrbs.Find(orb => orb.GetName().ToLower() == name.ToLower());
         }
 
         public abstract GameObject GetPrefab(int level);
@@ -52,6 +52,9 @@ namespace Promethium.Patches.Orbs.CustomOrbs
                     if (customOrb != null)
                     {
                         gameObject = customOrb.GetPrefab(Int32.Parse(name[1]));
+
+                        if(gameObject == null)
+                            Plugin.Log.LogWarning($"Found custom orb but could not find level {name[1]}!");
                     }
                     else
                     {

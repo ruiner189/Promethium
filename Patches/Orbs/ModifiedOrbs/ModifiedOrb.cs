@@ -1,16 +1,11 @@
-﻿using Battle.StatusEffects;
-using Cruciball;
+﻿using Cruciball;
 using HarmonyLib;
 using I2.Loc;
 using PeglinUI;
-using Promethium.Patches.Mechanics;
 using Relics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Promethium.Patches.Orbs.ModifiedOrbs
@@ -29,7 +24,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             if (Plugin.ConfigFile.Bind<bool>("Orbs", orbName, true, "Disable to remove modifications").Value)
             {
                 Registered = true;
-                Plugin.Log.LogMessage($"{_name} was successfully registered.");
+                Plugin.Log.LogDebug($"{_name} was successfully registered.");
             }
 
             AllModifiedOrbs.Add(this);
@@ -281,7 +276,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
 
         public static void Postfix(DeckManager __instance, List<GameObject> __state)
         {
-
+            if (__state == null || DeckManager.completeDeck == null) return;
             foreach (GameObject orb in DeckManager.completeDeck)
             {
                 __state.Remove(orb);
@@ -293,7 +288,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
                 if (attack != null)
                 {
                     ModifiedOrb modifiedOrb = ModifiedOrb.GetOrb(attack.locNameString);
-                    if (orb != null)
+                    if (modifiedOrb != null)
                     {
                         modifiedOrb.OnRemovedFromDeck(__instance, orb, attack);
                     }
@@ -343,23 +338,27 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
         }
     }
 
-    [HarmonyPatch(typeof(BattleController), "Start")]
+    [HarmonyPatch(typeof(BattleController), nameof(BattleController.Start))]
     public static class BattleStart
     {
         public static void Postfix(BattleController __instance)
         {
-            foreach (GameObject orb in DeckManager.completeDeck)
+            if(DeckManager.completeDeck != null)
             {
-                Attack attack = orb.GetComponent<Attack>();
-                if (attack != null)
+                foreach (GameObject orb in DeckManager.completeDeck)
                 {
-                    ModifiedOrb modifiedOrb = ModifiedOrb.GetOrb(attack.locNameString);
-                    if (modifiedOrb != null)
+                    Attack attack = orb.GetComponent<Attack>();
+                    if (attack != null)
                     {
-                        modifiedOrb.OnBattleStart(__instance, orb, attack);
+                        ModifiedOrb modifiedOrb = ModifiedOrb.GetOrb(attack.locNameString);
+                        if (modifiedOrb != null)
+                        {
+                            modifiedOrb.OnBattleStart(__instance, orb, attack);
+                        }
                     }
                 }
             }
+
         }
     }
 

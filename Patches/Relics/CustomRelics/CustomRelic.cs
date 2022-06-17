@@ -1,16 +1,8 @@
-﻿using Battle.Attacks.DamageModifiers;
-using Battle.StatusEffects;
-using Cruciball;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Promethium.Extensions;
 using Relics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
 namespace Promethium.Patches.Relics
 {

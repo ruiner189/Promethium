@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Promethium.Patches.Relics
+﻿namespace Promethium.Patches.Relics
 {
-
-    public enum CustomRelicEffect
+   public enum CustomRelicEffect
     {
-        NONE = 7588,
-        HOLSTER,
+        HOLSTER = 7589,
         MINI,
         WUMBO,
         KILL_BUTTON,
         PLASMA_BALL,
-        // Leaving room between each curse set, just in case there are more added in. This allows future compatibility
         CURSE_ONE_BALANCE = 8000,
         CURSE_ONE_ATTACK,
         CURSE_ONE_CRIT,

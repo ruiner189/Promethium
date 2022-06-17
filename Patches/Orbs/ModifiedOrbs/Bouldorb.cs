@@ -1,10 +1,4 @@
-﻿using Battle.StatusEffects;
-using Cruciball;
-using HarmonyLib;
-using Promethium.Patches.Mechanics;
-using Promethium.Extensions;
-using Promethium.Patches.Orbs;
-using System;
+﻿using Promethium.Extensions;
 using UnityEngine;
 using Relics;
 using Promethium.Components;

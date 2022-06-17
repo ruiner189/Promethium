@@ -3,14 +3,10 @@ using Battle.Enemies;
 using Battle.StatusEffects;
 using HarmonyLib;
 using Promethium.Extensions;
-using Promethium.Patches.Mechanics;
 using Relics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Worldmap;
 

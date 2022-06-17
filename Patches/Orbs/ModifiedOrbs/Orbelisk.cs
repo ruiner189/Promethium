@@ -1,11 +1,8 @@
 ﻿using Battle;
 using Battle.Attacks.DamageModifiers;
-using Battle.StatusEffects;
 using Cruciball;
 using HarmonyLib;
-using Promethium.Patches.Mechanics;
 using Promethium.Extensions;
-using System.Collections.Generic;
 using UnityEngine;
 using Relics;
 using I2.Loc;

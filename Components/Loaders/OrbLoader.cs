@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,9 @@ namespace Promethium.Components.Loaders
 
         private void RegisterOrbs()
         {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             UnityEngine.Object[] objects = Resources.FindObjectsOfTypeAll<OrbPool>();
 
             if (objects.Length == 0)
@@ -40,6 +44,9 @@ namespace Promethium.Components.Loaders
             List<GameObject> orbs = new List<GameObject>(_allOrbs.AvailableOrbs);
             orbs.Add(Oreb.GetInstance().GetPrefab(1));
             _allOrbs.AvailableOrbs = orbs.ToArray();
+
+            stopWatch.Stop();
+            Plugin.Log.LogInfo($"Orbs Registered! Took {stopWatch.ElapsedMilliseconds}ms");
         }
 
     }

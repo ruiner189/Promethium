@@ -1,13 +1,7 @@
-﻿using I2.Loc;
-using Promethium.Components;
+﻿using Promethium.Components;
 using Promethium.Extensions;
 using Promethium.Patches.Relics;
 using Relics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Promethium.Patches.Orbs.ModifiedOrbs
