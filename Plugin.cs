@@ -30,7 +30,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.1.7";
+        public const String Version = "1.1.8";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -51,6 +51,8 @@ namespace Promethium
         public static Sprite KillButtonRelic;
         public static Sprite KillButton;
         public static Sprite PlasmaBall;
+        public static Sprite OrbOfGreed;
+        public static Sprite OrbOfGreedAttack;
 
         //Localization
         public static List<String[]> LocalizationTerms;
@@ -98,7 +100,7 @@ namespace Promethium
             RegisterModifiedRelics();
 
             EnemyAttackOnShuffleConfig = Config.Bind<bool>("Mechanics", "EnemyAttackOnShuffle", true, "Disabling this will prevent enemies from taking two turns in certain circumstances");
-            SpeedUpOnConfig = Config.Bind<bool>("Mechanics", "SpeedUpOn", true, "Speeds up game after a set amount of time");
+            SpeedUpOnConfig = Config.Bind<bool>("Mechanics", "SpeedUpOn", false, "Speeds up game after a set amount of time");
             SpeedUpDelayConfig = Config.Bind<float>("Mechanics", "SpeedUpDelay", 10, "Delay for speed up. In seconds");
             SpeedUpMaxConfig = Config.Bind<float>("Mechanics", "SpeedUpMax", 3, "How much it speeds up the game at max value");
             SpeedUpRateConfig = Config.Bind<float>("Mechanics", "SpeedUpRate", 1, "How fast the mod transitions the speed-up. Higher values means the game will speed up faster");
@@ -125,6 +127,7 @@ namespace Promethium
             PromethiumManager.hideFlags = HideFlags.HideAndDontSave;
         }
 
+
         private void LoadSoftDependencies()
         {
             // Check Dependencies
@@ -140,15 +143,23 @@ namespace Promethium
             // Load Patches that require dependencies
             if (CustomStartDeckPlugin)
             {
-                MethodInfo original = AccessTools.Method(typeof(RelicManager), nameof(RelicManager.Reset));
-                MethodInfo postfix = AccessTools.Method(typeof(CustomStartDeck), nameof(CustomStartDeck.GetPromethiumRelics));
-                MethodInfo fixList = AccessTools.Method(typeof(CustomStartDeck), nameof(CustomStartDeck.ResetList));
-                _harmony.Patch(original, postfix: new HarmonyMethod(postfix, priority: Priority.HigherThanNormal));
-                _harmony.Patch(original, postfix: new HarmonyMethod(fixList, priority: Priority.LowerThanNormal));
-                
-                if(info.Instance != null)
+                MethodInfo relicReset = AccessTools.Method(typeof(RelicManager), nameof(RelicManager.Reset));
+                MethodInfo getPromethiumRelics = AccessTools.Method(typeof(CustomStartDeck), nameof(CustomStartDeck.GetPromethiumRelics));
+                MethodInfo resetRelicList = AccessTools.Method(typeof(CustomStartDeck), nameof(CustomStartDeck.ResetRelicList));
+                _harmony.Patch(relicReset, postfix: new HarmonyMethod(getPromethiumRelics, priority: Priority.HigherThanNormal));
+                _harmony.Patch(relicReset, postfix: new HarmonyMethod(resetRelicList, priority: Priority.LowerThanNormal));
+
+                MethodInfo gameInit = AccessTools.Method(typeof(GameInit), nameof(GameInit.Start));
+                MethodInfo getPromethiumOrbs = AccessTools.Method(typeof(CustomStartDeck), nameof(CustomStartDeck.GetPromethiumOrbs));
+                MethodInfo addPromethiumOrbs = AccessTools.Method(typeof(CustomStartDeck), nameof(CustomStartDeck.AddPromethiumOrbs));
+                _harmony.Patch(gameInit, postfix: new HarmonyMethod(getPromethiumOrbs, priority: Priority.HigherThanNormal));
+                _harmony.Patch(gameInit, postfix: new HarmonyMethod(addPromethiumOrbs, priority: Priority.LowerThanNormal));
+
+
+                if (info.Instance != null)
                 {
                     CustomStartDeck.wantedRelicEffects = AccessTools.Field(info.Instance.GetType(), "wantedRelicEffects").GetValue(info.Instance) as List<String>;
+                    CustomStartDeck.wantedOrbs = AccessTools.Field(info.Instance.GetType(), "wantedOrbs").GetValue(info.Instance) as List<String>;
                 }
             }
         }
@@ -157,6 +168,7 @@ namespace Promethium
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
+
             ArmorEffect = LoadSprite("ArmorEffect.png");
             Holster = LoadSprite("Relics.Holster.png");
             WumboBelt = LoadSprite("Relics.WumboBelt.png");
@@ -171,6 +183,10 @@ namespace Promethium
 
             KillButtonRelic = LoadSprite("Relics.KillButton.png");
             KillButton = LoadSprite("KillButton.png");
+
+            OrbOfGreed = LoadSprite("Orbs.OrbOfGreed.png", 8);
+            OrbOfGreedAttack = LoadSprite("Orbs.OrbOfGreed.png", 16);
+
             stopwatch.Stop();
             Log.LogInfo($"Sprites loaded! Took {stopwatch.ElapsedMilliseconds}ms");
         }
@@ -199,8 +215,6 @@ namespace Promethium
             ModifiedRelic.AddRelic(RelicEffect.MATRYOSHKA);
         }
 
-
-
         public List<String[]> ReadTSVFile(String filePath)
         {
             filePath = $"{Name}.Resources.{filePath}";
@@ -223,19 +237,19 @@ namespace Promethium
 
         public static Texture2D LoadTexture(string filePath)
         {
-            Texture2D texture = null;
+            Texture2D texture;
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(filePath);
-            texture = new Texture2D(10, 20, TextureFormat.ARGB32, false);
+            texture = new Texture2D(16, 16, TextureFormat.RGBA32, false);
             texture.LoadImage(ReadToEnd(stream));
             texture.filterMode = FilterMode.Point;
             return texture;
         }
 
-        public static Sprite LoadSprite(string filePath)
+        public static Sprite LoadSprite(string filePath, float pixelsPerUnit = 16f)
         {
             filePath = $"{Name}.Resources.{filePath}";
             Texture2D texture = LoadTexture(filePath);
-            Sprite sprite =  Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 16f);
+            Sprite sprite =  Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
             return sprite;
         }
 

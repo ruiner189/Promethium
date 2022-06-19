@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using PeglinUI.MainMenu;
 using Promethium.Patches.Orbs.ModifiedOrbs;
 using System;
 using System.Collections.Generic;
@@ -79,6 +80,25 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             __instance.InstantiateDeck(list);
 
             return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(MainMenuRandomOrbDrop), nameof(MainMenuRandomOrbDrop.FirePachinkoBall))]
+    public static class FixMenuDrop
+    {
+        public static void Prefix(PachinkoBall pBall)
+        {
+            pBall.gameObject.SetActive(true);
+        }
+    }
+
+    [HarmonyPatch(typeof(PachinkoBall), nameof(PachinkoBall.SetTrajectorySimulationRadius))]
+    public static class FixTrajectorySimulation
+    {
+        public static void Prefix(PachinkoBall __instance)
+        {
+            if (__instance._trajectorySimulation == null)
+                __instance._trajectorySimulation = __instance.GetComponent<TrajectorySimulation>();
         }
     }
 }

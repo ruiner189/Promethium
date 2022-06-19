@@ -13,6 +13,8 @@ namespace Promethium.Patches.Mechanics
         {
             if (Plugin.SpeedUpOn)
             {
+                if(TimescaleManager.Instance != null && TimescaleManager.Instance._isSpedUp)
+                    return;
                 if (____battleState == 3)
                 {
                     timeElapsed += Time.deltaTime;

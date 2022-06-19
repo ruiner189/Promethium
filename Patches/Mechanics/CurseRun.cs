@@ -65,14 +65,14 @@ namespace Promethium.Patches.Mechanics
 
             if (CurseRelic.IsCurseLevelActive(manager, 2))
             {
-                _commonRelics+=2;
                 _rareRelics++;
+                _bossRelics++;
             }
 
             if (CurseRelic.IsCurseLevelActive(manager, 3))
             {
+                _commonRelics+=2;
                 _rareRelics++;
-                _bossRelics++;
             }
 
             if (CurseRelic.IsCurseLevelActive(manager, 4))

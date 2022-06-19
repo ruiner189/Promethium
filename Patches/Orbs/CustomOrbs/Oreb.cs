@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Promethium.Patches.Orbs.CustomOrbs
 {
-    public class Oreb : CustomOrb
+    public sealed class Oreb : CustomOrb
     {
         private static GameObject _levelOne;
         private static GameObject _levelTwo;

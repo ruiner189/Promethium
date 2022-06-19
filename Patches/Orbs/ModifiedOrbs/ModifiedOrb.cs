@@ -14,7 +14,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     {
         public static readonly List<ModifiedOrb> AllModifiedOrbs = new List<ModifiedOrb>();
 
-        private String _name;
+        private readonly String _name;
         public bool LocalVariables = false;
         public readonly bool Registered = false;
 
@@ -154,7 +154,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     public static class ChangeDescription
     {
 
-        public static bool Prefix(Attack __instance, RelicManager ____relicManager, CruciballManager ____cruciballManager, ref String __result)
+        public static bool Prefix(Attack __instance, RelicManager ____relicManager)
         {
             ModifiedOrb orb = ModifiedOrb.GetOrb(__instance.locNameString);
 
@@ -269,7 +269,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     [HarmonyPatch(typeof(DeckManager), nameof(DeckManager.RemoveRandomOrbFromDeck))]
     public static class RemoveRandomOrbFromDeck
     {
-        public static void Prefix(DeckManager __instance, out List<GameObject> __state)
+        public static void Prefix(out List<GameObject> __state)
         {
             __state = new List<GameObject>(DeckManager.completeDeck);
         }

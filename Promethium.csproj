@@ -24,7 +24,7 @@
     <Reference Include="$(peglin)\Assembly-CSharp.dll" />
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="Resources\Relics\*" />
-
+    <EmbeddedResource Include="Resources\Orbs\*" />
   </ItemGroup>
 
   <Target Name="Copy" AfterTargets="Build">

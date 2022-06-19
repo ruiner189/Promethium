@@ -8,7 +8,41 @@ Localization is being done at https://docs.google.com/spreadsheets/d/1r7o-GVIn6l
 If you want to help translate, feel free to!
 
 ## Custom Start Deck
-If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0tzz/CustomStartDeck/), you can add Promethium's relics by using the names found [here](https://github.com/ruiner189/Promethium/blob/main/Patches/Relics/CustomRelics/CustomRelicEffect.cs)!
+If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0tzz/CustomStartDeck/), you can add Promethium's relics by using the names found below!
+<details>
+  <summary> Relic Names </summary>
+     <ul> <li>Holster: HOLSTER</li> </ul>
+     <ul> <li>Mini Belt: MINI</li> </ul>
+     <ul> <li>Wumbo Belt: WUMBO</li> </ul>
+     <ul> <li>PlasmaBall: PLASMA_BALL</li> </ul>
+</details>
+<details>
+  <summary>Curse Relic Names </summary>
+     <ul> <li>Curse 1 Balance: CURSE_ONE_BALANCE</li> </ul>
+     <ul> <li>Curse 1 Attack: CURSE_ONE_ATTACK</li> </ul>
+     <ul> <li>Curse 1 Crit: CURSE_ONE_CRIT</li> </ul>
+     <ul> <li>Curse 2 Health: CURSE_TWO_HEALTH</li> </ul>
+     <ul> <li>Curse 2 Armor: CURSE_TWO_ARMOR</li> </ul>
+     <ul> <li>Curse 2 Equip: CURSE_TWO_EQUIP</li> </ul>
+     <ul> <li>Curse 3 Bombs: CURSE_THREE_BOMB</li> </ul>
+     <ul> <li>Curse 3 Attack: CURSE_THREE_ATTACK</li> </ul>
+     <ul> <li>Curse 3 Crit: CURSE_THREE_CRIT</li> </ul>
+     <ul> <li>Curse 4 Health: CURSE_FOUR_HEALTH</li> </ul>
+     <ul> <li>Curse 4 Armor: CURSE_FOUR_ARMOR</li> </ul>
+     <ul> <li>Curse 4 Equip: CURSE_FOUR_EQUIP</li> </ul>
+     <ul> <li>Curse 5: CURSE_FIVE_A</li> </ul>
+     <ul> <li>Curse 5: CURSE_FIVE_B</li> </ul>
+     <ul> <li>Curse 5: CURSE_FIVE_C</li> </ul>
+</details>
+<details>
+  <summary> Orb Names </summary>
+     <ul> <li>Oreb-Lvl1</li> </ul>
+     <ul> <li>Oreb-Lvl2</li> </ul>
+     <ul> <li>Oreb-Lvl3</li> </ul>
+     <ul> <li>OrbOfGreed-Lvl1</li> </ul>
+     <ul> <li>OrbOfGreed-Lvl2</li> </ul>
+     <ul> <li>OrbOfGreed-Lvl3</li> </ul>
+</details>
 
 ## Installation
 ### Thunderstore (ModManager)
@@ -31,12 +65,19 @@ If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0t
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| v0.7.26 | v1.1.8 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.8/Promethium.dll) |
 | v0.7.24 | v1.1.7 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.7/Promethium.dll) |
 | v0.7.21 - v0.7.23 | v1.1.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.4/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.1.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.2/Promethium.dll) |
-| v0.7.0 - v0.7.20 | v1.0.10 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.0.10/Promethium.dll) |
 
 ## Changelog
+<details>
+  <summary> v1.1.8 </summary>
+     <ul> <li>Speed-up only activates when you use the in-game speed-up</li> </ul>
+     <ul> <li>Speed-up config is now defaulted to off</li> </ul>
+     <ul> <li>Added new orb: Orb of Greed</li> </ul>
+     <ul> <li>Added custom orb support to Custom Start Deck</li> </ul>
+</details>
 <details>
   <summary> v1.1.7 </summary>
   	 <ul> <li>German localization by Denny</li></ul>
@@ -88,7 +129,7 @@ Each curse relic will make the enemies stronger in different ways. It'll also gi
 #### Starting a Curse Run
 At the end of your current run (if you defeat the last boss), choose "Restart" to begin or increase your curse level. Each run will give you three choices of curse relics. The negative effect is the same, while you get to choose the benefit. 
 
-Curse runs too easy? Check the configs to make them harder. You can make it so you lose some relics, reset orbs back to four, or even change the health scaling! 
+Curse runs too easy? Check the configs to make them harder.
 
 ## New Relics
 Excluding the curse relics, Promethium currently several new relics:
@@ -121,6 +162,28 @@ Excluding the curse relics, Promethium currently several new relics:
    * 1.25x, 1.25x, 1x, 0.75x, 0.75x
    * 10x, 0x, 0x, 0x, 10x
    * 0x, 0x, 100x, 0x, 0x
+
+## New Orbs
+### Orb of Greed
+A new orb that adds more deck management to your loadout.
+
+Level 1
+* Attack: 1 | Crit: 1
+* Shuffles Deck on discard
+* Can only be discarded once per battle
+
+Level 2
+* Attack: 1 | Crit: 1
+* Shuffles Deck on discard
+* Prevents enemy turn on discard
+* Can only be discarded once per battle
+
+Level 3
+* Attack: 1 | Crit: 1
+* Adds a crit peg and refresh peg to the board
+* Shuffles deck on discard
+* Prevents enemy turn on discard
+* Can only be discarded once per battle
 
 ## Orb Changes
 ### Oreb

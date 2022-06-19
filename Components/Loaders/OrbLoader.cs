@@ -42,7 +42,12 @@ namespace Promethium.Components.Loaders
             _allOrbs = objects[0] as OrbPool;
 
             List<GameObject> orbs = new List<GameObject>(_allOrbs.AvailableOrbs);
-            orbs.Add(Oreb.GetInstance().GetPrefab(1));
+
+            if(Oreb.GetInstance().Registered)
+                orbs.Add(Oreb.GetInstance().GetPrefab(1));
+            if(OrbofGreed.GetInstance().Registered)
+                orbs.Add(OrbofGreed.GetInstance().GetPrefab(1));
+
             _allOrbs.AvailableOrbs = orbs.ToArray();
 
             stopWatch.Stop();

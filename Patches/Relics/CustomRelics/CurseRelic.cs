@@ -121,10 +121,9 @@ namespace Promethium.Patches.Relics
                 __instance.Heal((float)Math.Round(__instance.maxHealth * 0.05f));
             if (CurseRelic.IsCurseLevelActive(____relicManager, 4))
             {
-                StatusEffect statusEffect = new StatusEffect(StatusEffectType.DmgBuff, 1);
+                StatusEffect statusEffect = new StatusEffect(StatusEffectType.Strength, 1);
                 __instance.ApplyStatusEffect(statusEffect);
             }
-
         }
     }
 
@@ -136,8 +135,8 @@ namespace Promethium.Patches.Relics
         {
             if (_relicManager == null) _relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
             if (CurseRelic.IsCurseLevelActive(_relicManager, 5))
-            if (__instance.RoomType == RoomType.TREASURE)
-                __instance.RoomType = RoomType.MINI_BOSS;
+                if (__instance.RoomType == RoomType.TREASURE)
+                    __instance.RoomType = RoomType.MINI_BOSS;
         }
     }
 
