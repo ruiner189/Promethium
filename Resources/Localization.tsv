@@ -1,9 +1,9 @@
 Keys	English	Français [fr]	Español [es]	Deutsch [de]	Nederlands [nl]	Italiano [it]	Português do Brasil [pt-BR]	Русский [ru]	简体中文 [zh-CN]	繁体中文 [zh-TW]	日本語 [ja]	한국어 [ko]	Svenska [sv]	Polski [pl]	Türkçe [tr]
-Orbs/orbofgreed_name	Orb of Greed														
-Orbs/shuffle_deck_on_discard	Shuffles Deck on discard														
-Orbs/remove_on_discard	Can only be discarded once per battle														
-Orbs/skip_enemy_turn_on_discard	Prevents enemy turn if discarded														
-Orbs/add_crit_refresh_on_discard	Adds a <sprite name="CRIT_PEG"> and <sprite name="REFRESH_PEG"> on discard														
+Orbs/orbofgreed_name	Orb of Greed								贪欲弹珠						
+Orbs/shuffle_deck_on_discard	Shuffles Deck on discard								当这颗弹珠被跳过时，重新刷新你的弹珠列表						
+Orbs/remove_on_discard	Can only be discarded once per battle								每场战斗只能被跳过一次						
+Orbs/skip_enemy_turn_on_discard	Prevents enemy turn if discarded								当这颗弹珠被跳过时，跳过敌人的行动回合						
+Orbs/add_crit_refresh_on_discard	Adds a <sprite name="CRIT_PEG"> and <sprite name="REFRESH_PEG"> on discard								当这颗弹珠被跳过时，板面会增加1个额外的 <sprite name="CRIT_PEG"> 和 <sprite name="REFRESH_PEG">						
 Orbs/armor_damage_multiplier	Multiplies damage based on current <color="purple">Armor</color>. Current multiplier: <color="purple">{[ARMOR_DAMAGE_MULTIPLIER]}</color>	Multiplie les dégâts par l'<color="purple">Armure</color> actuelle.		Multipliziert den Schaden basierend auf der akutellen <color="purple">Rüstung</color>. Aktueller Faktor: <color="purple">{[ARMOR_DAMAGE_MULTIPLIER]}</color>					根据当前<color="purple">护甲</color>值增加伤害。当前倍率：<color="purple">{[ARMOR_DAMAGE_MULTIPLIER]}</color>						
 Orbs/armor_max	Increases Maximum <color="purple">Armor</color> by <color="purple">{[MAX_ARMOR_INCREASE]}</color>	Multiplicateur actuel : <color="purple">{[ARMOR_DAMAGE_MULTIPLIER]}</color>		Erhöht die maximale <color="purple">Rüstung</color> um <color="purple">{[MAX_ARMOR_INCREASE]}</color>					增加<color="purple">{[MAX_ARMOR_INCREASE]}</color>点<color="purple">护甲</color>上限						
 Orbs/armor_turn	Restores <color="purple">{[ARMOR_PER_RELOAD]} Armor</color> every reload	Restaure <color="purple">{[ARMOR_PER_RELOAD]} Armure</color> à chaque rechargement.		Stellt beim Nachladen <color="purple">{[ARMOR_PER_RELOAD]} Rüstung </color> wieder her					当这颗弹珠被装填时，恢复<color="purple">{[ARMOR_PER_RELOAD]}</color>点<color="purple">护甲</color>						
