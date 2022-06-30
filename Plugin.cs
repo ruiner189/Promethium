@@ -9,7 +9,7 @@ using Promethium.Loaders;
 using Promethium.Patches.Language;
 using Promethium.Patches.Orbs.ModifiedOrbs;
 using Promethium.Patches.Relics;
-using Promethium.SoftPatches;
+using Promethium.SoftDependencies;
 using Relics;
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.1.8";
+        public const String Version = "1.2.0";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -53,6 +53,10 @@ namespace Promethium
         public static Sprite PlasmaBall;
         public static Sprite OrbOfGreed;
         public static Sprite OrbOfGreedAttack;
+        public static Sprite Order;
+        public static Sprite Chaos;
+        public static Sprite PocketMoon;
+        public static Sprite[] RealityMarble;
 
         //Localization
         public static List<String[]> LocalizationTerms;
@@ -69,15 +73,17 @@ namespace Promethium
         private static ConfigEntry<float> SpeedUpDelayConfig;
         private static ConfigEntry<float> SpeedUpMaxConfig;
         private static ConfigEntry<float> SpeedUpRateConfig;
+        private static ConfigEntry<bool> DynamicIconActiveConfig;
+        private static ConfigEntry<int> DynamicIconMinimumConfig;
 
         // Soft Dependencies
 
         public static bool CustomStartDeckPlugin = false;
-        public static bool EndlessPeglin = false;
+        public static bool EndlessPeglinPlugin = false;
 
 
         public static bool EnemyAttackOnReload => EnemyAttackOnShuffleConfig.Value;
-        public static bool CurseRunOn => CurseRunOnConfig.Value && !EndlessPeglin;
+        public static bool CurseRunOn => CurseRunOnConfig.Value && !EndlessPeglinPlugin;
         public static bool PruneRelicsOnNewCurseRunOn => PruneRelicsOnNewCurseRunConfig.Value;
         public static bool PruneOrbsOnNewCurseRunOn => PruneOrbsOnNewCurseRunConfig.Value;
         public static float TierOneHealthMultiplier => TierOneCurseHealth.Value;
@@ -87,6 +93,9 @@ namespace Promethium
         public static float SpeedUpDelay => SpeedUpDelayConfig.Value;
         public static float SpeedUpMax => SpeedUpMaxConfig.Value;
         public static float SpeedUpRate => SpeedUpRateConfig.Value;
+
+        public static bool DynamicIconActive => DynamicIconActiveConfig.Value;
+        public static int DynamicIconMinimum => DynamicIconMinimumConfig.Value;
 
         private void Awake()
         {
@@ -105,6 +114,9 @@ namespace Promethium
             SpeedUpMaxConfig = Config.Bind<float>("Mechanics", "SpeedUpMax", 3, "How much it speeds up the game at max value");
             SpeedUpRateConfig = Config.Bind<float>("Mechanics", "SpeedUpRate", 1, "How fast the mod transitions the speed-up. Higher values means the game will speed up faster");
 
+            DynamicIconActiveConfig = Config.Bind<bool>("Dynamic Relic Icon", "DynamicIconActive", true, "Relic icons are hidden under certain conditions. This is to reduce screen clutter when you have a lot of relics.");
+            DynamicIconMinimumConfig = Config.Bind<int>("Dynamic Relic Icon", "DynamicIconMinimum", 16, "How many relics you need before they start hiding under certain conditions");
+
             CurseRunOnConfig = Config.Bind<bool>("Curse Run", "CurseRunOn", true, "Finish a game to increase your curse level. How far can you go?");
             PruneRelicsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneRelicOnCurseRun", true, "Reduces the amount of relics when starting a new curse run. Disabling lets you keep all relics.");
             PruneOrbsOnNewCurseRunConfig = Config.Bind<bool>("Curse Run", "PruneOrbsOnCurseRun", true, "Reduces the amount of orbs to four when starting a new curse run. Disabling lets you keep all orbs.");
@@ -113,7 +125,6 @@ namespace Promethium
 
             _harmony = new Harmony(GUID);
             _harmony.PatchAll();
-
             LoadSoftDependencies();
 
             PromethiumManager = new GameObject("Promethium Mod");
@@ -122,7 +133,7 @@ namespace Promethium
             PromethiumManager.AddComponent<OrbLoader>();
             PromethiumManager.AddComponent<RestartButtonActivator>();
             PromethiumManager.AddComponent<ArmorManager>();
-            
+
             DontDestroyOnLoad(PromethiumManager);
             PromethiumManager.hideFlags = HideFlags.HideAndDontSave;
         }
@@ -132,10 +143,10 @@ namespace Promethium
         {
             // Check Dependencies
             CustomStartDeckPlugin = Chainloader.PluginInfos.TryGetValue("me.bo0tzz.peglin.CustomStartDeck", out PluginInfo info);
-            EndlessPeglin = Chainloader.PluginInfos.TryGetValue("me.bo0tzz.peglinmods.endless", out _);
+            EndlessPeglinPlugin = Chainloader.PluginInfos.TryGetValue("me.bo0tzz.peglinmods.endless", out _);
 
             // Messages about incompatability
-            if(EndlessPeglin && CurseRunOnConfig.Value)
+            if(EndlessPeglinPlugin && CurseRunOnConfig.Value)
             {
                 Log.LogWarning("Endless Peglin Mod detected! Automatically turning off curse runs.");
             }
@@ -143,23 +154,9 @@ namespace Promethium
             // Load Patches that require dependencies
             if (CustomStartDeckPlugin)
             {
-                MethodInfo relicReset = AccessTools.Method(typeof(RelicManager), nameof(RelicManager.Reset));
-                MethodInfo getPromethiumRelics = AccessTools.Method(typeof(CustomStartDeck), nameof(CustomStartDeck.GetPromethiumRelics));
-                MethodInfo resetRelicList = AccessTools.Method(typeof(CustomStartDeck), nameof(CustomStartDeck.ResetRelicList));
-                _harmony.Patch(relicReset, postfix: new HarmonyMethod(getPromethiumRelics, priority: Priority.HigherThanNormal));
-                _harmony.Patch(relicReset, postfix: new HarmonyMethod(resetRelicList, priority: Priority.LowerThanNormal));
-
-                MethodInfo gameInit = AccessTools.Method(typeof(GameInit), nameof(GameInit.Start));
-                MethodInfo getPromethiumOrbs = AccessTools.Method(typeof(CustomStartDeck), nameof(CustomStartDeck.GetPromethiumOrbs));
-                MethodInfo addPromethiumOrbs = AccessTools.Method(typeof(CustomStartDeck), nameof(CustomStartDeck.AddPromethiumOrbs));
-                _harmony.Patch(gameInit, postfix: new HarmonyMethod(getPromethiumOrbs, priority: Priority.HigherThanNormal));
-                _harmony.Patch(gameInit, postfix: new HarmonyMethod(addPromethiumOrbs, priority: Priority.LowerThanNormal));
-
-
                 if (info.Instance != null)
                 {
-                    CustomStartDeck.wantedRelicEffects = AccessTools.Field(info.Instance.GetType(), "wantedRelicEffects").GetValue(info.Instance) as List<String>;
-                    CustomStartDeck.wantedOrbs = AccessTools.Field(info.Instance.GetType(), "wantedOrbs").GetValue(info.Instance) as List<String>;
+                    CustomStartDeck.ConvertPromethiumRelics(AccessTools.Field(info.Instance.GetType(), "wantedRelicEffects").GetValue(info.Instance) as List<String>);
                 }
             }
         }
@@ -174,6 +171,9 @@ namespace Promethium
             WumboBelt = LoadSprite("Relics.WumboBelt.png");
             MiniBelt = LoadSprite("Relics.MiniBelt.png");
             PlasmaBall = LoadSprite("Relics.Plasmaball.png");
+            Order = LoadSprite("Relics.Order.png");
+            Chaos = LoadSprite("Relics.Chaos.png");
+            PocketMoon = LoadSprite("Relics.PocketMoon.png");
 
             CurseOne = LoadSprite("Relics.Curse_One.png");
             CurseTwo = LoadSprite("Relics.Curse_Two.png");
@@ -186,6 +186,14 @@ namespace Promethium
 
             OrbOfGreed = LoadSprite("Orbs.OrbOfGreed.png", 8);
             OrbOfGreedAttack = LoadSprite("Orbs.OrbOfGreed.png", 16);
+
+            RealityMarble = new Sprite[] { 
+                LoadSprite("Relics.RealityMarble_0.png"),
+                LoadSprite("Relics.RealityMarble_1.png"),
+                LoadSprite("Relics.RealityMarble_2.png"),
+                LoadSprite("Relics.RealityMarble_3.png"),
+                LoadSprite("Relics.RealityMarble_4.png"),
+            };
 
             stopwatch.Stop();
             Log.LogInfo($"Sprites loaded! Took {stopwatch.ElapsedMilliseconds}ms");
@@ -242,6 +250,7 @@ namespace Promethium
             texture = new Texture2D(16, 16, TextureFormat.RGBA32, false);
             texture.LoadImage(ReadToEnd(stream));
             texture.filterMode = FilterMode.Point;
+   
             return texture;
         }
 
@@ -250,6 +259,14 @@ namespace Promethium
             filePath = $"{Name}.Resources.{filePath}";
             Texture2D texture = LoadTexture(filePath);
             Sprite sprite =  Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
+            return sprite;
+        }
+
+        public static Sprite LoadSprite(string filePath, float width, float height, float pixelsPerUnit = 16f)
+        {
+            filePath = $"{Name}.Resources.{filePath}";
+            Texture2D texture = LoadTexture(filePath);
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
             return sprite;
         }
 

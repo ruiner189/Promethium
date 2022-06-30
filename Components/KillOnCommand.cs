@@ -6,11 +6,18 @@ namespace Promethium.Components
     public class KillOnCommand : MonoBehaviour
     {
         public static bool Kill = false;
+        private PachinkoBall _pachinko;
+
+        public void Awake()
+        {
+            _pachinko = gameObject.GetComponent<PachinkoBall>();
+        }
+
         public void Update()
         {
             if (Kill)
             {
-                typeof(PachinkoBall).GetMethod("StartDestroy", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(gameObject.GetComponent<PachinkoBall>(), new object[] { });
+                _pachinko.StartDestroy();
             }
         }
     }

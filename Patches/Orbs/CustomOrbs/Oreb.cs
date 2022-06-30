@@ -38,7 +38,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
 
         public override void CreatePrefabs()
         {
-            _levelOne = Resources.Load<GameObject>("Prefabs/Orbs/Oreb-Lvl1");
+            _levelOne = Resources.Load<GameObject>("$Prefabs/Orbs/Oreb-Lvl1");
             _levelOne.name = "Oreb-Lvl1";
 
             Fragile fragileOne = _levelOne.AddComponent<Fragile>();

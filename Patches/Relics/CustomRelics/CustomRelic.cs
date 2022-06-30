@@ -1,8 +1,10 @@
-﻿using HarmonyLib;
+﻿using BepInEx.Configuration;
+using HarmonyLib;
 using Promethium.Extensions;
 using Relics;
 using System.Collections.Generic;
 using System.Reflection.Emit;
+using UnityEngine;
 
 namespace Promethium.Patches.Relics
 {
@@ -10,8 +12,7 @@ namespace Promethium.Patches.Relics
     {
         private RelicPool _pool = RelicPool.RARE_SCENARIO;
         public static List<CustomRelic> AllCustomRelics = new List<CustomRelic>();
-
-
+        private ConfigEntry<bool> _config;
 
         public static CustomRelic GetCustomRelic(CustomRelicEffect effect)
         {
@@ -20,6 +21,12 @@ namespace Promethium.Patches.Relics
         public CustomRelic()
         {
             AllCustomRelics.Add(this);
+        }
+
+        public void Register()
+        {
+            if (this is not CurseRelic && _config == null)
+                _config = Plugin.ConfigFile.Bind<bool>("Custom Relics", locKey, true, "Disable to remove from relic pool. The relic itself is still in the game.");
         }
 
         public void SetPoolType(RelicPool pool)
@@ -34,8 +41,23 @@ namespace Promethium.Patches.Relics
 
         public bool IsEnabled()
         {
-            if (this is CurseRelic) return true;
-            return Plugin.ConfigFile.Bind<bool>("Custom Relics", locKey, true, "Disable to remove from relic pool. The relic itself is still in the game.").Value;
+            if (_config == null) return true;
+            return _config.Value;
+        }
+
+        public virtual void OnRelicAdded(RelicManager relicManager)
+        {
+
+        }
+
+        public virtual void OnRelicRemoved(RelicManager relicManager)
+        {
+
+        }
+
+        public virtual void OnArmBallForShot(BattleController battleController)
+        {
+
         }
 
         public static float GetDamageModifier(Attack attack, int critCount, float damage)
@@ -139,19 +161,82 @@ namespace Promethium.Patches.Relics
 
             return code;
         }
+    }
 
-        [HarmonyPatch(typeof(BattleController), nameof(BattleController.MaxDiscardedShots), MethodType.Getter)]
-        public static class ChangeDiscards
+    [HarmonyPatch(typeof(BattleController), nameof(BattleController.MaxDiscardedShots), MethodType.Getter)]
+    public static class ChangeDiscards
+    {
+        public static void Postfix(RelicManager ____relicManager, ref int __result)
         {
-            public static void Postfix(RelicManager ____relicManager, ref int __result)
+            if (ModifiedRelic.HasRelicEffect(RelicEffect.NO_DISCARD) && ____relicManager.RelicEffectActive(RelicEffect.NO_DISCARD))
             {
-                if (____relicManager.RelicEffectActive(RelicEffect.NO_DISCARD))
+                ModifiedRelic.NO_DISCARD_RELIC_REMOVED_DISCARDS = __result + 1;
+                __result = 0;
+            }
+            else if (____relicManager.RelicEffectActive(CustomRelicEffect.HOLSTER))
+            {
+                ModifiedRelic.NO_DISCARD_RELIC_REMOVED_DISCARDS = __result + 1;
+                __result = 0;
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(RelicManager), nameof(RelicManager.AddRelic))]
+    public static class RelicAdded
+    {
+        public static void Postfix(RelicManager __instance, Relic relic)
+        {
+            if(relic is CustomRelic customRelic)
+            {
+                customRelic.OnRelicAdded(__instance);
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(RelicManager), nameof(RelicManager.RemoveRelic))]
+    public static class RelicRemoved
+    {
+        public static void Prefix(RelicManager __instance, RelicEffect re)
+        {
+            if (__instance._ownedRelics.ContainsKey(re))
+            {
+                CustomRelic relic = CustomRelic.GetCustomRelic((CustomRelicEffect)re);
+                if (relic != null)
                 {
-                    ModifiedRelic.NO_DISCARD_RELIC_REMOVED_DISCARDS = __result + 1;
-                    __result = 0;
+                    relic.OnRelicRemoved(__instance);
                 }
-                else if (____relicManager.RelicEffectActive(CustomRelicEffect.HOLSTER))
-                    __result = 0;
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(RelicManager), nameof(RelicManager.Reset))]
+    public static class AllRelicsRemoved
+    {
+        public static void Prefix(RelicManager __instance)
+        {
+            if (__instance._ownedRelics == null) return;
+            foreach(Relic relic in __instance._ownedRelics.Values)
+            {
+                if(relic is CustomRelic customRelic)
+                {
+                    customRelic.OnRelicRemoved(__instance);
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(BattleController), nameof(BattleController.ArmBallForShot))]
+    public static class ArmBallForShot
+    {
+        [HarmonyPriority(Priority.Low)]
+        public static void Prefix(BattleController __instance)
+        {
+            foreach (Relic relic in __instance._relicManager._ownedRelics.Values)
+            {
+                if (relic is CustomRelic customRelic)
+                {
+                    customRelic.OnArmBallForShot(__instance);
+                }
             }
         }
     }

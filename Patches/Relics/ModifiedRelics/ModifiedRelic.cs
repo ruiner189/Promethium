@@ -21,7 +21,6 @@ namespace Promethium.Patches.Relics
 
         public static float NO_DISCARD_RELIC_REMOVED_DISCARDS = 0;
 
-
         public static void AddRelic(RelicEffect relic, bool alwaysEnabled = false)
         {
             if (alwaysEnabled)

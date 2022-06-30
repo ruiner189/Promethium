@@ -1,5 +1,6 @@
 ﻿using Battle;
 using HarmonyLib;
+using I2.Loc;
 using Relics;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,9 @@ namespace Promethium.Patches.Orbs.CustomOrbs
         private static int critCount = 0;
         private static int resetCount = 0;
 
-        private OrbofGreed() : base("orbofgreed"){ }
+        private OrbofGreed() : base("orbofgreed"){
+            LocalVariables = true;
+        }
 
         public static OrbofGreed GetInstance()
         {
@@ -29,9 +32,24 @@ namespace Promethium.Patches.Orbs.CustomOrbs
                 _instance = new OrbofGreed();
             return _instance;
         }
+
+        public override void SetLocalVariables(LocalizationParamsManager localParams, GameObject orb, Attack attack)
+        {
+            localParams.SetParameterValue(ParamKeys.DISCARD_DAMAGE, $"{GetDiscardDamage(attack)}");
+        }
+
+        public float GetDiscardDamage(Attack attack)
+        {
+            if (attack.Level == 2)
+                return 3f;
+            if (attack.Level == 3)
+                return 5f;
+            return 0f;
+        }
+
         public override void CreatePrefabs()
         {
-            GameObject prefab = Resources.Load<GameObject>("Prefabs/Orbs/StoneOrb-Lvl1");
+            GameObject prefab = Resources.Load<GameObject>("$Prefabs/Orbs/StoneOrb-Lvl1");
             _levelOne = GameObject.Instantiate(prefab);
             _levelOne.name = "OrbOfGreed-Lvl1";
             GameObject sprite = _levelOne.transform.GetChild(0).gameObject;
@@ -56,7 +74,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             _levelTwo = GameObject.Instantiate(_levelOne);
             _levelTwo.name = "OrbOfGreed-Lvl2";
             Attack attackTwo = _levelTwo.GetComponent<Attack>();
-            attackTwo.locDescStrings = new string[] { "shuffle_deck_on_discard", "skip_enemy_turn_on_discard", "remove_on_discard"};
+            attackTwo.locDescStrings = new string[] { "shuffle_deck_on_discard", "skip_enemy_turn_on_discard", "damage_self_on_discard", "remove_on_discard"};
             attackTwo.Level = 2;
             
 
@@ -64,7 +82,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             _levelThree.name = "OrbOfGreed-Lvl3";
             Attack attackThree = _levelThree.GetComponent<Attack>();
             attackThree.Level = 3;
-            attackThree.locDescStrings = new string[] {"add_crit_refresh_on_discard", "shuffle_deck_on_discard", "skip_enemy_turn_on_discard", "remove_on_discard" };
+            attackThree.locDescStrings = new string[] {"add_crit_refresh_on_discard", "shuffle_deck_on_discard", "skip_enemy_turn_on_discard", "damage_self_on_discard", "remove_on_discard" };
 
             attackOne.NextLevelPrefab = _levelTwo;
             attackTwo.NextLevelPrefab = _levelThree;
@@ -98,6 +116,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             if(attack.Level > 1)
             {
                 SkipReloadTurn = true;
+                battleController._playerHealthController.Damage(GetDiscardDamage(attack));
             }
 
             if(attack.Level > 2)
@@ -113,18 +132,17 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             }
         }
 
-        [HarmonyPatch(typeof(BattleController), nameof(BattleController.StartAttacking))]
+        [HarmonyPatch(typeof(BattleController), nameof(BattleController.AttemptOrbDiscard))]
         public static class NoFreeTurn
         {
             [HarmonyPriority(Priority.HigherThanNormal)]
-            private static bool Prefix(BattleController __instance)
+            private static void Postfix(BattleController __instance)
             {
                 if (SkipReloadTurn)
                 {
                     SkipReloadTurn = false;
-                    return false;
+                    __instance._skipPlayersTurn = false;
                 }
-                return true;
             }
         }
 

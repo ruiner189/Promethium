@@ -35,7 +35,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             }
 
             localParams.SetParameterValue(ParamKeys.DISCARD_ARMOR_DAMAGE, $"{GetArmorDiscardDamage(attack)}");
-            localParams.SetParameterValue(ParamKeys.DISCARD_HEALTH_DAMAGE, $"{GetHealthDiscardDamage(attack)}");
+            localParams.SetParameterValue(ParamKeys.DISCARD_DAMAGE, $"{GetHealthDiscardDamage(attack)}");
             localParams.SetParameterValue(ParamKeys.ARMOR_HOLD_DAMAGE, $"{GetArmorHoldDamage(attack)}");
         }
 

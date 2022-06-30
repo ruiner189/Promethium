@@ -11,37 +11,42 @@ If you want to help translate, feel free to!
 If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0tzz/CustomStartDeck/), you can add Promethium's relics by using the names found below!
 <details>
   <summary> Relic Names </summary>
-     <ul> <li>Holster: HOLSTER</li> </ul>
-     <ul> <li>Mini Belt: MINI</li> </ul>
-     <ul> <li>Wumbo Belt: WUMBO</li> </ul>
-     <ul> <li>PlasmaBall: PLASMA_BALL</li> </ul>
+
+* Holster: HOLSTER
+* Mini Belt: MINI
+* Wumbo Belt: WUMBO
+* PlasmaBall: PLASMA_BALL
 </details>
+
 <details>
   <summary>Curse Relic Names </summary>
-     <ul> <li>Curse 1 Balance: CURSE_ONE_BALANCE</li> </ul>
-     <ul> <li>Curse 1 Attack: CURSE_ONE_ATTACK</li> </ul>
-     <ul> <li>Curse 1 Crit: CURSE_ONE_CRIT</li> </ul>
-     <ul> <li>Curse 2 Health: CURSE_TWO_HEALTH</li> </ul>
-     <ul> <li>Curse 2 Armor: CURSE_TWO_ARMOR</li> </ul>
-     <ul> <li>Curse 2 Equip: CURSE_TWO_EQUIP</li> </ul>
-     <ul> <li>Curse 3 Bombs: CURSE_THREE_BOMB</li> </ul>
-     <ul> <li>Curse 3 Attack: CURSE_THREE_ATTACK</li> </ul>
-     <ul> <li>Curse 3 Crit: CURSE_THREE_CRIT</li> </ul>
-     <ul> <li>Curse 4 Health: CURSE_FOUR_HEALTH</li> </ul>
-     <ul> <li>Curse 4 Armor: CURSE_FOUR_ARMOR</li> </ul>
-     <ul> <li>Curse 4 Equip: CURSE_FOUR_EQUIP</li> </ul>
-     <ul> <li>Curse 5: CURSE_FIVE_A</li> </ul>
-     <ul> <li>Curse 5: CURSE_FIVE_B</li> </ul>
-     <ul> <li>Curse 5: CURSE_FIVE_C</li> </ul>
+
+* Curse 1 Balance: CURSE_ONE_BALANCE
+* Curse 1 Attack: CURSE_ONE_ATTACK
+* Curse 1 Crit: CURSE_ONE_CRIT
+* Curse 2 Health: CURSE_TWO_HEALTH
+* Curse 2 Armor: CURSE_TWO_ARMOR
+* Curse 2 Equip: CURSE_TWO_EQUIP
+* Curse 3 Bombs: CURSE_THREE_BOMB
+* Curse 3 Attack: CURSE_THREE_ATTACK
+* Curse 3 Crit: CURSE_THREE_CRIT
+* Curse 4 Health: CURSE_FOUR_HEALTH
+* Curse 4 Armor: CURSE_FOUR_ARMOR
+* Curse 4 Equip: CURSE_FOUR_EQUIP
+* Curse 5: CURSE_FIVE_A
+* Curse 5: CURSE_FIVE_B
+* Curse 5: CURSE_FIVE_C
 </details>
+
 <details>
   <summary> Orb Names </summary>
-     <ul> <li>Oreb-Lvl1</li> </ul>
-     <ul> <li>Oreb-Lvl2</li> </ul>
-     <ul> <li>Oreb-Lvl3</li> </ul>
-     <ul> <li>OrbOfGreed-Lvl1</li> </ul>
-     <ul> <li>OrbOfGreed-Lvl2</li> </ul>
-     <ul> <li>OrbOfGreed-Lvl3</li> </ul>
+
+* Oreb-Lvl1
+* Oreb-Lvl2
+* Oreb-Lvl3
+* OrbOfGreed-Lvl1
+* OrbOfGreed-Lvl2
+* OrbOfGreed-Lvl3
 </details>
 
 ## Installation
@@ -65,49 +70,68 @@ If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0t
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| v0.7.34 | v1.2.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.2.0/Promethium.dll) |
 | v0.7.26 | v1.1.8 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.8/Promethium.dll) |
-| v0.7.24 | v1.1.7 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.7/Promethium.dll) |
 | v0.7.21 - v0.7.23 | v1.1.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.4/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.1.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.2/Promethium.dll) |
 
 ## Changelog
 <details>
-  <summary> v1.1.8 </summary>
-     <ul> <li>Speed-up only activates when you use the in-game speed-up</li> </ul>
-     <ul> <li>Speed-up config is now defaulted to off</li> </ul>
-     <ul> <li>Added new orb: Orb of Greed</li> </ul>
-     <ul> <li>Added custom orb support to Custom Start Deck</li> </ul>
+  <summary> v1.2.0 </summary>
+* Updated to v0.7.34
+* New QoL Feature: Dynamic Relic Icons
+* New Relics: Chaos, Order, Pocket Moon, Reality Marble
+* Prediction System overhauled
+* Now compatible with other mods that add orbs
+* Fixed integer overflow
+* Localization now auto-updates!
+* Nerfed Orb of Greed (Now damages player on discard)
 </details>
+<details>
+  <summary> v1.1.8 </summary>
+
+* Speed-up only activates when you are not using the in-game speed-up
+* Speed-up config is now defaulted to off
+* Added new orb: Orb of Greed
+* Added custom orb support to Custom Start Deck
+</details>
+
 <details>
   <summary> v1.1.7 </summary>
-  	 <ul> <li>German localization by Denny</li></ul>
-     <ul> <li>Added compatibility checks for Endless Peglin and Custom Start Deck. They should now both work with Promethium without strange behavior</li> </ul>
-     <ul> <li>Added support to Custom Start Deck so that Promethium's relics work</li> </ul>
-     <ul> <li>Pruning relics now gives you a choice, and is now the default on the config</li> </ul>
-     <ul> <li>Fixed a bug where Oreb was not being properly loaded in from a save file</li> </ul>
-     <ul> <li>Fixed localization being loaded twice</li> </ul>
-     <ul> <li>Fixed max health taken from Infernal Ingot being restored when starting another curse run while keeping Infernal Ingot</li> </ul>
-     <ul> <li>Fixed a vanilla bug where loading a save file with more than 100 hp would reset it back to 100</li> </ul>
+
+* German localization by Denny
+* Added compatibility checks for Endless Peglin and Custom Start Deck. They should now both work with Promethium without strange behavior
+* Added support to Custom Start Deck so that Promethium's relics work
+* Pruning relics now gives you a choice, and is now the default on the config
+* Fixed a bug where Oreb was not being properly loaded in from a save file
+* Fixed localization being loaded twice
+* Fixed max health taken from Infernal Ingot being restored when starting another curse run while keeping Infernal Ingot
+* Fixed a vanilla bug where loading a save file with more than 100 hp would reset it back to 100
 </details>
+
 <details>
   <summary> v1.1.6 </summary>
-     <ul> <li>Fixed Localization typo</li> </ul>
+
+* Fixed Localization typo
 </details>
 <details>
   <summary> v1.1.5 </summary>
-     <ul> <li>Experimental changes on Matroyshka Shell and Sealed Conviction. You can disable these changes in the config</li> </ul>
-     <ul> <li>Fixed pachinko relic minigame causing the game from being able to continue if there are no relics left in the relic pool</li> </ul>
-     <ul> <li>Fixed curse 5 not increasing the amount of elites correctly</li> </ul>
-     <ul> <li>Fixed curse modifiers not being calculated properly if other modifiers bring it less than 0</li> </ul>
-     <ul> <li>Localization Update</li> </ul>
+
+* Experimental changes on Matroyshka Shell and Sealed Conviction. You can disable these changes in the config
+* Fixed pachinko relic minigame causing the game from being able to continue if there are no relics left in the relic pool
+* Fixed curse 5 not increasing the amount of elites correctly
+* Fixed curse modifiers not being calculated properly if other modifiers bring it less than 0
+* Localization Update
 </details>
+
 <details>
   <summary> v1.1.4 </summary>
-    <ul> <li>Added new relic: Plasma ball</li> </ul>
-    <ul> <li>Added hold effects for martrtorbshka and lightningorb</li> </ul>
-    <ul> <li>Changed speed up formula</li> </ul>
-    <ul> <li>Fixed orbelisk vanilla behavior being restored if the modifications are removed</li> </ul>
-    <ul> <li>Localization Update</li> </ul>
+
+* Added new relic: Plasma ball
+* Added hold effects for martrtorbshka and lightningorb
+* Changed speed up formula
+* Fixed orbelisk vanilla behavior being restored if the modifications are removed
+* Localization Update
 </details>
 
 
@@ -116,6 +140,8 @@ If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0t
 * You can now retarget after sending your orb out!
 * You can turn off enemy turn on reload in the configs! Default is vanilla behavior.
 * Confusion is removed while navigating
+* You can now set relic icons to disappear if they are not relevant to what you are currently doing (I.e. relics that don't affect navigation won't appear while navigating). This is mainly aimed for cursed/endless runs, as your screen just becomes all relics. This feature requires you to have a minimum number of relics to activate, and can be turned off.
+* Prediction system is now much more accurate with pegnet and unicorn horn. There are still some edge cases, but generally should be accurate.
 
 ## New Mechanics
 ### Armor
@@ -133,38 +159,101 @@ Curse runs too easy? Check the configs to make them harder.
 
 ## New Relics
 Excluding the curse relics, Promethium currently several new relics:
-### Holster
-* Removes Discarding and allows you to hold orbs instead.
-* Some orbs have special mechanics while held, and many more are to come!
-### Plasma Ball
-* Zaps up to 3 additional pegs every 5 pegs hit
-### Wumbo Belt
-* Doubles the size of your orb.
-* Has a special interaction with Mini Belt if you have both relics
-### Mini Belt
-* Halves the size of your orb.
-* Has a special interaction with Wumbo Belt if you have both relics
-### Kill Button
-* Allows you to end your shot early
-* Can only be used once per reload
+<details>
+  <summary> Holster </summary>
+
+  * Removes Discarding and allows you to hold orbs instead.
+  * Some orbs have special mechanics while held, and many more are to come!
+</details>
+
+<details>
+  <summary> Plasma Ball </summary>
+
+  * Zaps up to 3 additional pegs every 5 pegs hit
+</details>
+
+<details>
+  <summary> Wumbo Belt </summary>
+
+  * Doubles the size of your orb.
+  * Has a special interaction with Mini Belt if you have both relics
+</details>
+
+<details>
+  <summary> Mini Belt </summary>
+
+  * Halves the size of your orb.
+  * Has a special interaction with Wumbo Belt if you have both relics
+</details>
+
+<details>
+  <summary> Kill Button </summary>
+
+  * Allows you to end your shot early
+  * Can only be used once per reload
+</details>
+
+<details>
+  <summary> Chaos </summary>
+
+  * Removes rarity from all relics. That means you can get a boss relic from a chest and a common relic from a boss!
+</details>
+
+<details>
+  <summary> Order </summary>
+
+  * You are more likely to find similar Relics.
+
+</details>
+
+<details>
+  <summary> Pocket Moon </summary>
+
+  * Reduces gravity
+</details>
+
+<details>
+  <summary> Reality Marble </summary>
+
+  * Changes the direction of gravity every x seconds
+</details>
 
 ## Relic Changes
-### Gardener's Glove
-![Garderner's Glove](https://raw.githubusercontent.com/ruiner189/Promethium/main/Docs/Images/GardenerGlove.png)
+<details>
+  <summary> Gardener's Glove </summary>
 
-----------
-### Weighted Chip
-* Multipliers now cycles through 7 different layouts. Some layouts are rarer to get then others
-   * 0.5x, 0.5x, 1x, 1x, 2x
-   * 0.25x, 0.25x, 0.5x, 1.5x, 3x
-   * 0.25x, 0.5x, 1x, 2x, 2x
-   * 1x, 1x, 1x, 1x, 1x
-   * 1.25x, 1.25x, 1x, 0.75x, 0.75x
-   * 10x, 0x, 0x, 0x, 10x
-   * 0x, 0x, 100x, 0x, 0x
+  * Gardener's Glove now increases your maximum armor by 5, and regenerates 1 armor per turn.
+</details>
+
+<details>
+  <summary> Sealed Conviction </summary>
+
+  * Removes all discards. Damage is increased based on number of discards removed.
+</details>
+
+<details>
+  <summary> Matryoshka Shell </summary>
+
+  * Damage reduction is now percentage based instead of the flat decrease.
+</details>
+
+<details>
+  <summary> Weighted Chip </summary>
+
+  * Multipliers now cycles through 7 different layouts. Some layouts are rarer to get than others
+    * 0.5x, 0.5x, 1x, 1x, 2x
+    * 0.25x, 0.25x, 0.5x, 1.5x, 3x
+    * 0.25x, 0.5x, 1x, 2x, 2x
+    * 1x, 1x, 1x, 1x, 1x
+    * 1.25x, 1.25x, 1x, 0.75x, 0.75x
+    * 10x, 0x, 0x, 0x, 10x
+    * 0x, 0x, 100x, 0x, 0x
+</details>
 
 ## New Orbs
-### Orb of Greed
+<details>
+<summary> Orb of Greed </summary>
+
 A new orb that adds more deck management to your loadout.
 
 Level 1
@@ -184,9 +273,12 @@ Level 3
 * Shuffles deck on discard
 * Prevents enemy turn on discard
 * Can only be discarded once per battle
+</details>
 
 ## Orb Changes
-### Oreb
+<details>
+<summary> Oreb </summary>
+
 Oreb has been redone to have a higher impact in the game. Not only is it back, but you can now upgrade it!
 
 Level 1
@@ -208,11 +300,12 @@ Level 3
 * Every 2 hits a fragment gets sent off
 * Fragments can split twice
 * After the last split, the next 2 hits will cause it to disappear
+</details>
 
-### Stone
-![Stone](https://raw.githubusercontent.com/ruiner189/Promethium/main/Docs/Images/Stone3.png)
+<details>
+<summary> Stone </summary>
 
-#### Normal Gameplay
+### Normal Gameplay
 Level 1
 * Does nothing
 
@@ -223,7 +316,7 @@ Level 2
 Level 3
 * Increases Maximum Armor by 6
 * Replenishes Armor by 4 every reload
-#### Cruciball Lvl 3
+### Cruciball Lvl 3
 Level 2
 * Increases Maximum Armor by 2
 * Replenishes Armor by 1 every reload
@@ -231,18 +324,22 @@ Level 2
 Level 3
 * Increases Maximum Armor by 4
 * Replenishes Armor by 2 every reload
-----------
-### Bouldorb
+</details>
+
+<details>
+<summary> Bouldorb </summary>
+
 All Levels
 * Restores 10 Armor if discarded
-----------
-### Orbelisk
-![Orbelisk](https://raw.githubusercontent.com/ruiner189/Promethium/main/Docs/Images/Orbelisk3.png)
+</details>
 
-Level 1
-* Attack: 1 | Crit: 3
-* Multiplies damage based on current armor (0.08 * currentArmor)
-* On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
+<details>
+<summary> Orbelisk </summary>
+
+ Level 1
+ * Attack: 1 | Crit: 3
+ * Multiplies damage based on current armor (0.08 * currentArmor)
+ * On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
 
 Level 2
 * Attack: 2 | Crit: 5
@@ -253,3 +350,4 @@ Level 3
 * Attack: 3 | Crit: 7
 * Multiplies damage based on current armor (0.12 * currentArmor)
 * On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
+</details>

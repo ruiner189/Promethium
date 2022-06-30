@@ -19,6 +19,14 @@ namespace Promethium.Extensions
         // Used instead of RelicManager::Reset so other mods do not modify the reset. 
         public static void ResetSilently(this RelicManager relicManager)
         {
+            foreach (Relic relic in relicManager._ownedRelics.Values)
+            {
+                if (relic is CustomRelic customRelic)
+                {
+                    customRelic.OnRelicRemoved(relicManager);
+                }
+            }
+
             relicManager._ownedRelics = new Dictionary<RelicEffect, Relic>();
             relicManager._relicRemainingCountdowns = new Dictionary<RelicEffect, int>();
             relicManager._relicRemainingUsesPerBattle = new Dictionary<RelicEffect, int>();

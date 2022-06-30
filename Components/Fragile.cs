@@ -29,6 +29,18 @@ namespace Promethium.Components
         public bool RefreshPegHitThisTurn => (bool)(typeof(PachinkoBall).GetField("_refreshPegHitThisTurn", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(_pachinko));
         public int State => (int)(typeof(PachinkoBall).GetField("_state", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(_pachinko));
 
+        private void Awake()
+        {
+            _pachinko = GetComponent<PachinkoBall>();
+        }
+
+        private void Start()
+        {
+            _relicManager = _pachinko._relicManager;
+            _predictionManager = _pachinko._predictionManager;
+            _playerStatusEffectController = _pachinko._playerStatusEffectController;
+        }
+
         public void OnValidate()
         {
             _localParams = gameObject.GetComponent<LocalizationParamsManager>();
@@ -41,29 +53,15 @@ namespace Promethium.Components
             }
         }
 
-        public void Init()
-        {
-            _relicManager = _pachinko._relicManager;
-            _predictionManager = _pachinko._predictionManager;
-            _playerStatusEffectController = _pachinko._playerStatusEffectController;
-        }
+
         public void OnCollisionEnter2D(Collision2D collision)
         {
-            if (_pachinko == null)
-            {
-                _pachinko = GetComponent<PachinkoBall>();
-                if (_pachinko != null && !_pachinko.IsDummy)
-                    Init();
-                else
-                    return;
-            }
             if (_pachinko.IsDummy || State != 2 || !Duplicate) return;
             if (collision.collider.CompareTag("Peg") || collision.collider.CompareTag("Bomb"))
             {
                 HitCount++;
                 if (HitCount == HitToSplitCount)
                 {
-
                     HitCount = 0;
                     if (!Original)
                     {
@@ -140,7 +138,6 @@ namespace Promethium.Components
                         component5.HitToSplitCount = 2;
                     }
                     PachinkoBall.OnAdditionalPachinkoBallCreated();
-
                 }
             }
         }

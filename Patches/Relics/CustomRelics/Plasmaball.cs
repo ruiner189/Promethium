@@ -6,18 +6,11 @@ using UnityEngine;
 
 namespace Promethium.Patches.Relics
 {
-
-    [HarmonyPatch(typeof(BattleController), nameof(BattleController.ArmBallForShot))]
-    public static class AddPlasmaComponentOnLaunch
+    public sealed class Plasmaball : CustomRelic
     {
-        [HarmonyPriority(Priority.Low)]
-        public static void Prefix(RelicManager ____relicManager, GameObject ____ball)
+        public override void OnArmBallForShot(BattleController battleController)
         {
-            if (____relicManager.RelicEffectActive(CustomRelicEffect.PLASMA_BALL))
-            {
-                ____ball.AddComponent<Plasma>();
-            }
+            battleController._ball.AddComponent<Plasma>();
         }
     }
-
 }
