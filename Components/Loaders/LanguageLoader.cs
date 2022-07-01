@@ -30,6 +30,21 @@ namespace Promethium.Patches.Language
         {
             Instance = this;
             LanguageSource = new LanguageSourceData();
+            LanguageSource.AddLanguage("English", "en");
+            LanguageSource.AddLanguage("Français", "fr");
+            LanguageSource.AddLanguage("Español", "es");
+            LanguageSource.AddLanguage("Deutsch", "de");
+            LanguageSource.AddLanguage("Nederlands", "nl");
+            LanguageSource.AddLanguage("Italiano", "it");
+            LanguageSource.AddLanguage("Português do Brasil", "pt-BR");
+            LanguageSource.AddLanguage("Русский", "ru");
+            LanguageSource.AddLanguage("简体中文", "zh-CN");
+            LanguageSource.AddLanguage("繁体中文", "zh-TW");
+            LanguageSource.AddLanguage("日本語", "ja");
+            LanguageSource.AddLanguage("한국어", "ko");
+            LanguageSource.AddLanguage("Svenska", "sv");
+            LanguageSource.AddLanguage("Polski", "pl");
+            LanguageSource.AddLanguage("Türkçe", "tr");
             LocalizationManager.AddSource(LanguageSource);
         }
 
@@ -135,7 +150,7 @@ namespace Promethium.Patches.Language
 
         public void RegisterTerms(bool replace)
         {
-            if(replace) LanguageSource.ClearAllData();
+            if(replace) LanguageSource.mTerms.Clear();
             foreach (String[] term in LocalizationTerms)
             {
                 String key = term[0];
