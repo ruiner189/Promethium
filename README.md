@@ -70,12 +70,18 @@ If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0t
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.34 | v1.2.3 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.2.3/Promethium.dll) |
+| v0.7.34 | v1.2.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.2.4/Promethium.dll) |
 | v0.7.26 | v1.1.8 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.8/Promethium.dll) |
 | v0.7.21 - v0.7.23 | v1.1.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.4/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.1.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.2/Promethium.dll) |
 
 ## Changelog
+<details>
+  <summary> v1.2.4 </summary>
+
+* Attempt two at fixing bombs showing a bounce prediction when popped
+</details>
+
 <details>
   <summary> v1.2.3 </summary>
 
