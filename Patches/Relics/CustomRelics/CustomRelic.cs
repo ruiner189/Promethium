@@ -4,7 +4,6 @@ using Promethium.Extensions;
 using Relics;
 using System.Collections.Generic;
 using System.Reflection.Emit;
-using UnityEngine;
 
 namespace Promethium.Patches.Relics
 {

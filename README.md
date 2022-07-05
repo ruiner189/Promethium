@@ -70,12 +70,24 @@ If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0t
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| v0.7.34 | v1.2.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.2.2/Promethium.dll) |
+| v0.7.34 | v1.2.3 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.2.3/Promethium.dll) |
 | v0.7.26 | v1.1.8 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.8/Promethium.dll) |
 | v0.7.21 - v0.7.23 | v1.1.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.4/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.1.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.2/Promethium.dll) |
 
 ## Changelog
+<details>
+  <summary> v1.2.3 </summary>
+
+* Fixed slimy pegs showing a bounce prediction when popped
+* Fixed bombs showing a bounce prediction when popped
+* Lowered Orb of Greed self-damage 
+  * **Lvl 2**: 3 -> 1
+  * **Lvl 3**: 5 -> 3
+* Added a config option to use the default prediction system instead of Promethium's
+* Moved custom orbs to their own section in the config
+</details>
+
 <details>
   <summary> v1.2.2 </summary>
 
@@ -94,6 +106,7 @@ If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0t
 * Localization now auto-updates!
 * Nerfed Orb of Greed (Now damages player on discard)
 </details>
+
 <details>
   <summary> v1.1.8 </summary>
 

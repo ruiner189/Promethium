@@ -30,7 +30,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.2.2";
+        public const String Version = "1.2.3";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -75,6 +75,7 @@ namespace Promethium
         private static ConfigEntry<float> SpeedUpRateConfig;
         private static ConfigEntry<bool> DynamicIconActiveConfig;
         private static ConfigEntry<int> DynamicIconMinimumConfig;
+        private static ConfigEntry<bool> UseCustomPredictionConfig;
 
         // Soft Dependencies
 
@@ -97,6 +98,8 @@ namespace Promethium
         public static bool DynamicIconActive => DynamicIconActiveConfig.Value;
         public static int DynamicIconMinimum => DynamicIconMinimumConfig.Value;
 
+        public static bool UseCustomPrediction => UseCustomPredictionConfig.Value;
+
         private void Awake()
         {
             Log = Logger;
@@ -113,6 +116,8 @@ namespace Promethium
             SpeedUpDelayConfig = Config.Bind<float>("Mechanics", "SpeedUpDelay", 10, "Delay for speed up. In seconds");
             SpeedUpMaxConfig = Config.Bind<float>("Mechanics", "SpeedUpMax", 3, "How much it speeds up the game at max value");
             SpeedUpRateConfig = Config.Bind<float>("Mechanics", "SpeedUpRate", 1, "How fast the mod transitions the speed-up. Higher values means the game will speed up faster");
+
+            UseCustomPredictionConfig = Config.Bind<bool>("Mechanics", "UseCustomPrediction", true, "Use Promethium's Custom Prediction. Setting this to false will use the default prediction system.");
 
             DynamicIconActiveConfig = Config.Bind<bool>("Dynamic Relic Icon", "DynamicIconActive", true, "Relic icons are hidden under certain conditions. This is to reduce screen clutter when you have a lot of relics.");
             DynamicIconMinimumConfig = Config.Bind<int>("Dynamic Relic Icon", "DynamicIconMinimum", 16, "How many relics you need before they start hiding under certain conditions");
@@ -332,11 +337,13 @@ namespace Promethium
     {
         public static void Postfix(VersionDisplay __instance)
         {
+
             TMP_Text text = __instance.GetComponent<TMP_Text>();
             if (text.text.StartsWith("v"))
             {
-                text.text = $"Peglin {text.text}\n{Plugin.Name} v{Plugin.Version}";
-                __instance.transform.position += new Vector3(0, 0.5f, 0);
+                text.fontStyle = FontStyles.Bold;
+                text.text = $"Peglin {text.text}\n{Plugin.Name} v{Plugin.Version}\n{Chainloader.PluginInfos.Count} Mods Loaded";
+                __instance.transform.position += new Vector3(0, 0.75f, 0);
             }
         }
     }

@@ -1,67 +1,64 @@
 ﻿using Battle.Pachinko;
 using Battle.Pachinko.BallBehaviours;
 using Battle.PegBehaviour;
-using DG.Tweening;
 using HarmonyLib;
-using PeglinUtils;
-using Promethium.Components;
 using Relics;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Promethium.Patches.Fixes
 {
     [HarmonyPatch(typeof(PachinkoBall), nameof(PachinkoBall.DoUpdate))]
     public static class PredictionFix
     {
-        public struct PegState
+        public class PegState
         {
             public Peg Peg;
             public int NumOfBounces;
             public Peg.PegType Type;
             public bool IsDead;
+            public bool FakeDestroy = false;
 
-            public PegState(Peg peg, int numOfBounces, Peg.PegType type, bool isDead)
+            public PegState(Peg peg, int numOfBounces, Peg.PegType type)
             {
                 Peg = peg;
                 NumOfBounces = numOfBounces;
                 Type = type;
-                IsDead = isDead;
+                IsDead = IsPegDead(peg);
             }
         }
+
+        private static readonly List<PegState> States = new List<PegState>();
 
         public static bool IsPegDead(Peg peg)
         {
             if (peg._collider != null && peg._collider.enabled) return false;
             if (peg._trigger != null && peg._trigger.enabled) return false;
-            if (peg._poppedPegCollider != null && !peg._poppedPegCollider.enabled) return false;
-            if (peg._poppedPegTrigger != null && !peg._poppedPegTrigger.enabled) return false;
-            if (peg is Bomb && !((Bomb)peg)._detonated) return false;
+            if (peg is Bomb bomb && !bomb._detonated) return false;
             return true;
         }
-
-        private static List<PegState> States = new List<PegState>();
 
         [HarmonyPatch(typeof(PredictionManager), nameof(PredictionManager.CopyChildren))]
         public static class CopyPegStates
         {
             public static void Postfix(PredictionManager __instance)
             {
+                if (!Plugin.UseCustomPrediction) return;
                 States.Clear();
                 foreach (GameObject obj in __instance._dummyPegs)
                 {
                     foreach (Peg peg in obj.GetComponentsInChildren<Peg>(true))
                     {
-                        if (peg is Bomb) continue;
-                        States.Add(new PegState(peg, peg._numBounces, peg.pegType, IsPegDead(peg)));
+                        if(peg.pegType == Peg.PegType.BOMB && peg is Bomb bomb)
+                        {
+                            States.Add(new PegState(bomb, bomb.HitCount, bomb.pegType));
+                        }
+                        else
+                        {
+                            States.Add(new PegState(peg, peg._numBounces, peg.pegType));
+                        }
                     }
 
                     foreach(FlickeringPeg flickeringPeg in obj.GetComponentsInChildren<FlickeringPeg>(true))
@@ -96,9 +93,21 @@ namespace Promethium.Patches.Fixes
 
                     state.Peg.pegType = state.Type;
 
-                    if(state.Peg is LongPeg)
+                    if (state.FakeDestroy)
                     {
-                        ((LongPeg)state.Peg)._hit = state.IsDead;
+                        state.Peg.gameObject.SetActive(true);
+                        state.FakeDestroy = false;
+                    }
+
+                    if(state.Peg is LongPeg longPeg)
+                    {
+                        longPeg._hit = state.IsDead;
+                    }
+
+                    if(state.Peg is Bomb bombPeg)
+                    {
+                        bombPeg.HitCount = state.NumOfBounces;
+                        bombPeg._detonated = state.IsDead;
                     }
                 }
             }
@@ -130,8 +139,7 @@ namespace Promethium.Patches.Fixes
         {
             public static bool Prefix(PachinkoBall __instance, PhysicsScene2D physicsScene)
             {
-                bool te = false;
-                if (te) return false;
+                if (!Plugin.UseCustomPrediction) return true;
 
                 if ((__instance._state == PachinkoBall.FireballState.FIRING || __instance.IsDummy) && __instance._relicManager != null && __instance._relicManager.RelicEffectActive(RelicEffect.PEG_MAGNET) && __instance._shotTime < 12f)
                 {
@@ -191,6 +199,8 @@ namespace Promethium.Patches.Fixes
             {
                 public static bool Prefix(PredictionManager __instance, GameObject subject, Vector3 currentPosition, Vector3 force)
                 {
+                    if (!Plugin.UseCustomPrediction) return true;
+
                     if (__instance._currentPhysicsScene.IsValid() && __instance._predictionPhysicsScene.IsValid())
                     {
                         if (__instance._dummy == null)
@@ -259,26 +269,13 @@ namespace Promethium.Patches.Fixes
                 }
             }
 
-            //[HarmonyPatch(typeof(PredictionManager), nameof(PredictionManager.PlayerFired))]
-            public static class whatisthishiding
-            {
-                public static bool Prefix(PredictionManager __instance)
-                {
-                    foreach (IUpdateableBySimulation updateableBySimulation in __instance._updateableSceneObjs)
-                    {
-                        updateableBySimulation.Disable();
-                    }
-                    return false;
-                }
-
-            }
-
             [HarmonyPatch(typeof(RegularPeg), nameof(RegularPeg.DoPegCollision))]
             public static class FixRegularPeg
             {
                 public static bool Prefix(RegularPeg __instance, PachinkoBall pachinko, Peg.CollisionType cType)
                 {
-                    if (pachinko == null || !pachinko.IsDummy)
+
+                    if (!Plugin.UseCustomPrediction || pachinko == null || !pachinko.IsDummy )
                     {
                         return true;
                     }
@@ -295,13 +292,17 @@ namespace Promethium.Patches.Fixes
                     }
                     if (pachinko.GetComponent<DestroyPegsOnHit>() != null)
                     {
-                        __instance.gameObject.SetActive(false);
+                        PegState state = States.Find(state => state.Peg == __instance);
+                        if(state != null)
+                        {
+                            __instance.gameObject.SetActive(false);
+                            state.FakeDestroy = true;
+                        }
                         return false;
                     }
                     __instance._numBounces++;
                     if (__instance.ShouldDestroyPegOnHit())
                     {
-                        
                         __instance._collider.enabled = false;
                         __instance._trigger.enabled = false;
                        
@@ -310,7 +311,6 @@ namespace Promethium.Patches.Fixes
                         __instance._poppedPegCollider.enabled = true;
                         
                         __instance.pegType = Peg.PegType.REGULAR;
-                        
                     }
                     return false;
                 }
@@ -321,12 +321,62 @@ namespace Promethium.Patches.Fixes
             {
                 public static bool Prefix(LongPeg __instance, PachinkoBall pachinko)
                 {
-                    if (pachinko == null || !pachinko.IsDummy)
+                    if (!Plugin.UseCustomPrediction || pachinko == null || !pachinko.IsDummy)
                     {
                         return true;
                     }
                     __instance.pegType = Peg.PegType.REGULAR;
                     __instance._hit = true;
+                    return false;
+                }
+            }
+
+            [HarmonyPatch(typeof(Bomb), nameof(Bomb.DoPegCollision))]
+            public static class FixBombPeg
+            {
+                public static bool Prefix(Bomb __instance, PachinkoBall pachinko)
+                {
+                    if(!Plugin.UseCustomPrediction || pachinko == null || !pachinko.IsDummy)
+                    {
+                        return true;
+                    }
+
+                    if (__instance.HitCount == 0 && (pachinko.gameObject.GetComponent<DetonateBomb>() || pachinko.gameObject.GetComponent<Multihit>()))
+                    {
+                        __instance.HitCount = 1;
+                    }
+                    __instance.HitCount++;
+                    if (__instance.ShouldExplode() && !__instance._detonated)
+                    {
+                        __instance._detonated = true;
+                        __instance._collider.enabled = false;
+                        Vector2 vector = pachinko.transform.position - __instance.transform.position;
+                        pachinko.gameObject.GetComponent<Rigidbody2D>().AddForce(vector.normalized * __instance.bombFlingForce);
+                    }
+
+                    return false;
+                }
+            }
+
+            [HarmonyPatch(typeof(SlimeOnlyPeg), nameof(SlimeOnlyPeg.DoPegCollision))]
+            public static class FixSlimePeg
+            {
+                public static bool Prefix(SlimeOnlyPeg __instance, PachinkoBall pachinko)
+                {
+                    if (!Plugin.UseCustomPrediction || pachinko == null || !pachinko.IsDummy)
+                    {
+                        return true;
+                    }
+                    PierceBehavior component = pachinko.GetComponent<PierceBehavior>();
+                    if (component == null || !component.CanPierce)
+                    {
+                        pachinko.GetComponent<Rigidbody2D>().velocity *= __instance._pachinkoBallVelocityReduction;
+                    }
+
+                    __instance._cleared = true;
+                    __instance._collider.enabled = false;
+                    __instance._trigger.enabled = false;
+
                     return false;
                 }
             }

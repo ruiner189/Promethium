@@ -1,8 +1,4 @@
-﻿using HarmonyLib;
-using Promethium.Components;
-using Promethium.Extensions;
-using Relics;
-using UnityEngine;
+﻿using Promethium.Components;
 
 namespace Promethium.Patches.Relics
 {

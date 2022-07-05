@@ -1,4 +1,5 @@
-﻿using Cruciball;
+﻿using BepInEx.Configuration;
+using Cruciball;
 using HarmonyLib;
 using I2.Loc;
 using PeglinUI;
@@ -17,17 +18,30 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
         private readonly String _name;
         public bool LocalVariables = false;
         public readonly bool Registered = false;
+        public ConfigEntry<bool> EnabledConfig { internal set; get; }
 
         public ModifiedOrb(String orbName)
         {
             _name = orbName;
-            if (Plugin.ConfigFile.Bind<bool>("Orbs", orbName, true, "Disable to remove modifications").Value)
+            SetConfig();
+            if (EnabledConfig != null && EnabledConfig.Value)
             {
                 Registered = true;
                 Plugin.Log.LogDebug($"{_name} was successfully registered.");
+            } else
+            {
+                Plugin.Log.LogDebug($"{_name} was disabled and is being skipped.");
             }
 
             AllModifiedOrbs.Add(this);
+        }
+
+        internal virtual void SetConfig()
+        {
+            if(EnabledConfig == null)
+            {
+                EnabledConfig = Plugin.ConfigFile.Bind<bool>("Orbs", _name, true, "Disable to remove modifications");
+            }
         }
 
         public static ModifiedOrb GetOrb(String name, bool includeAll = false)

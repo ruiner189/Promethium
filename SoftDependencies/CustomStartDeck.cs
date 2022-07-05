@@ -1,9 +1,6 @@
-﻿using Promethium.Patches.Orbs.CustomOrbs;
-using Promethium.Patches.Relics;
-using Relics;
+﻿using Promethium.Patches.Relics;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Promethium.SoftDependencies
 {

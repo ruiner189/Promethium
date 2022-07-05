@@ -21,6 +21,14 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             }
         }
 
+        internal override void SetConfig()
+        {
+            if (EnabledConfig == null)
+            {
+                EnabledConfig = Plugin.ConfigFile.Bind<bool>("Custom Orbs", GetName(), true, "Disable to remove from orb pool");
+            }
+        }
+
         public static CustomOrb GetCustomOrbByName(String name)
         {
             return AllCustomOrbs.Find(orb => orb.GetName().ToLower() == name.ToLower());

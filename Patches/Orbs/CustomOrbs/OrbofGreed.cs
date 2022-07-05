@@ -2,11 +2,6 @@
 using HarmonyLib;
 using I2.Loc;
 using Relics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Promethium.Patches.Orbs.CustomOrbs
@@ -41,9 +36,9 @@ namespace Promethium.Patches.Orbs.CustomOrbs
         public float GetDiscardDamage(Attack attack)
         {
             if (attack.Level == 2)
-                return 3f;
+                return 1f;
             if (attack.Level == 3)
-                return 5f;
+                return 3f;
             return 0f;
         }
 
