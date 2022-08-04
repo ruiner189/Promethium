@@ -10,6 +10,9 @@ If you want to help translate, feel free to! Want to become an editor on the she
 ## Dependencies
 For this mod to work, you must also have ProLib installed. Download links: [[Github](https://github.com/ruiner189/ProLib/releases)] [[Thunderstore](https://peglin.thunderstore.io/package/Promethium/ProLib/)]
 
+## Save Warning
+This mod uses ProLib which does affect your save file. Please back up your save file before using.
+
 ## Installation
 ### Thunderstore (ModManager)
 1. Download [Thunderstore](https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager)
