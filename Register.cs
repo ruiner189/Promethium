@@ -1,6 +1,7 @@
 ﻿using ProLib.Attributes;
 using ProLib.Loaders;
 using ProLib.Relics;
+using ProLib.Utility;
 using Promethium.Components;
 using Promethium.Patches.Orbs.CustomOrbs;
 using Promethium.Patches.Orbs.ModifiedOrbs;
@@ -10,6 +11,7 @@ using Promethium.Patches.Relics.CustomRelics;
 using Relics;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Promethium
 {
@@ -45,7 +47,7 @@ namespace Promethium
 
         private static void RegisterLocalization(LanguageLoader languageLoader)
         {
-            languageLoader.LoadSource(Plugin.LocalizationTerms);
+            languageLoader.LoadResourceTSV(Assembly.GetExecutingAssembly(), $"{Plugin.Name}.Resources.Localization.tsv");
             languageLoader.LoadGoogleSheetTSVSource("https://docs.google.com/spreadsheets/d/e/2PACX-1vRe82XVSt8LOUz3XewvAHT5eDDzAqXr5MV0lt3gwvfN_2n9Zxj613jllVPtdPdQweAap2yOSJSgwpPt/pub?gid=0&single=true&output=tsv", "Promethium_Translation.tsv");
             languageLoader.AddDynamicLocalizationParam(GetParameterValue);
         }

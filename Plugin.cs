@@ -56,10 +56,6 @@ namespace Promethium
         public static Sprite DogRelicSprite;
         public static Sprite[] RealityMarble;
 
-        //Localization
-        public static List<String[]> LocalizationTerms;
-        public static List<String> LocalizationKeys = new List<string>();
-
         // Config
         private static ConfigEntry<bool> EnemyAttackOnShuffleConfig;
         private static ConfigEntry<bool> CurseRunOnConfig;
@@ -103,8 +99,6 @@ namespace Promethium
             Log = Logger;
             ConfigFile = Config;
 
-            LocalizationTerms = ReadTSVFile("Localization.tsv");
-
             LoadSprites();
 
             EnemyAttackOnShuffleConfig = Config.Bind<bool>("Mechanics", "EnemyAttackOnShuffle", true, "Disabling this will prevent enemies from taking two turns in certain circumstances");
@@ -139,7 +133,6 @@ namespace Promethium
             DontDestroyOnLoad(PromethiumPrefabHolder);
             PromethiumPrefabHolder.hideFlags = HideFlags.HideAndDontSave;
             PromethiumPrefabHolder.SetActive(false);
-            SendOrbsToConsole();
         }
 
 
@@ -194,28 +187,6 @@ namespace Promethium
 
             stopwatch.Stop();
             Log.LogInfo($"Sprites loaded! Took {stopwatch.ElapsedMilliseconds}ms");
-        }
-
-
-
-        public List<String[]> ReadTSVFile(String filePath)
-        {
-            filePath = $"{Name}.Resources.{filePath}";
-            List<String[]> results = new List<String[]>();
-            using (var reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(filePath)))
-            {
-                while (!reader.EndOfStream)
-                {
-                    String line = reader.ReadLine();
-                    String[] split = line.Split('\t');
-                    results.Add(split);
-                    if (split.Length > 1 && !LocalizationKeys.Contains(split[0]))
-                    {
-                        LocalizationKeys.Add(split[0]);
-                    }
-                }
-            }
-            return results;
         }
 
         public static Texture2D LoadTexture(string filePath)
@@ -290,18 +261,6 @@ namespace Promethium
             finally
             {
                 stream.Position = originalPosition;
-            }
-        }
-
-        private void SendOrbsToConsole()
-        {
-            foreach (GameObject obj in Resources.LoadAll<GameObject>("Prefabs/Orbs/"))
-            {
-                Attack attack = obj.GetComponent<Attack>();
-                if (attack != null)
-                {
-                    Logger.LogInfo($"{obj.name} ({attack.locNameString})");
-                }
             }
         }
     }
