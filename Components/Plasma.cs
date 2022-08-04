@@ -1,6 +1,8 @@
-﻿using HarmonyLib;
+﻿using ProLib.Relics;
+using HarmonyLib;
 using Promethium.Extensions;
 using Promethium.Patches.Relics;
+using Promethium.Patches.Relics.CustomRelics;
 using UnityEngine;
 
 namespace Promethium.Components
@@ -59,7 +61,7 @@ namespace Promethium.Components
             if (_thunder != null)
             {
                 if (_pachinkoBall._relicManager != null)
-                    _pachinkoBall._relicManager.AttemptUseRelic(CustomRelicEffect.PLASMA_BALL);
+                   CustomRelicManager.AttemptUseRelic(RelicNames.PLASMA_BALL);
                 _thunder.numZaps = _defaultZaps + AdditionalZaps;
             }
         }

@@ -3,18 +3,26 @@ using UnityEngine;
 using Relics;
 using Promethium.Components;
 using I2.Loc;
+using ProLib.Orbs;
+using BepInEx.Configuration;
+using ProLib.Relics;
+using Promethium.Patches.Relics.CustomRelics;
 
 namespace Promethium.Patches.Orbs.ModifiedOrbs
 {
-
     public sealed class ModifiedBouldorb : ModifiedOrb
     {
         private static ModifiedBouldorb _instance;
+        private static readonly string _name = OrbNames.Bouldorb;
+        public static readonly ConfigEntry<bool> EnabledConfig = Plugin.ConfigFile.Bind<bool>("Orbs", _name, true, "Disable to remove modifications");
 
-
-        private ModifiedBouldorb() : base(OrbNames.Bouldorb)
+        private ModifiedBouldorb() : base(_name)
         {
             LocalVariables = true;
+        }
+        public override bool IsEnabled()
+        {
+            return EnabledConfig.Value;
         }
 
         public override void SetLocalVariables(LocalizationParamsManager localParams, GameObject orb, Attack attack)
@@ -25,7 +33,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
 
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
-            if (relicManager != null && relicManager.RelicEffectActive(Relics.CustomRelicEffect.HOLSTER))
+            if (CustomRelicManager.RelicActive(RelicNames.HOLSTER))
             {
                 ReplaceDescription(attack, "armor_hold", 3);
             }
@@ -62,7 +70,6 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
                 armor.AddArmor(3);
             }
         }
-
 
         public static ModifiedBouldorb Register()
         {

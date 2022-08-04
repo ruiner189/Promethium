@@ -1,50 +1,35 @@
-﻿using HarmonyLib;
+﻿using ProLib.Relics;
+using HarmonyLib;
 using Promethium.Components;
-using Promethium.Extensions;
-using Promethium.Extensions.UI;
-using Relics;
+using Promethium.Patches.Relics.CustomRelics;
+using Promethium.UI;
 using UnityEngine;
 
 namespace Promethium.Patches.Relics
 {
     public static class KillButtonRelic
     {
-        private static GameObject currentButton;
-
         [HarmonyPatch(typeof(BattleController), "ShuffleDeck")]
         public static class RestoreButtonOnReload
         {
-            public static void Prefix(RelicManager ____relicManager)
+            public static void Prefix()
             {
-                if (____relicManager != null)
+                if (CustomRelicManager.AttemptUseRelic(RelicNames.KILL_BUTTON))
                 {
-                    if (____relicManager.AttemptUseRelic(CustomRelicEffect.KILL_BUTTON))
+                    if (KillButton.currentButton != null)
                     {
-                        if (currentButton != null)
-                        {
-                            currentButton.SetActive(true);
-                        }
+                        KillButton.currentButton.SetActive(true);
                     }
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(BattleController), "Awake")]
-        public static class CreateKillButtonOnLoad
-        {
-            public static void Postfix(RelicManager ____relicManager)
-            {
-                if (____relicManager.RelicEffectActive(CustomRelicEffect.KILL_BUTTON))
-                    currentButton = KillButton.CreateButton(new Vector3(12, -4.5f, 0));
+                } 
             }
         }
 
         [HarmonyPatch(typeof(BattleController), nameof(BattleController.ArmBallForShot))]
         public static class AddKillComponent
         {
-            public static void Prefix(RelicManager ____relicManager, GameObject ____ball)
+            public static void Prefix(GameObject ____ball)
             {
-                if (____relicManager.RelicEffectActive(CustomRelicEffect.KILL_BUTTON))
+                if (CustomRelicManager.RelicActive(RelicNames.KILL_BUTTON))
                 {
                     ____ball.AddComponent<KillOnCommand>();
                 }

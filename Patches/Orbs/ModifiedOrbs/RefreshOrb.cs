@@ -1,5 +1,9 @@
-﻿using Promethium.Extensions;
+﻿using BepInEx.Configuration;
+using ProLib.Orbs;
+using ProLib.Relics;
+using Promethium.Extensions;
 using Promethium.Patches.Relics;
+using Promethium.Patches.Relics.CustomRelics;
 using Relics;
 using UnityEngine;
 
@@ -8,12 +12,20 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     public sealed class ModifiedRefreshOrb : ModifiedOrb
     {
         private static ModifiedRefreshOrb _instance;
+
+        private static readonly string _name = OrbNames.Refreshorb;
+        public static readonly ConfigEntry<bool> EnabledConfig = Plugin.ConfigFile.Bind<bool>("Orbs", _name, true, "Disable to remove modifications");
+
         private ModifiedRefreshOrb() : base(OrbNames.Refreshorb) { }
+        public override bool IsEnabled()
+        {
+            return EnabledConfig.Value;
+        }
 
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
             int level = attack.Level;
-            if (relicManager.RelicEffectActive(CustomRelicEffect.HOLSTER))
+            if (CustomRelicManager.RelicActive(RelicNames.HOLSTER))
             {
                 if (level == 2)
                 {

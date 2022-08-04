@@ -7,16 +7,26 @@ using UnityEngine;
 using Relics;
 using I2.Loc;
 using Promethium.Components;
+using ProLib.Orbs;
+using BepInEx.Configuration;
+using ProLib.Relics;
+using Promethium.Patches.Relics.CustomRelics;
 
 namespace Promethium.Patches.Orbs.ModifiedOrbs
 {
-
     public sealed class ModifiedOrbelisk : ModifiedOrb
     {
         private static ModifiedOrbelisk _instance;
-        private ModifiedOrbelisk() : base(OrbNames.Orbelisk)
+        private static readonly string _name = OrbNames.Orbelisk;
+        public static readonly ConfigEntry<bool> EnabledConfig = Plugin.ConfigFile.Bind<bool>("Orbs", _name, true, "Disable to remove modifications");
+        private ModifiedOrbelisk() : base(_name)
         {
             LocalVariables = true;
+        }
+
+        public override bool IsEnabled()
+        {
+            return EnabledConfig.Value;
         }
 
         public override void SetLocalVariables(LocalizationParamsManager localParams, GameObject orb, Attack attack)
@@ -98,7 +108,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
 
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
-            if (relicManager != null && relicManager.RelicEffectActive(Relics.CustomRelicEffect.HOLSTER))
+            if (CustomRelicManager.RelicActive(RelicNames.HOLSTER))
             {
                 ReplaceDescription(attack, new string[] { "attacks_flying_and_ground", "armor_damage_multiplier", "armor_damage_hold_multiplier" });
             }
@@ -175,7 +185,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     {
         public static bool Prefix(ref float __result)
         {
-            if (ModifiedOrb.GetOrb(OrbNames.Orbelisk, true).Registered)
+            if (ModifiedOrb.GetOrb(OrbNames.Orbelisk, true).IsEnabled())
             {
                 __result = 0;
                 return false;

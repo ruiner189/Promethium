@@ -1,4 +1,6 @@
-﻿using I2.Loc;
+﻿using BepInEx.Configuration;
+using ProLib.Orbs;
+using I2.Loc;
 using Promethium.Components;
 using Relics;
 using UnityEngine;
@@ -8,9 +10,15 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     public sealed class ModifiedStone : ModifiedOrb
     {
         private static ModifiedStone _instance;
-        private ModifiedStone() : base(OrbNames.StoneOrb)
+        private static readonly string _name = OrbNames.StoneOrb;
+        public static readonly ConfigEntry<bool> EnabledConfig = Plugin.ConfigFile.Bind<bool>("Orbs", _name, true, "Disable to remove modifications");
+        private ModifiedStone() : base(_name)
         {
             LocalVariables = true;
+        }
+        public override bool IsEnabled()
+        {
+            return EnabledConfig.Value;
         }
 
         public override void SetLocalVariables(LocalizationParamsManager localParams, GameObject orb, Attack attack)

@@ -11,17 +11,10 @@
   <ItemGroup>
     <Reference Include="$(peglin)\BepInEx\core\0Harmony.dll" />
     <Reference Include="$(peglin)\BepInEx\core\BepInEx.dll" />
-    <Reference Include="$(peglin)\BepInEx\core\BepInEx.Harmony.dll" />
-    <Reference Include="$(peglin)\BepInEx\core\BepInEx.Preloader.dll" />
-    <Reference Include="$(peglin)\BepInEx\core\HarmonyXInterop.dll" />
-    <Reference Include="$(peglin)\BepInEx\core\Mono.Cecil.dll" />
-    <Reference Include="$(peglin)\BepInEx\core\Mono.Cecil.Mdb.dll" />
-    <Reference Include="$(peglin)\BepInEx\core\Mono.Cecil.Pdb.dll" />
-    <Reference Include="$(peglin)\BepInEx\core\Mono.Cecil.Rocks.dll" />
-    <Reference Include="$(peglin)\BepInEx\core\MonoMod.RuntimeDetour.dll" />
-    <Reference Include="$(peglin)\BepInEx\core\MonoMod.Utils.dll" />
     <Reference Include="$(peglin)\Peglin_Data\Managed\*.dll" Exclude="$(peglin)\Peglin_Data\Managed\Assembly-CSharp.dll" />
     <Reference Include="$(peglin)\Assembly-CSharp.dll" />
+    <Reference Include="$(appdata)\Thunderstore Mod Manager\DataFolder\Peglin\profiles\Development\BepInEx\plugins\Promethium-ProLib\ProLib.dll" />
+    <Reference Include="$(appdata)\Thunderstore Mod Manager\DataFolder\Peglin\profiles\Development\BepInEx\plugins\CustomChallenges-CustomChallenges\CustomChallenges.dll" />
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="Resources\Relics\*" />
     <EmbeddedResource Include="Resources\Orbs\*" />

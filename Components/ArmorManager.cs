@@ -1,7 +1,8 @@
 ﻿using Battle.StatusEffects;
 using Cruciball;
-using Promethium.Extensions;
+using ProLib.Relics;
 using Promethium.Patches.Relics;
+using Promethium.Patches.Relics.CustomRelics;
 using Promethium.Patches.Status_Effect;
 using Relics;
 using UnityEngine;
@@ -92,31 +93,26 @@ namespace Promethium.Components
         public int GetArmorPerTurnFromRelics()
         {
             int total = 0;
-            if (_relicManager != null)
-            {
-                if (_relicManager.AttemptUseRelic(CustomRelicEffect.CURSE_TWO_EQUIP))
-                    total += 1;
-                if (_relicManager.AttemptUseRelic(CustomRelicEffect.CURSE_FOUR_EQUIP))
-                    total += 1;
-                if (ModifiedRelic.HasRelicEffect(RelicEffect.DAMAGE_BONUS_PLANT_FLAT) && _relicManager.AttemptUseRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
-                    total += 1;
-            }
+
+            if (CustomRelicManager.AttemptUseRelic(RelicNames.CURSE_TWO_EQUIP))
+                total += 1;
+            if (CustomRelicManager.AttemptUseRelic(RelicNames.CURSE_FOUR_EQUIP))
+                total += 1;
+            if (ModifiedRelic.HasRelicEffect(RelicEffect.DAMAGE_BONUS_PLANT_FLAT) && _relicManager.AttemptUseRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
+                total += 1;
+            
             return total;
         }
 
         public int GetMaxArmorFromRelics()
         {
             int total = 0;
-            if (_relicManager != null)
-            {
-                if (_relicManager.AttemptUseRelic(CustomRelicEffect.CURSE_TWO_ARMOR))
-                    total += 5;
-                if (_relicManager.AttemptUseRelic(CustomRelicEffect.CURSE_FOUR_ARMOR))
-                    total += 5;
-                if (ModifiedRelic.HasRelicEffect(RelicEffect.DAMAGE_BONUS_PLANT_FLAT) && _relicManager.AttemptUseRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
-                    total += 5;
-            }
-
+            if (CustomRelicManager.AttemptUseRelic(RelicNames.CURSE_TWO_ARMOR))
+                total += 5;
+            if (CustomRelicManager.AttemptUseRelic(RelicNames.CURSE_FOUR_ARMOR))
+                total += 5;
+            if (ModifiedRelic.HasRelicEffect(RelicEffect.DAMAGE_BONUS_PLANT_FLAT) && _relicManager.AttemptUseRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
+                total += 5;
             return total;
         }
     }

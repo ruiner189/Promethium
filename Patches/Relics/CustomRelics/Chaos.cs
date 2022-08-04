@@ -1,4 +1,5 @@
-﻿using Relics;
+﻿using ProLib.Relics;
+using Relics;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,42 +7,50 @@ namespace Promethium.Patches.Relics.CustomRelics
 {
     public sealed class Chaos : CustomRelic
     {
-        private List<Relic> _commonRelics;
-        private List<Relic> _rareRelics;
-        private List<Relic> _bossRelics;
-        private List<Relic> _combinedRelics;
-
         public override void OnRelicAdded(RelicManager relicManager)
         {
-            _commonRelics = relicManager._availableCommonRelics;
-            _rareRelics = relicManager._availableRareRelics;
-            _bossRelics = relicManager._availableBossRelics;
+            MixRelicPools(relicManager);
+        }
 
-            _combinedRelics = new List<Relic>();
-            _combinedRelics = _commonRelics.Union(_rareRelics).Union(_bossRelics).ToList();
+        public static void MixRelicPools(RelicManager relicManager)
+        {
+            List<Relic> combinedRelics = new List<Relic>();
+            combinedRelics = relicManager._availableCommonRelics.Union(relicManager._availableRareRelics).Union(relicManager._availableBossRelics).ToList();
 
-            foreach(Relic relic in relicManager._rareScenarioRelics.relics)
+            foreach (Relic relic in relicManager.RareScenarioRelicPool)
             {
                 if (relic is not CurseRelic)
                 {
-                    if (!relicManager.RelicEffectActive(relic.effect))
-                    {
-                        _combinedRelics.Add(relic);
+                    if (relic is CustomRelic customRelic && !CustomRelicManager.RelicActive(customRelic))
+                        combinedRelics.Add(relic);
 
-                    }
+                    else if (!relicManager.RelicEffectActive(relic.effect))
+                        combinedRelics.Add(relic);
                 }
             }
 
-            relicManager._availableCommonRelics = _combinedRelics;
-            relicManager._availableRareRelics = _combinedRelics;
-            relicManager._availableBossRelics = _combinedRelics;
+            relicManager._availableCommonRelics = combinedRelics;
+            relicManager._availableRareRelics = combinedRelics;
+            relicManager._availableBossRelics = combinedRelics;
         }
 
         public override void OnRelicRemoved(RelicManager relicManager)
         {
-            relicManager._availableCommonRelics = _combinedRelics.Where(relic => _commonRelics.Contains(relic)).ToList();
-            relicManager._availableRareRelics = _combinedRelics.Where(relic => _rareRelics.Contains(relic)).ToList();
-            relicManager._availableBossRelics = _combinedRelics.Where(relic => _bossRelics.Contains(relic)).ToList();
+            relicManager._availableCommonRelics = relicManager.CommonRelicPool.Where(relic => {
+                if (relicManager.RelicEffectActive(relic.effect)) return false;
+                if (relic is CustomRelic customRelic && CustomRelicManager.RelicActive(customRelic)) return false;
+                return true;
+            }).ToList();
+            relicManager._availableRareRelics = relicManager.RareRelicPool.Where(relic => {
+                if (relicManager.RelicEffectActive(relic.effect)) return false;
+                if (relic is CustomRelic customRelic && CustomRelicManager.RelicActive(customRelic)) return false;
+                return true;
+            }).ToList();
+            relicManager._availableBossRelics = relicManager.BossRelicPool.Where(relic => {
+                if (relicManager.RelicEffectActive(relic.effect)) return false;
+                if (relic is CustomRelic customRelic && CustomRelicManager.RelicActive(customRelic)) return false;
+                return true;
+            }).ToList();
         }
     }
 }

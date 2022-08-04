@@ -1,7 +1,8 @@
 ﻿using DG.Tweening;
+using ProLib.Relics;
 using HarmonyLib;
 using Promethium.Components;
-using Promethium.Extensions;
+using Promethium.Patches.Relics.CustomRelics;
 using Relics;
 using UnityEngine;
 
@@ -24,18 +25,18 @@ namespace Promethium.Patches.Relics
                 if (____relicManager == null) return;
                 Scale = ____ball.transform.localScale;
 
-                if (____relicManager.RelicEffectActive(CustomRelicEffect.WUMBO) && !____relicManager.RelicEffectActive(CustomRelicEffect.MINI))
+                if (CustomRelicManager.RelicActive(RelicNames.WUMBO) && !CustomRelicManager.RelicActive(RelicNames.MINI))
                 {
-                    ____relicManager.AttemptUseRelic(CustomRelicEffect.WUMBO);
+                    CustomRelicManager.AttemptUseRelic(RelicNames.WUMBO);
                     ____ball.transform.DOScale(new Vector3(Scale.x * TargetEnlarge, Scale.y * TargetEnlarge, Scale.z), Time);
                 }
 
-                else if (____relicManager.RelicEffectActive(CustomRelicEffect.MINI) && !____relicManager.RelicEffectActive(CustomRelicEffect.WUMBO))
+                else if (CustomRelicManager.RelicActive(RelicNames.MINI) && !CustomRelicManager.RelicActive(RelicNames.WUMBO))
                 {
-                    ____relicManager.AttemptUseRelic(CustomRelicEffect.MINI);
+                    CustomRelicManager.AttemptUseRelic(RelicNames.MINI);
                     ____ball.transform.DOScale(new Vector3(Scale.x * TargetShrink, Scale.y * TargetShrink, Scale.z), Time);
                 }
-                else if (____relicManager.RelicEffectActive(CustomRelicEffect.MINI) && ____relicManager.RelicEffectActive(CustomRelicEffect.WUMBO))
+                else if (CustomRelicManager.RelicActive(RelicNames.MINI) && CustomRelicManager.RelicActive(RelicNames.WUMBO))
                 {
                     if (____ball.GetComponent<AutoScaler>() == null)
                         ____ball.AddComponent<AutoScaler>();

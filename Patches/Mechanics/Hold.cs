@@ -1,15 +1,21 @@
 ﻿using HarmonyLib;
 using PeglinUI;
 using PeglinUI.OrbDisplay;
-using Promethium.Patches.Relics;
-using Promethium.Extensions;
 using Relics;
 using System;
 using UnityEngine;
 using Battle.Pachinko;
+using UI.OrbDisplay;
+using Promethium.UI;
+using System.Linq;
+using ProLib.Attributes;
+using ProLib.Loaders;
+using ProLib.Relics;
+using Promethium.Patches.Relics.CustomRelics;
 
 namespace Promethium.Patches.Mechanics
 {
+    [SceneModifier]
     public static class Hold
     {
         private static GameObject _heldObject;
@@ -20,17 +26,18 @@ namespace Promethium.Patches.Mechanics
 
         public static GameObject HeldOrb => _heldObject;
 
-        [HarmonyPatch(typeof(BattleController), "Start")]
-        public static class OnStart
+        public static void LateOnSceneLoaded(String scene, bool firstLoad)
         {
-            public static void Prefix(RelicManager ____relicManager)
+            if(scene == SceneLoader.Battle)
             {
                 _heldObject = null;
                 _heldInfo = null;
                 _heldDeckObject = null;
                 _heldPersists = -1;
 
-                if (____relicManager != null && ____relicManager.AttemptUseRelic(CustomRelicEffect.HOLSTER))
+                RelicManager relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
+
+                if (relicManager != null && CustomRelicManager.AttemptUseRelic(RelicNames.HOLSTER))
                 {
                     GameObject mask = GameObject.Find("OrbCountMask");
                     GameObject maskClone = GameObject.Instantiate(mask);
@@ -41,141 +48,206 @@ namespace Promethium.Patches.Mechanics
             }
         }
 
-        [HarmonyPatch(typeof(BattleController), "AttemptOrbDiscard")]
-        public static class OnDiscard
+        [HarmonyPatch(typeof(OrbDiscardButton), nameof(OrbDiscardButton.Update))]
+        public static class HoldDiscard
         {
-            public static bool Prefix(BattleController __instance, RelicManager ____relicManager, DeckManager ____deckManager, int ____battleState, ref bool ___currentBallIsPersistBonusOrb, ref GameObject ____ball)
+            private static float _holdTime;
+            private static float _targetTime = 1;
+            private static bool _complete = false;
+            private static bool _startPress = false;
+
+            public static bool Prefix(OrbDiscardButton __instance)
             {
-                if (____relicManager == null || ____deckManager == null || ____battleState == 9) return true;
-                if (_heldObject != null && ____relicManager.AttemptUseRelic(RelicEffect.NO_DISCARD)) return false;
-                if (____relicManager.AttemptUseRelic(CustomRelicEffect.HOLSTER) && ____ball != null && ____ball.GetComponent<PachinkoBall>().available && !DeckInfoManager.populatingDisplayOrb && !GameBlockingWindow.windowOpen)
+                BattleController controller = Resources.FindObjectsOfTypeAll<BattleController>().FirstOrDefault();
+                if(controller != null)
                 {
-                    long elapsed = DateTimeOffset.Now.ToUnixTimeMilliseconds() - _lastDraw;
-                    if (DeckInfoManager.populatingDisplayOrb || elapsed < 750)
+                    if (!Plugin.HoldDiscard && !CustomRelicManager.RelicActive(RelicNames.HOLSTER))
+                        return true;
+                }
+
+                RadialBar bar = RadialBar.GarbageBar;
+                if (__instance._player.GetButton("Back") && !PauseMenu.Paused && !GameBlockingWindow.windowOpen)
+                {
+                    _startPress = true;
+                    _holdTime += Time.deltaTime;
+
+                    if (__instance.CanDiscard() && !_complete)
                     {
-                        return false;
+                        if (bar != null)
+                        {
+                            bar.gameObject.SetActive(true);
+                            bar.FillPercent = _holdTime / _targetTime;
+                        }
+
+                        if (_holdTime >= _targetTime)
+                        {
+                            _complete = true;
+                            bar.gameObject.SetActive(false);
+                            OrbDiscardButton.OnOrbDiscardButtonClicked();
+                        }
                     }
-                    _lastDraw = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                    ____ball.SetActive(false);
-
-                    DeckInfoManager info = GameObject.Find("OrbDisplay").GetComponent<DeckInfoManager>();
-                    GameObject displayOrb = info._currentOrb;
-                    ShotDetailsWidget widget = GameObject.Find("OrbDetails").GetComponent<ShotDetailsWidget>();
-
-                    if (_heldObject != null)
+                } 
+                else
+                {
+                    if (bar != null)
                     {
-                        //Swap pointers
-                        GameObject oldBall = ____ball;
-                        ____ball = _heldObject;
-                        _heldObject = oldBall;
+                        bar.gameObject.SetActive(false);
+                    }
+
+                    if (_startPress && !_complete)
+                    {
+                        HoldOrb(controller);
+                    }
+
+                    _complete = false;
+                    _startPress = false;
+                    _holdTime = 0f;
+                }
+
+                if (__instance._cachedCanDiscard != __instance.CanDiscard())
+                {
+                    __instance._cachedCanDiscard = __instance.CanDiscard();
+                    __instance.gamepadPrompt.SetActive(__instance._cachedCanDiscard);
+                }
+                return false;
+            }
+        }
+
+        public static void HoldOrb(BattleController battleController)
+        {
+            RelicManager relicManager = battleController._relicManager;
+            DeckManager deckManager = battleController._deckManager;
+            ref GameObject ball = ref battleController._ball;
+            ref bool currentBallIsPersistBonusOrb = ref battleController.currentBallIsPersistBonusOrb;
+
+            if (relicManager == null || deckManager == null || BattleController._battleState == BattleController.BattleState.NAVIGATION) return;
+            if (_heldObject != null && relicManager.AttemptUseRelic(RelicEffect.NO_DISCARD)) return;
+            if (CustomRelicManager.RelicActive(RelicNames.HOLSTER) && ball != null && ball.GetComponent<PachinkoBall>().available && !DeckInfoManager.populatingDisplayOrb && !GameBlockingWindow.windowOpen)
+            {
+                CustomRelicManager.AttemptUseRelic(RelicNames.HOLSTER);
+
+                long elapsed = DateTimeOffset.Now.ToUnixTimeMilliseconds() - _lastDraw;
+                if (DeckInfoManager.populatingDisplayOrb || elapsed < 750)
+                {
+                    return;
+                }
+                _lastDraw = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                ball.SetActive(false);
+
+                DeckInfoManager info = GameObject.Find("OrbDisplay").GetComponent<DeckInfoManager>();
+                GameObject displayOrb = info._currentOrb;
+                ShotDetailsWidget widget = GameObject.Find("OrbDetails").GetComponent<ShotDetailsWidget>();
+
+                if (_heldObject != null)
+                {
+                    //Swap pointers
+                    GameObject oldBall = ball;
+                    ball = _heldObject;
+                    _heldObject = oldBall;
 
 
-                        // And again for persist
-                        PersistentOrb newPersist = ____ball.GetComponent<PersistentOrb>();
-                        PersistentOrb oldPersist = _heldObject.GetComponent<PersistentOrb>();
-                        int persist = _heldPersists;
-                        ___currentBallIsPersistBonusOrb = false;
+                    // And again for persist
+                    PersistentOrb newPersist = ball.GetComponent<PersistentOrb>();
+                    PersistentOrb oldPersist = _heldObject.GetComponent<PersistentOrb>();
+                    int persist = _heldPersists;
+                    currentBallIsPersistBonusOrb = false;
 
-                        // And the deck object...
-                        GameObject oldDeckObject = _heldDeckObject;
+                    // And the deck object...
+                    GameObject oldDeckObject = _heldDeckObject;
 
-                        if (oldPersist != null)
+                    if (oldPersist != null)
+                    {
+                        _heldPersists = oldPersist.remainingPersistence;
+                        if (_heldPersists >= 0)
+                            _heldDeckObject = deckManager.shuffledDeck.Pop();
+                    }
+
+                    if (newPersist != null)
+                    {
+                        BattleController.currentBallPersistLevel = persist;
+
+                        if (newPersist.remainingPersistence < newPersist.modifiedPersistLevel - 1)
                         {
-                            _heldPersists = oldPersist.remainingPersistence;
-                            if (_heldPersists >= 0)
-                                _heldDeckObject = ____deckManager.shuffledDeck.Pop();
+                            currentBallIsPersistBonusOrb = true;
                         }
 
-                        if (newPersist != null)
+                        info.UpdatePersistentInfo(persist);
+
+                        newPersist.remainingPersistence = persist;
+                        if (persist >= 0)
                         {
-                            BattleController.currentBallPersistLevel = persist;
-
-                            if (newPersist.remainingPersistence < newPersist.modifiedPersistLevel - 1)
-                            {
-                                ___currentBallIsPersistBonusOrb = true;
-                            }
-
-                            info.UpdatePersistentInfo(persist);
-
-                            newPersist.remainingPersistence = persist;
-                            if (persist >= 0)
-                            {
-                                if (oldDeckObject != null)
-                                    ____deckManager.shuffledDeck.Push(oldDeckObject);
-                            }
+                            if (oldDeckObject != null)
+                                deckManager.shuffledDeck.Push(oldDeckObject);
                         }
+                    }
 
-                        ____ball.SetActive(true);
+                    ball.SetActive(true);
 
-                        info._nextOrb = _heldInfo;
-                        _heldInfo = CreateShotDetails(info, GameObject.Find("OrbDisplay").transform, _heldObject);
-                        AddOrbToBattleDeck(____deckManager, ____ball);
-                        ____deckManager.RemoveOrbFromBattleDeck(_heldObject);
+                    info._nextOrb = _heldInfo;
+                    _heldInfo = CreateShotDetails(info, GameObject.Find("OrbDisplay").transform, _heldObject);
+                    AddOrbToBattleDeck(deckManager, ball);
+                    deckManager.RemoveOrbFromBattleDeck(_heldObject);
 
-                        info._currentOrb.SetActive(false);
-                        __instance.InitializeAttack(____ball);
-                        Action onBallCreationComplete = BattleController.OnBallCreationComplete;
-                        if (onBallCreationComplete != null)
-                        {
-                            onBallCreationComplete();
-                        }
+                    info._currentOrb.SetActive(false);
+                    battleController.InitializeAttack(ball);
+                    Action onBallCreationComplete = BattleController.OnBallCreationComplete;
+                    if (onBallCreationComplete != null)
+                    {
+                        onBallCreationComplete();
+                    }
 
-                        info.BallDrawFinished();
-                        return false;
+                    info.BallDrawFinished();
+                    return;
+                }
+                else
+                {
+                    _heldObject = ball;
+                    _heldObject.SetActive(false);
+                    _heldInfo = CreateShotDetails(info, GameObject.Find("OrbDisplay").transform, _heldObject);
+                    GameObject.Destroy(info._currentOrb);
+                    deckManager.RemoveOrbFromBattleDeck(_heldObject);
+                    ball = null;
+                    if (deckManager.shuffledDeck.Count == 0)
+                    {
+                        battleController.ShuffleDeck();
                     }
                     else
                     {
-                        _heldObject = ____ball;
-                        _heldObject.SetActive(false);
-                        _heldInfo = CreateShotDetails(info, GameObject.Find("OrbDisplay").transform, _heldObject);
-                        GameObject.Destroy(info._currentOrb);
-                        ____deckManager.RemoveOrbFromBattleDeck(_heldObject);
-                        ____ball = null;
-                        if (____deckManager.shuffledDeck.Count == 0)
+                        PersistentOrb persist = _heldObject.GetComponent<PersistentOrb>();
+                        if (persist != null)
                         {
-                            __instance.ShuffleDeck();
-                        }
-                        else
-                        {
-                            PersistentOrb persist = _heldObject.GetComponent<PersistentOrb>();
-                            if (persist != null)
+                            _heldPersists = persist.remainingPersistence;
+                            if (deckManager.shuffledDeck.Count > 0 && persist.remainingPersistence >= 0 && persist.remainingPersistence < persist.modifiedPersistLevel)
                             {
-                                _heldPersists = persist.remainingPersistence;
-                                if (____deckManager.shuffledDeck.Count > 0 && persist.remainingPersistence >= 0 && persist.remainingPersistence < persist.modifiedPersistLevel)
-                                {
-                                    _heldDeckObject = ____deckManager.shuffledDeck.Pop();
-                                }
+                                _heldDeckObject = deckManager.shuffledDeck.Pop();
                             }
-                            __instance.DrawBall();
                         }
-                        return false;
+                        battleController.DrawBall();
                     }
                 }
-                return true;
             }
+        }
 
+        private static GameObject CreateShotDetails(DeckInfoManager manager, Transform parent, GameObject ball)
+        {
+            GameObject gameObject = manager.CreatePreviewSprite(ball, 0.0f);
+            gameObject.transform.SetParent(parent);
+            gameObject.transform.position = new Vector3(-8.4f, 4.6f, gameObject.transform.position.z);
+            return gameObject;
+        }
 
-            private static GameObject CreateShotDetails(DeckInfoManager manager, Transform parent, GameObject ball)
+        private static void AddOrbToBattleDeck(DeckManager manager, GameObject orb)
+        {
+            GameObject container = manager.battleDeckOrbContainerInstance.gameObject;
+            foreach (Transform child in container.transform)
             {
-                GameObject gameObject = manager.CreatePreviewSprite(ball, 0.0f);
-                gameObject.transform.SetParent(parent);
-                gameObject.transform.position = new Vector3(-8.4f, 4.6f, gameObject.transform.position.z);
-                return gameObject;
-            }
-
-            private static void AddOrbToBattleDeck(DeckManager manager, GameObject orb)
-            {
-                GameObject container = manager.battleDeckOrbContainerInstance.gameObject;
-                foreach (Transform child in container.transform)
+                GameObject gameObject = child.gameObject;
+                Attack component = gameObject.GetComponent<Attack>();
+                Attack component2 = orb.GetComponent<Attack>();
+                if (Attack.IsEquivalent(component, component2))
                 {
-                    GameObject gameObject = child.gameObject;
-                    Attack component = gameObject.GetComponent<Attack>();
-                    Attack component2 = orb.GetComponent<Attack>();
-                    if (Attack.IsEquivalent(component, component2))
-                    {
-                        manager.battleDeck.Add(gameObject);
-                        break;
-                    }
+                    manager.battleDeck.Add(gameObject);
+                    break;
                 }
             }
         }

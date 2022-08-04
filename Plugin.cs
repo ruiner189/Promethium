@@ -4,13 +4,6 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using Promethium.Components;
-using Promethium.Components.Loaders;
-using Promethium.Loaders;
-using Promethium.Patches.Language;
-using Promethium.Patches.Orbs.ModifiedOrbs;
-using Promethium.Patches.Relics;
-using Promethium.SoftDependencies;
-using Relics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,23 +16,27 @@ using UnityEngine;
 namespace Promethium
 {
     [BepInPlugin(GUID, Name, Version)]
-    [BepInDependency("me.bo0tzz.peglin.CustomStartDeck", BepInDependency.DependencyFlags.SoftDependency)]
+
+    [BepInDependency("com.ruiner.prolib", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("me.bo0tzz.peglinmods.endless", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("com.ruiner.customchallenges", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.2.4";
+        public const String Version = "1.3.0";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
         public static ConfigFile ConfigFile;
 
         public static GameObject PromethiumManager;
+        public static GameObject PromethiumPrefabHolder;
 
         // Sprites
         public static Sprite ArmorEffect;
+        public static Sprite Circle;
         public static Sprite CurseOne;
         public static Sprite CurseTwo;
         public static Sprite CurseThree;
@@ -56,6 +53,7 @@ namespace Promethium
         public static Sprite Order;
         public static Sprite Chaos;
         public static Sprite PocketMoon;
+        public static Sprite DogRelicSprite;
         public static Sprite[] RealityMarble;
 
         //Localization
@@ -76,15 +74,15 @@ namespace Promethium
         private static ConfigEntry<bool> DynamicIconActiveConfig;
         private static ConfigEntry<int> DynamicIconMinimumConfig;
         private static ConfigEntry<bool> UseCustomPredictionConfig;
+        private static ConfigEntry<bool> HoldDiscardConfig;
 
         // Soft Dependencies
-
-        public static bool CustomStartDeckPlugin = false;
         public static bool EndlessPeglinPlugin = false;
+        public static bool CustomChallengesPlugin = false;
 
 
         public static bool EnemyAttackOnReload => EnemyAttackOnShuffleConfig.Value;
-        public static bool CurseRunOn => CurseRunOnConfig.Value && !EndlessPeglinPlugin;
+        public static bool CurseRunOn =>  CurseRunOnConfig.Value && !EndlessPeglinPlugin;
         public static bool PruneRelicsOnNewCurseRunOn => PruneRelicsOnNewCurseRunConfig.Value;
         public static bool PruneOrbsOnNewCurseRunOn => PruneOrbsOnNewCurseRunConfig.Value;
         public static float TierOneHealthMultiplier => TierOneCurseHealth.Value;
@@ -97,8 +95,8 @@ namespace Promethium
 
         public static bool DynamicIconActive => DynamicIconActiveConfig.Value;
         public static int DynamicIconMinimum => DynamicIconMinimumConfig.Value;
-
         public static bool UseCustomPrediction => UseCustomPredictionConfig.Value;
+        public static bool HoldDiscard => HoldDiscardConfig.Value;
 
         private void Awake()
         {
@@ -108,14 +106,13 @@ namespace Promethium
             LocalizationTerms = ReadTSVFile("Localization.tsv");
 
             LoadSprites();
-            RegisterModifiedOrbs();
-            RegisterModifiedRelics();
 
             EnemyAttackOnShuffleConfig = Config.Bind<bool>("Mechanics", "EnemyAttackOnShuffle", true, "Disabling this will prevent enemies from taking two turns in certain circumstances");
             SpeedUpOnConfig = Config.Bind<bool>("Mechanics", "SpeedUpOn", false, "Speeds up game after a set amount of time");
             SpeedUpDelayConfig = Config.Bind<float>("Mechanics", "SpeedUpDelay", 10, "Delay for speed up. In seconds");
             SpeedUpMaxConfig = Config.Bind<float>("Mechanics", "SpeedUpMax", 3, "How much it speeds up the game at max value");
             SpeedUpRateConfig = Config.Bind<float>("Mechanics", "SpeedUpRate", 1, "How fast the mod transitions the speed-up. Higher values means the game will speed up faster");
+            HoldDiscardConfig = Config.Bind<bool>("Mechanics", "HoldToDiscard", false, "Hold to discard instead of pressing. Will auto-enable if you have the relic Holster");
 
             UseCustomPredictionConfig = Config.Bind<bool>("Mechanics", "UseCustomPrediction", true, "Use Promethium's Custom Prediction. Setting this to false will use the default prediction system.");
 
@@ -133,36 +130,29 @@ namespace Promethium
             LoadSoftDependencies();
 
             PromethiumManager = new GameObject("Promethium Mod");
-            PromethiumManager.AddComponent<LanguageLoader>();
-            PromethiumManager.AddComponent<RelicLoader>();
-            PromethiumManager.AddComponent<OrbLoader>();
             PromethiumManager.AddComponent<RestartButtonActivator>();
             PromethiumManager.AddComponent<ArmorManager>();
-
             DontDestroyOnLoad(PromethiumManager);
             PromethiumManager.hideFlags = HideFlags.HideAndDontSave;
+
+            PromethiumPrefabHolder = new GameObject("Promethium Prefab Holder");
+            DontDestroyOnLoad(PromethiumPrefabHolder);
+            PromethiumPrefabHolder.hideFlags = HideFlags.HideAndDontSave;
+            PromethiumPrefabHolder.SetActive(false);
+            SendOrbsToConsole();
         }
 
 
         private void LoadSoftDependencies()
         {
             // Check Dependencies
-            CustomStartDeckPlugin = Chainloader.PluginInfos.TryGetValue("me.bo0tzz.peglin.CustomStartDeck", out PluginInfo info);
             EndlessPeglinPlugin = Chainloader.PluginInfos.TryGetValue("me.bo0tzz.peglinmods.endless", out _);
+            CustomChallengesPlugin = Chainloader.PluginInfos.TryGetValue("com.ruiner.customchallenges", out _);
 
             // Messages about incompatability
-            if(EndlessPeglinPlugin && CurseRunOnConfig.Value)
+            if (EndlessPeglinPlugin && CurseRunOnConfig.Value)
             {
                 Log.LogWarning("Endless Peglin Mod detected! Automatically turning off curse runs.");
-            }
-
-            // Load Patches that require dependencies
-            if (CustomStartDeckPlugin)
-            {
-                if (info.Instance != null)
-                {
-                    CustomStartDeck.ConvertPromethiumRelics(AccessTools.Field(info.Instance.GetType(), "wantedRelicEffects").GetValue(info.Instance) as List<String>);
-                }
             }
         }
 
@@ -172,6 +162,7 @@ namespace Promethium
             stopwatch.Start();
 
             ArmorEffect = LoadSprite("ArmorEffect.png");
+            Circle = LoadSprite("Circle.png");
             Holster = LoadSprite("Relics.Holster.png");
             WumboBelt = LoadSprite("Relics.WumboBelt.png");
             MiniBelt = LoadSprite("Relics.MiniBelt.png");
@@ -179,6 +170,7 @@ namespace Promethium
             Order = LoadSprite("Relics.Order.png");
             Chaos = LoadSprite("Relics.Chaos.png");
             PocketMoon = LoadSprite("Relics.PocketMoon.png");
+            DogRelicSprite = LoadSprite("Relics.Dog_1.png");
 
             CurseOne = LoadSprite("Relics.Curse_One.png");
             CurseTwo = LoadSprite("Relics.Curse_Two.png");
@@ -204,29 +196,7 @@ namespace Promethium
             Log.LogInfo($"Sprites loaded! Took {stopwatch.ElapsedMilliseconds}ms");
         }
 
-        private void RegisterModifiedOrbs()
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            ModifiedBouldorb.Register();
-            ModifiedOrbelisk.Register();
-            ModifiedStone.Register();
-            ModifiedDoctorb.Register();
-            ModifiedNosforbatu.Register();
-            ModifiedRefreshOrb.Register();
-            ModifiedShuffleOrb.Register();
-            ModifiedMatryoshka.Register();
-            ModifiedLightningBall.Register();
-            stopwatch.Stop();
-            Log.LogInfo($"Vanilla orbs modified! Took {stopwatch.ElapsedMilliseconds}ms");
-        }
 
-        private void RegisterModifiedRelics()
-        {
-            ModifiedRelic.AddRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT); // Gardening Gloves
-            ModifiedRelic.AddRelic(RelicEffect.NO_DISCARD);
-            ModifiedRelic.AddRelic(RelicEffect.MATRYOSHKA);
-        }
 
         public List<String[]> ReadTSVFile(String filePath)
         {
@@ -255,6 +225,10 @@ namespace Promethium
             texture = new Texture2D(16, 16, TextureFormat.RGBA32, false);
             texture.LoadImage(ReadToEnd(stream));
             texture.filterMode = FilterMode.Point;
+            texture.wrapMode = TextureWrapMode.Clamp;
+            texture.wrapModeU = TextureWrapMode.Clamp;
+            texture.wrapModeV = TextureWrapMode.Clamp;
+            texture.wrapModeW = TextureWrapMode.Clamp;
    
             return texture;
         }
@@ -328,22 +302,6 @@ namespace Promethium
                 {
                     Logger.LogInfo($"{obj.name} ({attack.locNameString})");
                 }
-            }
-        }
-    }
-
-    [HarmonyPatch(typeof(VersionDisplay), "Start")]
-    public static class ModVersionDisplay
-    {
-        public static void Postfix(VersionDisplay __instance)
-        {
-
-            TMP_Text text = __instance.GetComponent<TMP_Text>();
-            if (text.text.StartsWith("v"))
-            {
-                text.fontStyle = FontStyles.Bold;
-                text.text = $"Peglin {text.text}\n{Plugin.Name} v{Plugin.Version}\n{Chainloader.PluginInfos.Count} Mods Loaded";
-                __instance.transform.position += new Vector3(0, 0.75f, 0);
             }
         }
     }

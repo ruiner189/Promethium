@@ -1,4 +1,5 @@
-﻿using Promethium.Components;
+﻿using ProLib.Relics;
+using Promethium.Components;
 
 namespace Promethium.Patches.Relics
 {

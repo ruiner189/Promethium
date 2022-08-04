@@ -1,6 +1,8 @@
 ﻿using Battle;
-using Promethium.Extensions;
-using Promethium.Patches.Relics;
+using BepInEx.Configuration;
+using ProLib.Orbs;
+using ProLib.Relics;
+using Promethium.Patches.Relics.CustomRelics;
 using Relics;
 using UnityEngine;
 
@@ -9,12 +11,20 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     public sealed class ModifiedShuffleOrb : ModifiedOrb
     {
         private static ModifiedShuffleOrb _instance;
-        private ModifiedShuffleOrb() : base(OrbNames.ShuffleOrb) { }
+
+        private static readonly string _name = OrbNames.ShuffleOrb;
+        public static readonly ConfigEntry<bool> EnabledConfig = Plugin.ConfigFile.Bind<bool>("Orbs", _name, true, "Disable to remove modifications");
+
+        private ModifiedShuffleOrb() : base(_name) { }
+        public override bool IsEnabled()
+        {
+            return EnabledConfig.Value;
+        }
 
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
             int level = attack.Level;
-            if (relicManager.RelicEffectActive(CustomRelicEffect.HOLSTER))
+            if (CustomRelicManager.RelicActive(RelicNames.HOLSTER))
             {
                 if (level == 2)
                 {

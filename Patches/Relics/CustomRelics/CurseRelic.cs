@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Worldmap;
+using ProLib.Relics;
+using Promethium.Patches.Relics.CustomRelics;
 
 namespace Promethium.Patches.Relics
 {
@@ -28,27 +30,60 @@ namespace Promethium.Patches.Relics
             return AllCurseRelics.FindAll(relic => relic.CurseLevel == level);
         }
 
-        public static bool IsCurseLevelActive(RelicManager relicManager, int curseLevel)
+        public static bool IsCurseLevelActive(int curseLevel)
         {
-            if(relicManager != null)
-            {
                 foreach (CurseRelic relic in AllCurseRelics)
                 {
                     if (relic.CurseLevel == curseLevel)
                     {
-                        if (relicManager.RelicEffectActive(relic.effect))
+                        if (CustomRelicManager.RelicActive(relic))
                         {
                             return true;
                         }
                     }
                 }
-            }
             return false;
         }
 
-        public static int AmountOfCurseRelics(RelicManager relicManager)
+        public static int AmountOfCurseRelics()
         {
-            return AllCurseRelics.Where(relic => relicManager.RelicEffectActive(relic.effect)).Count();
+            return AllCurseRelics.Where(relic => CustomRelicManager.RelicActive(relic)).Count();
+        }
+
+        public override int DamageModifier(Attack attack, int critCount)
+        {
+            if (Id == RelicNames.CURSE_ONE_ATTACK || Id == RelicNames.CURSE_THREE_ATTACK)
+                return 2;
+            if (Id == RelicNames.CURSE_ONE_BALANCE)
+                return 1;
+            return 0;
+        }
+
+        public override int CritModifier(Attack attack, int critCount)
+        {
+            if (Id == RelicNames.CURSE_ONE_CRIT || Id == RelicNames.CURSE_THREE_CRIT)
+                return 2;
+            if (Id == RelicNames.CURSE_ONE_BALANCE)
+                return 1;
+            return 0;
+        }
+
+        public override void OnRelicAdded(RelicManager relicManager)
+        {
+            if(Id == RelicNames.CURSE_TWO_HEALTH  || Id == RelicNames.CURSE_FOUR_HEALTH)
+            {
+                relicManager._maxPlayerHealth?.Add(25);
+                relicManager._playerHealth?.Add(25);
+            }
+        }
+
+        public override void OnRelicRemoved(RelicManager relicManager)
+        {
+            if (Id == RelicNames.CURSE_TWO_HEALTH || Id == RelicNames.CURSE_FOUR_HEALTH)
+            {
+                relicManager._playerHealth?.Subtract(25);
+                relicManager._maxPlayerHealth?.Subtract(25);
+            }
         }
     }
 
@@ -57,9 +92,9 @@ namespace Promethium.Patches.Relics
     {
         public static void Postfix(Enemy __instance, RelicManager relicManager, ref float ____maxHealth)
         {
-            if (CurseRelic.IsCurseLevelActive(relicManager, 1))
+            if (CurseRelic.IsCurseLevelActive(1))
             {
-                int amountOfCurse = CurseRelic.AmountOfCurseRelics(relicManager);
+                int amountOfCurse = CurseRelic.AmountOfCurseRelics();
                 float multiplier = (float)(Plugin.TierOneHealthMultiplier * Math.Pow(Plugin.ExponentialCurseHealthMultiplier, amountOfCurse - 1));
                 ____maxHealth *= multiplier;
                 __instance.CurrentHealth = ____maxHealth;
@@ -68,58 +103,14 @@ namespace Promethium.Patches.Relics
         }
     }
 
-    [HarmonyPatch(typeof(RelicManager), nameof(RelicManager.AddRelic))]
-    public static class OnRelicAdded
-    {
-        public static void Prefix(Relic relic, FloatVariable ____maxPlayerHealth, FloatVariable ____playerHealth)
-        {
-            if (relic == null) return;
-            CustomRelicEffect effect = (CustomRelicEffect)relic.effect;
-            if (effect == CustomRelicEffect.CURSE_TWO_HEALTH)
-            {
-                ____maxPlayerHealth?.Add(25f);
-                ____playerHealth?.Add(25f);
-            }
-            else if (effect == CustomRelicEffect.CURSE_FOUR_HEALTH)
-            {
-                ____maxPlayerHealth?.Add(25f);
-                ____playerHealth?.Add(25f);
-            }
-        }
-    }
-
-
-    [HarmonyPatch(typeof(RelicManager), nameof(RelicManager.RemoveRelic))]
-    public static class OnRelicRemoved
-    {
-        public static void Prefix(RelicEffect re, Dictionary<RelicEffect, Relic> ____ownedRelics, FloatVariable ____maxPlayerHealth, FloatVariable ____playerHealth)
-        {
-            if (____ownedRelics.ContainsKey(re))
-            {
-                CustomRelicEffect effect = (CustomRelicEffect)re;
-                if (effect == CustomRelicEffect.CURSE_TWO_HEALTH)
-                {
-                    ____maxPlayerHealth.Subtract(25f);
-                    ____playerHealth.Subtract(25f);
-                }
-                else if (effect == CustomRelicEffect.CURSE_FOUR_HEALTH)
-                {
-                    ____maxPlayerHealth.Subtract(25f);
-                    ____playerHealth.Subtract(25f);
-                }
-            }
-
-        }
-    }
-
     [HarmonyPatch(typeof(Enemy), nameof(Enemy.Attack))]
     public static class HealEnemiesOnTurnEnd
     {
         public static void Prefix(Enemy __instance, RelicManager ____relicManager)
         {
-            if (CurseRelic.IsCurseLevelActive(____relicManager, 3))
+            if (CurseRelic.IsCurseLevelActive(3))
                 __instance.Heal((float)Math.Round(__instance.maxHealth * 0.05f));
-            if (CurseRelic.IsCurseLevelActive(____relicManager, 4))
+            if (CurseRelic.IsCurseLevelActive(4))
             {
                 StatusEffect statusEffect = new StatusEffect(StatusEffectType.Strength, 1);
                 __instance.ApplyStatusEffect(statusEffect);
@@ -134,7 +125,7 @@ namespace Promethium.Patches.Relics
         public static void Postfix(MapNode __instance)
         {
             if (_relicManager == null) _relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
-            if (CurseRelic.IsCurseLevelActive(_relicManager, 5))
+            if (CurseRelic.IsCurseLevelActive(5))
                 if (__instance.RoomType == RoomType.TREASURE)
                     __instance.RoomType = RoomType.MINI_BOSS;
         }
@@ -145,7 +136,7 @@ namespace Promethium.Patches.Relics
     {
         public static void Postfix(PlayerHealthController __instance, RelicManager ____relicManager, ref float __result)
         {
-            if (CurseRelic.IsCurseLevelActive(____relicManager, 2))
+            if (CurseRelic.IsCurseLevelActive(2))
                 __result = (float)__result * 0.5f;
         }
     }
@@ -154,11 +145,12 @@ namespace Promethium.Patches.Relics
     public static class AdditionalBombs
     {
 
-        public static void Postfix(PegManager ____pegManager, RelicManager ____relicManager)
+        public static void Postfix(PegManager ____pegManager)
         {
-            if (____relicManager.RelicEffectActive(CustomRelicEffect.CURSE_THREE_BOMB))
+            if (CustomRelicManager.RelicActive(RelicNames.CURSE_THREE_BOMB))
             {
                 ____pegManager.ConvertPegsToBombs(3, false);
+
             }
         }
     }

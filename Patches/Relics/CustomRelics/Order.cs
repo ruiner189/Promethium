@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ProLib.Relics;
+using HarmonyLib;
 using Promethium.Extensions;
 using Relics;
 using System;
@@ -38,6 +39,11 @@ namespace Promethium.Patches.Relics.CustomRelics
         public Order()
         {
             SetCategories();
+        }
+
+        public override void OnRelicAdded(RelicManager relicManager)
+        {
+            RelicCategory.CalculateAllCategoryWeights(relicManager);
         }
 
         private void SetCategories()
@@ -131,21 +137,22 @@ namespace Promethium.Patches.Relics.CustomRelics
             RelicCategory.AddCategories(RelicEffect.UNPOPPABLE_PEGS, AFFECTS_PEG);
             RelicCategory.AddCategories(RelicEffect.WALL_BOUNCES_COUNT, ORB_DAMAGE, MODIFY_BOARD);
 
-            RelicCategory.AddCategories(CustomRelicEffect.HOLSTER, DISCARD, AFFECTS_ORB);
-            RelicCategory.AddCategories(CustomRelicEffect.MINI, AFFECTS_ORB, AFFECTS_PHYSICS);
-            RelicCategory.AddCategories(CustomRelicEffect.WUMBO, AFFECTS_ORB, AFFECTS_PHYSICS);
-            RelicCategory.AddCategories(CustomRelicEffect.KILL_BUTTON, AFFECTS_ORB, RELOAD, BOMB);
-            RelicCategory.AddCategories(CustomRelicEffect.PLASMA_BALL, ORB_DAMAGE, AFFECTS_ORB);
-            RelicCategory.AddCategories(CustomRelicEffect.REDUCED_GRAVITY, AFFECTS_PHYSICS, MODIFY_BOARD);
-            RelicCategory.AddCategories(CustomRelicEffect.GRAVITY_CHANGE, AFFECTS_PHYSICS, MODIFY_BOARD, RANDOM);
+            RelicCategory.AddCategories(RelicNames.HOLSTER, DISCARD, AFFECTS_ORB);
+            RelicCategory.AddCategories(RelicNames.MINI, AFFECTS_ORB, AFFECTS_PHYSICS);
+            RelicCategory.AddCategories(RelicNames.WUMBO, AFFECTS_ORB, AFFECTS_PHYSICS);
+            RelicCategory.AddCategories(RelicNames.KILL_BUTTON, AFFECTS_ORB, RELOAD, BOMB);
+            RelicCategory.AddCategories(RelicNames.PLASMA_BALL, ORB_DAMAGE, AFFECTS_ORB);
+            RelicCategory.AddCategories(RelicNames.REDUCED_GRAVITY, AFFECTS_PHYSICS, MODIFY_BOARD);
+            RelicCategory.AddCategories(RelicNames.GRAVITY_CHANGE, AFFECTS_PHYSICS, MODIFY_BOARD, RANDOM);
         }
+
         
         [HarmonyPatch(typeof(RelicManager), nameof(RelicManager.GetCommonRelic))]
         public static class RigCommonRelics
         {
             public static bool Prefix(RelicManager __instance, bool fallback, ref Relic __result)
             {
-                if (__instance.RelicEffectActive(CustomRelicEffect.WEIGHTED_ITEM_POOL))
+                if (CustomRelicManager.RelicActive(RelicNames.WEIGHTED_ITEM_POOL))
                 {
                     __instance.CheckForDebugReset(__instance._availableCommonRelics);
                     if (__instance._availableCommonRelics.Count > 0)
@@ -166,7 +173,7 @@ namespace Promethium.Patches.Relics.CustomRelics
         {
             public static bool Prefix(RelicManager __instance, bool fallback, ref Relic __result)
             {
-                if (__instance.RelicEffectActive(CustomRelicEffect.WEIGHTED_ITEM_POOL))
+                if (CustomRelicManager.RelicActive(RelicNames.WEIGHTED_ITEM_POOL))
                 {
                     __instance.CheckForDebugReset(__instance._availableRareRelics);
                     if (__instance._availableRareRelics.Count > 0)
@@ -188,7 +195,7 @@ namespace Promethium.Patches.Relics.CustomRelics
         {
             public static bool Prefix(RelicManager __instance, bool fallback, ref Relic __result)
             {
-                if (__instance.RelicEffectActive(CustomRelicEffect.WEIGHTED_ITEM_POOL))
+                if (CustomRelicManager.RelicActive(RelicNames.WEIGHTED_ITEM_POOL))
                 {
                     __instance.CheckForDebugReset(__instance._availableBossRelics);
                     if (__instance._availableBossRelics.Count > 0)

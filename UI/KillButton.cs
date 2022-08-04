@@ -1,36 +1,44 @@
-﻿using Promethium.Components;
+﻿using ProLib.Attributes;
+using ProLib.Loaders;
+using ProLib.Relics;
+using Promethium.Components;
+using Promethium.Patches.Relics.CustomRelics;
 using Relics;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Promethium.Extensions.UI
+namespace Promethium.UI
 {
+    [SceneModifier]
     public class KillButton : MonoBehaviour
     {
         private static GameObject _prefab;
-        public BattleController battleController;
-        public RelicManager relicManager;
+        public static GameObject currentButton;
 
-        public int State => (int)typeof(BattleController).GetField("_battleState", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).GetValue(battleController);
-
-        public void Awake()
+        public static void LateOnSceneLoaded(string sceneName, bool firstLoad)
         {
-            battleController = Resources.FindObjectsOfTypeAll<BattleController>().FirstOrDefault();
-            relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
+            if(sceneName == SceneLoader.Battle)
+            {
+                RelicManager relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
+                if(relicManager != null)
+                {
+                   if (CustomRelicManager.RelicActive(RelicNames.KILL_BUTTON))
+                       currentButton = CreateButton(new Vector3(12, -4.5f, 0));
+                }
+            }
         }
 
         public void OnButtonPress()
         {
-            if (battleController != null)
+            
+            if (BattleController._battleState == BattleController.BattleState.AWAITING_SHOT_COMPLETION)
             {
-                if (State == 3)
-                {
-                    KillOnCommand.Kill = true;
-                    this.gameObject.SetActive(false);
-                }
+                KillOnCommand.Kill = true;
+                this.gameObject.SetActive(false);
             }
+            
         }
 
         private static void CreatePrefab()

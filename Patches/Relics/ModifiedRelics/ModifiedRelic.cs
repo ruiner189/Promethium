@@ -51,6 +51,19 @@ namespace Promethium.Patches.Relics
             return multiplier;
         }
 
+        [HarmonyPatch(typeof(BattleController), nameof(BattleController.MaxDiscardedShots), MethodType.Getter)]
+        public static class ChangeDiscards
+        {
+            public static void Postfix(RelicManager ____relicManager, ref int __result)
+            {
+                if (HasRelicEffect(RelicEffect.NO_DISCARD) && ____relicManager.RelicEffectActive(RelicEffect.NO_DISCARD))
+                {
+                    NO_DISCARD_RELIC_REMOVED_DISCARDS = __result + 1;
+                    __result = 0;
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(Relic), nameof(Relic.descKey), MethodType.Getter)]
         public static class ChangeDescription
         {

@@ -1,6 +1,9 @@
 ﻿using Battle;
+using BepInEx.Configuration;
+using ProLib.Orbs;
 using HarmonyLib;
 using I2.Loc;
+using Promethium.Extensions;
 using Relics;
 using UnityEngine;
 
@@ -19,6 +22,17 @@ namespace Promethium.Patches.Orbs.CustomOrbs
 
         private OrbofGreed() : base("orbofgreed"){
             LocalVariables = true;
+        }
+
+        public ConfigEntry<bool> EnabledConfig { internal set; get; }
+        public override bool IsEnabled()
+        {
+            if (EnabledConfig == null)
+            {
+                EnabledConfig = Plugin.ConfigFile.Bind<bool>("Custom Orbs", GetName(), true, "Disable to remove from orb pool");
+            }
+
+            return EnabledConfig.Value;
         }
 
         public static OrbofGreed GetInstance()
@@ -86,9 +100,8 @@ namespace Promethium.Patches.Orbs.CustomOrbs
 
             foreach(GameObject obj in new GameObject[] {_levelOne, _levelTwo, _levelThree, shotPrefab})
             {
-                GameObject.DontDestroyOnLoad(obj);
-                obj.hideFlags = HideFlags.HideAndDontSave;
-                obj.SetActive(false);
+                obj.transform.SetParent(Plugin.PromethiumPrefabHolder.transform);
+                obj.HideAndDontSave();
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using Battle.Attacks;
+using ProLib.Relics;
 using HarmonyLib;
 using Relics;
 using UnityEngine;

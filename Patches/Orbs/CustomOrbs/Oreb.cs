@@ -1,8 +1,11 @@
 ﻿using HarmonyLib;
 using I2.Loc;
 using Promethium.Components;
+using Promethium.Extensions;
 using System;
 using UnityEngine;
+using ProLib.Orbs;
+using BepInEx.Configuration;
 
 namespace Promethium.Patches.Orbs.CustomOrbs
 {
@@ -16,6 +19,17 @@ namespace Promethium.Patches.Orbs.CustomOrbs
         public const String Name = "oreb";
 
         private Oreb() : base(Name) { }
+        public ConfigEntry<bool> EnabledConfig { internal set; get; }
+        public override bool IsEnabled()
+        {
+            if (EnabledConfig == null)
+            {
+                EnabledConfig = Plugin.ConfigFile.Bind<bool>("Custom Orbs", GetName(), true, "Disable to remove from orb pool");
+            }
+
+            return EnabledConfig.Value;
+        }
+
         public static Oreb GetInstance()
         {
             if (_instance == null)
@@ -55,7 +69,6 @@ namespace Promethium.Patches.Orbs.CustomOrbs
 
             _levelOne.AddComponent<LocalizationParamsManager>();
 
-            _levelOne.transform.position = new Vector3(0, 0, -1000);
             fragileOne.OnValidate();
 
             ////////////////////
@@ -76,10 +89,10 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             fragileTwo.HitToSplitCount = 3;
             fragileTwo.MaxSplits = 2;
 
-            GameObject.DontDestroyOnLoad(_levelTwo);
-            _levelTwo.transform.position = new Vector3(0, 0, -1000);
             fragileTwo.OnValidate();
-            _levelTwo.SetActive(false);
+            _levelTwo.transform.SetParent(Plugin.PromethiumPrefabHolder.transform);
+            _levelTwo.HideAndDontSave();
+
 
             ////////////////////
 
@@ -100,10 +113,10 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             attackThree.DamagePerPeg = 2;
             attackThree.CritDamagePerPeg = 3;
 
-            GameObject.DontDestroyOnLoad(_levelThree);
-            _levelThree.transform.position = new Vector3(0, 0, -1000);
             fragileThree.OnValidate();
-            _levelThree.SetActive(false);
+            _levelThree.transform.SetParent(Plugin.PromethiumPrefabHolder.transform);
+            _levelThree.HideAndDontSave();
+
 
             ////////////////////
 

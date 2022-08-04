@@ -1,10 +1,11 @@
-﻿using Cruciball;
+﻿using CustomChallenges;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
+using ProLib.Relics;
 using HarmonyLib;
-using Promethium.Extensions;
 using Promethium.Patches.Relics;
+using Promethium.Patches.Relics.CustomRelics;
 using Relics;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Worldmap;
 using Random = System.Random;
 
 namespace Promethium.Patches.Mechanics
@@ -31,7 +31,6 @@ namespace Promethium.Patches.Mechanics
         // Block other mods from modifiying the deck when we are keeping/pruning it.
         public static bool BlockDeckInit = false;
 
-
         public static void PruneDeck(DeckManager manager)
         {
             if (Plugin.PruneOrbsOnNewCurseRunOn)
@@ -47,48 +46,48 @@ namespace Promethium.Patches.Mechanics
         public static void PruneRelics(RelicManager manager)
         {
             Dictionary<RelicEffect, Relic> relicDict = manager._ownedRelics;
-            List<Relic> relics = relicDict.Values.ToList();
+            List<Relic> relics = relicDict.Values.Union(CustomRelicManager.OwnedRelics).ToList();
 
             Random rand = new Random();
-            List<Relic> curses = relics.FindAll(relic => CurseRelic.AllCurseRelics.Contains(relic));
+            List<Relic> curses = relics.FindAll(relic => relic is CurseRelic);
             _oldRelics = relics.FindAll(relic => !curses.Contains(relic)).OrderBy(relic => rand.Next()).ToList();
 
             _commonRelics = 3;
             _rareRelics = 2;
             _bossRelics = 1;
 
-            if (CurseRelic.IsCurseLevelActive(manager, 1))
+            if (CurseRelic.IsCurseLevelActive(1))
             {
                 _commonRelics++;
                 _rareRelics++;
             }
 
-            if (CurseRelic.IsCurseLevelActive(manager, 2))
+            if (CurseRelic.IsCurseLevelActive(2))
             {
                 _rareRelics++;
                 _bossRelics++;
             }
 
-            if (CurseRelic.IsCurseLevelActive(manager, 3))
+            if (CurseRelic.IsCurseLevelActive(3))
             {
                 _commonRelics+=2;
                 _rareRelics++;
             }
 
-            if (CurseRelic.IsCurseLevelActive(manager, 4))
+            if (CurseRelic.IsCurseLevelActive(4))
             {
                 _commonRelics+=2;
                 _rareRelics++;
             }
 
-            if (CurseRelic.IsCurseLevelActive(manager, 5))
+            if (CurseRelic.IsCurseLevelActive(5))
             {
                 _commonRelics++;
                 _rareRelics++;
                 _bossRelics++;
             }
 
-            manager.ResetSilently();
+            manager.Reset();
             curses.ForEach(manager.AddRelic);
         }
 
@@ -96,7 +95,7 @@ namespace Promethium.Patches.Mechanics
         {
             if (_oldRelics == null) return false;
             if (_commonRelics == 0 && _rareRelics == 0 && _bossRelics == 0) return false;
-            if (_oldRelics.Count >= 3) return true;
+            if (_oldRelics.Count >= 1) return true;
             return false;
         }
 
@@ -104,10 +103,8 @@ namespace Promethium.Patches.Mechanics
         {
             if (_commonRelics == 0 && _rareRelics == 0 && _bossRelics == 0) 
                 return new List<Relic>();
-            if (_oldRelics.Count <= 3) 
-                return _oldRelics;
 
-            if(_commonRelics != 0)
+            if (_commonRelics != 0)
             {
                 _commonRelics--;
                 return GetRelicsOfRarity(relicManager, 3, _oldRelics, RelicRarity.COMMON, 100);
@@ -128,6 +125,28 @@ namespace Promethium.Patches.Mechanics
             return new List<Relic>();
         }
 
+        public static void RegenerateRelicPools(RelicManager relicManager)
+        {
+            relicManager._availableCommonRelics = relicManager.CommonRelicPool.Where(relic => {
+                if (relicManager.RelicEffectActive(relic.effect)) return false;
+                if (relic is CustomRelic customRelic && CustomRelicManager.RelicActive(customRelic)) return false;
+                return true;
+            }).ToList();
+            relicManager._availableRareRelics = relicManager.RareRelicPool.Where(relic => {
+                if (relicManager.RelicEffectActive(relic.effect)) return false;
+                if (relic is CustomRelic customRelic && CustomRelicManager.RelicActive(customRelic)) return false;
+                return true;
+            }).ToList();
+            relicManager._availableBossRelics = relicManager.BossRelicPool.Where(relic => {
+                if (relicManager.RelicEffectActive(relic.effect)) return false;
+                if (relic is CustomRelic customRelic && CustomRelicManager.RelicActive(customRelic)) return false;
+                return true;
+            }).ToList();
+
+            if (CustomRelicManager.RelicActive(RelicNames.SINGLE_ITEM_POOL))
+                Chaos.MixRelicPools(relicManager);
+        }
+
         public static void RemoveRelicFromList(Relic relic)
         {
             _oldRelics.Remove(relic);
@@ -135,21 +154,14 @@ namespace Promethium.Patches.Mechanics
 
         public static List<Relic> GetCurseRelics(RelicManager manager)
         {
-            if (CurseRelic.IsCurseLevelActive(manager, 5))
+            if (CurseRelic.IsCurseLevelActive(5))
             {
                 return new Relic[] { manager.consolationPrize, manager.consolationPrize, manager.consolationPrize }.ToList();
             }
             Dictionary<RelicEffect, Relic> relicDict = manager._ownedRelics;
-            List<Relic> relics = relicDict.Values.ToList();
+            List<CustomRelic> ownedCurseRelics = CustomRelicManager.OwnedRelics.Where(relic => relic is CurseRelic).ToList();
 
-            int currentCurse = 0;
-            foreach (Relic relic in relics)
-            {
-                if (relic is CurseRelic)
-                    currentCurse++;
-            }
-
-            List<Relic> curses = new List<Relic>(CurseRelic.GetCurseRelicOfLevel(currentCurse + 1));
+            List<Relic> curses = new List<Relic>(CurseRelic.GetCurseRelicOfLevel(ownedCurseRelics.Count + 1));
 
             while (curses.Count > 3) curses.RemoveAt(curses.Count - 1);
             return curses;
@@ -157,7 +169,22 @@ namespace Promethium.Patches.Mechanics
 
         public static bool ShouldStartNextCurseRun()
         {
-            return Victory && Plugin.CurseRunOn;
+            if(Victory && Plugin.CurseRunOn)
+            {
+                if (Plugin.CustomChallengesPlugin)
+                {
+                    return CheckChallengeAllows();
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private static bool CheckChallengeAllows()
+        {
+            if(ChallengeManager.ChallengeActive)
+                return ChallengeManager.CurrentChallenge.TryGetEntry<bool>("allowCurseRuns", out bool allowCurseRuns) && allowCurseRuns;
+            return true;
         }
 
         public static List<Relic> GetRelicsOfRarity(RelicManager manager, int amount, List<Relic> relics, RelicRarity rarity, int upgradeChance = 0)
@@ -192,16 +219,16 @@ namespace Promethium.Patches.Mechanics
                 }
             }
 
-            RelicSet relicPool = null;
+            List<Relic> relicPool = null;
             if (rarity == RelicRarity.COMMON)
-                relicPool = manager._commonRelicPool;
+                relicPool = manager.CommonRelicPool;
             else if (rarity == RelicRarity.RARE)
-                relicPool = manager._rareRelicPool;
+                relicPool = manager.RareRelicPool;
             else if (rarity == RelicRarity.BOSS)
-                relicPool = manager._bossRelicPool;
+                relicPool = manager.BossRelicPool;
 
-            Relic relic = relics.Find(r => relicPool.relics.Contains(r));
-            if (relic == null && rarity != RelicRarity.COMMON)
+            Relic relic = relics.Find(r => relicPool.Contains(r));
+            if (relic == null)
             {
                 if (rarity == RelicRarity.RARE)
                     return GetRelicOfRarity(manager, relics, RelicRarity.COMMON);
@@ -226,11 +253,8 @@ namespace Promethium.Patches.Mechanics
     [HarmonyPatch(typeof(GameInit), nameof(GameInit.Start))]
     public static class GameInitPatch
     {
-        [HarmonyPriority(Priority.Last)]
-        public static bool Prefix(GameInit __instance, DeckManager ____deckManager,
-            DeckData ____initialDeck, RelicManager ____relicManager, CruciballManager ____cruciballManager,
-            GameObject ____chooseRelicCanvas, float ____chooseRelicCanvasFadeInTime,
-            ref List<Relic> ____chosenRelics, RelicIcon[] ____chooseRelicIcons)
+        [HarmonyPriority(Priority.Low)]
+        public static bool Prefix(GameInit __instance)
         {
             CanvasGroup component = GameObject.FindGameObjectWithTag("PersistentUI").GetComponent<CanvasGroup>();
             CurseRun.BlockDeckInit = false;
@@ -238,19 +262,19 @@ namespace Promethium.Patches.Mechanics
             if (CurseRun.HasAnotherRelic())
             {
                 CurseRun.BlockDeckInit = true;
-                ____chooseRelicCanvas.GetComponent<CanvasGroup>().DOFade(1f, ____chooseRelicCanvasFadeInTime);
-                component.DOFade(1f, ____chooseRelicCanvasFadeInTime).From(0f, true, false);
-                ____chosenRelics = CurseRun.GetNextRelicSet(____relicManager);
-                while(____chosenRelics.Count == 0 && CurseRun.HasAnotherRelic())
+                __instance._chooseRelicCanvas.GetComponent<CanvasGroup>().DOFade(1f, __instance._chooseRelicCanvasFadeInTime);
+                component.DOFade(1f, __instance._chooseRelicCanvasFadeInTime).From(0f, true, false);
+                __instance._chosenRelics = CurseRun.GetNextRelicSet(__instance._relicManager);
+                while (__instance._chosenRelics.Count == 0 && CurseRun.HasAnotherRelic())
                 {
-                    ____chosenRelics = CurseRun.GetNextRelicSet(____relicManager);
+                    __instance._chosenRelics = CurseRun.GetNextRelicSet(__instance._relicManager);
                 }
 
-                if(____chosenRelics.Count > 0)
+                if (__instance._chosenRelics.Count > 0)
                 {
-                    for (int j = 0; j < ____chosenRelics.Count; j++)
+                    for (int j = 0; j < __instance._chosenRelics.Count; j++)
                     {
-                        ____chooseRelicIcons[j].SetRelic(____chosenRelics[j]);
+                        __instance._chooseRelicIcons[j].SetRelic(__instance._chosenRelics[j]);
                     }
                     return false;
                 }
@@ -261,19 +285,20 @@ namespace Promethium.Patches.Mechanics
             {
                 CurseRun.Victory = false;
                 CurseRun.BlockDeckInit = true;
-                if (CurseRelic.IsCurseLevelActive(____relicManager, 4)) CurseRun.LoadElite = true;
+                if (CurseRelic.IsCurseLevelActive(4)) CurseRun.LoadElite = true;
 
                 if (Plugin.PruneRelicsOnNewCurseRunOn)
                 {
                     __instance.maxPlayerHealth.Reset();
                     __instance.playerHealth.Reset();
-                    CurseRun.PruneRelics(____relicManager);
+                    CurseRun.PruneRelics(__instance._relicManager);
+                    CurseRun.RegenerateRelicPools(__instance._relicManager);
                 }
                 else
                 {
                     __instance.playerHealth.Set(__instance.maxPlayerHealth.Value);
                 }
-                CurseRun.PruneDeck(____deckManager);
+                CurseRun.PruneDeck(__instance._deckManager);
 
                 PopulateSuggestionOrbs.ShouldForceNewOrb = true;
 
@@ -281,16 +306,16 @@ namespace Promethium.Patches.Mechanics
                 StaticGameData.specificNodeOverride = null;
                 StaticGameData.relicRarityOverride = RelicRarity.NONE;
 
-                List<Relic> cursedRelics = CurseRun.GetCurseRelics(____relicManager);
+                List<Relic> cursedRelics = CurseRun.GetCurseRelics(__instance._relicManager);
                 if (cursedRelics.Count > 0)
                 {
                     GameObject.Find("SkipButton").SetActive(false);
-                    ____chooseRelicCanvas.GetComponent<CanvasGroup>().DOFade(1f, ____chooseRelicCanvasFadeInTime);
-                    component.DOFade(1f, ____chooseRelicCanvasFadeInTime).From(0f, true, false);
-                    ____chosenRelics = cursedRelics;
-                    for (int j = 0; j < ____chosenRelics.Count; j++)
+                    __instance._chooseRelicCanvas.GetComponent<CanvasGroup>().DOFade(1f, __instance._chooseRelicCanvasFadeInTime);
+                    component.DOFade(1f, __instance._chooseRelicCanvasFadeInTime).From(0f, true, false);
+                    __instance._chosenRelics = cursedRelics;
+                    for (int j = 0; j < __instance._chosenRelics.Count; j++)
                     {
-                        ____chooseRelicIcons[j].SetRelic(____chosenRelics[j]);
+                        __instance._chooseRelicIcons[j].SetRelic(__instance._chosenRelics[j]);
                     }
                 }
 

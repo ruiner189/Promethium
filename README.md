@@ -5,49 +5,10 @@ The goal of the mod is to offer balance changes, new mechanics, and QoL features
 
 ## Localization
 Localization is being done at https://docs.google.com/spreadsheets/d/1r7o-GVIn6ljL4DvOIRY4eTTo1OhWjd-P2HyBS9UB0OI/edit#gid=0
-If you want to help translate, feel free to!
+If you want to help translate, feel free to! Want to become an editor on the sheet? Please send a pull request on github.
 
-## Custom Start Deck
-If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0tzz/CustomStartDeck/), you can add Promethium's relics by using the names found below!
-<details>
-  <summary> Relic Names </summary>
-
-* Holster: HOLSTER
-* Mini Belt: MINI
-* Wumbo Belt: WUMBO
-* PlasmaBall: PLASMA_BALL
-</details>
-
-<details>
-  <summary>Curse Relic Names </summary>
-
-* Curse 1 Balance: CURSE_ONE_BALANCE
-* Curse 1 Attack: CURSE_ONE_ATTACK
-* Curse 1 Crit: CURSE_ONE_CRIT
-* Curse 2 Health: CURSE_TWO_HEALTH
-* Curse 2 Armor: CURSE_TWO_ARMOR
-* Curse 2 Equip: CURSE_TWO_EQUIP
-* Curse 3 Bombs: CURSE_THREE_BOMB
-* Curse 3 Attack: CURSE_THREE_ATTACK
-* Curse 3 Crit: CURSE_THREE_CRIT
-* Curse 4 Health: CURSE_FOUR_HEALTH
-* Curse 4 Armor: CURSE_FOUR_ARMOR
-* Curse 4 Equip: CURSE_FOUR_EQUIP
-* Curse 5: CURSE_FIVE_A
-* Curse 5: CURSE_FIVE_B
-* Curse 5: CURSE_FIVE_C
-</details>
-
-<details>
-  <summary> Orb Names </summary>
-
-* Oreb-Lvl1
-* Oreb-Lvl2
-* Oreb-Lvl3
-* OrbOfGreed-Lvl1
-* OrbOfGreed-Lvl2
-* OrbOfGreed-Lvl3
-</details>
+## Dependencies
+For this mod to work, you must also have ProLib installed. Download links: [[Github](https://github.com/ruiner189/ProLib/releases)] [[Thunderstore](https://peglin.thunderstore.io/package/Promethium/ProLib/)]
 
 ## Installation
 ### Thunderstore (ModManager)
@@ -70,12 +31,22 @@ If you are using [Custom Start Deck](https://peglin.thunderstore.io/package/bo0t
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| v0.7.45 | v1.3.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.3.0/Promethium.dll) |
 | v0.7.34 | v1.2.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.2.4/Promethium.dll) |
 | v0.7.26 | v1.1.8 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.8/Promethium.dll) |
 | v0.7.21 - v0.7.23 | v1.1.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.4/Promethium.dll) |
 | v0.7.0 - v0.7.20 | v1.1.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.2/Promethium.dll) |
 
 ## Changelog
+<details>
+  <summary> v1.3.0 </summary>
+
+* Split Promethium into two mods - one with content and the other as a library
+* Updated to v0.7.45
+* Added support to Custom Challenges
+* Bug fixes
+
+</details>
 <details>
   <summary> v1.2.4 </summary>
 

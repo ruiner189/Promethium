@@ -1,6 +1,10 @@
-﻿using Promethium.Components;
+﻿using BepInEx.Configuration;
+using ProLib.Orbs;
+using ProLib.Relics;
+using Promethium.Components;
 using Promethium.Extensions;
 using Promethium.Patches.Relics;
+using Promethium.Patches.Relics.CustomRelics;
 using Relics;
 using UnityEngine;
 
@@ -10,12 +14,19 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
     {
         private static ModifiedLightningBall _instance;
         private static LineRenderer _line;
-        private ModifiedLightningBall() : base(OrbNames.LightningBall) {}
 
+        private static readonly string _name = OrbNames.LightningBall;
+        public static readonly ConfigEntry<bool> EnabledConfig = Plugin.ConfigFile.Bind<bool>("Orbs", _name, true, "Disable to remove modifications");
+
+        private ModifiedLightningBall() : base(_name) {}
+        public override bool IsEnabled()
+        {
+            return EnabledConfig.Value;
+        }
 
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
-            if (relicManager != null && relicManager.RelicEffectActive(CustomRelicEffect.HOLSTER))
+            if (CustomRelicManager.RelicActive(RelicNames.HOLSTER))
                 AddToDescription(attack, "lightning_on_hold");
         }
 
