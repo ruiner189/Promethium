@@ -34,6 +34,7 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 ## Releases
 | Peglin - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| v0.7.48 | v1.3.1 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.3.1/Promethium.dll) |
 | v0.7.45 | v1.3.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.3.0/Promethium.dll) |
 | v0.7.34 | v1.2.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.2.4/Promethium.dll) |
 | v0.7.26 | v1.1.8 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.8/Promethium.dll) |
@@ -42,10 +43,17 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 
 ## Changelog
 <details>
+  <summary> v1.3.1 </summary>
+
+* Updated to v.0.7.48
+* Minor prediction bug fixes
+
+</details>
   <summary> v1.3.0 </summary>
 
 * Split Promethium into two mods - one with content and the other as a library
 * Updated to v0.7.45
+* Buffed Holster
 * Added support to Custom Challenges
 * Bug fixes
 
@@ -162,7 +170,7 @@ Excluding the curse relics, Promethium currently several new relics:
 <details>
   <summary> Holster </summary>
 
-  * Removes Discarding and allows you to hold orbs instead.
+  * Adds a new mechanic! You can now hold orbs alongside of discarding them.
   * Some orbs have special mechanics while held, and many more are to come!
 </details>
 

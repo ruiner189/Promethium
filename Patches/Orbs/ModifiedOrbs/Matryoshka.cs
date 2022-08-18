@@ -7,6 +7,7 @@ using Promethium.Patches.Relics;
 using Promethium.Patches.Relics.CustomRelics;
 using Relics;
 using UnityEngine;
+using Battle.Attacks;
 
 namespace Promethium.Patches.Orbs.ModifiedOrbs
 {

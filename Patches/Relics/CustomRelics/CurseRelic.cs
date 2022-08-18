@@ -11,6 +11,7 @@ using UnityEngine;
 using Worldmap;
 using ProLib.Relics;
 using Promethium.Patches.Relics.CustomRelics;
+using Battle.Attacks;
 
 namespace Promethium.Patches.Relics
 {

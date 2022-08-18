@@ -4,6 +4,7 @@ using I2.Loc;
 using Promethium.Components;
 using Relics;
 using UnityEngine;
+using Battle.Attacks;
 
 namespace Promethium.Patches.Orbs.ModifiedOrbs
 {

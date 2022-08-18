@@ -12,6 +12,7 @@ using ProLib.Attributes;
 using ProLib.Loaders;
 using ProLib.Relics;
 using Promethium.Patches.Relics.CustomRelics;
+using Battle.Attacks;
 
 namespace Promethium.Patches.Mechanics
 {
@@ -117,7 +118,7 @@ namespace Promethium.Patches.Mechanics
         {
             RelicManager relicManager = battleController._relicManager;
             DeckManager deckManager = battleController._deckManager;
-            ref GameObject ball = ref battleController._ball;
+            ref GameObject ball = ref battleController._activePachinkoBall;
             ref bool currentBallIsPersistBonusOrb = ref battleController.currentBallIsPersistBonusOrb;
 
             if (relicManager == null || deckManager == null || BattleController._battleState == BattleController.BattleState.NAVIGATION) return;

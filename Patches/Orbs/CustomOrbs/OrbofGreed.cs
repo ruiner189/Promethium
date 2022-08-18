@@ -6,6 +6,7 @@ using I2.Loc;
 using Promethium.Extensions;
 using Relics;
 using UnityEngine;
+using Battle.Attacks;
 
 namespace Promethium.Patches.Orbs.CustomOrbs
 {
@@ -66,7 +67,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             renderer.sprite = Plugin.OrbOfGreed;
             sprite.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
 
-            FireballAttack attackOne = _levelOne.GetComponent<FireballAttack>();
+            ProjectileAttack attackOne = _levelOne.GetComponent<ProjectileAttack>();
             attackOne.locName = "orbofgreed";
             attackOne.locNameString = "orbofgreed";
             attackOne.DamagePerPeg = 1;

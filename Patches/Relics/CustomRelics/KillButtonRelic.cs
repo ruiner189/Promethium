@@ -27,11 +27,11 @@ namespace Promethium.Patches.Relics
         [HarmonyPatch(typeof(BattleController), nameof(BattleController.ArmBallForShot))]
         public static class AddKillComponent
         {
-            public static void Prefix(GameObject ____ball)
+            public static void Prefix(BattleController __instance)
             {
                 if (CustomRelicManager.RelicActive(RelicNames.KILL_BUTTON))
                 {
-                    ____ball.AddComponent<KillOnCommand>();
+                    __instance._activePachinkoBall.AddComponent<KillOnCommand>();
                 }
             }
         }
