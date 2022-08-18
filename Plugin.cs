@@ -25,7 +25,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.3.0";
+        public const String Version = "1.3.1";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -75,7 +75,6 @@ namespace Promethium
         // Soft Dependencies
         public static bool EndlessPeglinPlugin = false;
         public static bool CustomChallengesPlugin = false;
-
 
         public static bool EnemyAttackOnReload => EnemyAttackOnShuffleConfig.Value;
         public static bool CurseRunOn =>  CurseRunOnConfig.Value && !EndlessPeglinPlugin;

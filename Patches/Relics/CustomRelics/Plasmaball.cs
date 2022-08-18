@@ -7,7 +7,7 @@ namespace Promethium.Patches.Relics
     {
         public override void OnArmBallForShot(BattleController battleController)
         {
-            battleController._ball.AddComponent<Plasma>();
+            battleController._activePachinkoBall.AddComponent<Plasma>();
         }
     }
 }

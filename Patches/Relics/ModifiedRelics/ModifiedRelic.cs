@@ -3,6 +3,7 @@ using Relics;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static BattleController;
 
 namespace Promethium.Patches.Relics
 {
@@ -81,9 +82,9 @@ namespace Promethium.Patches.Relics
         [HarmonyPatch(typeof(BattleController), nameof(BattleController.ShotFired))]
         public static class OnShotFired
         {
-            public static void Prefix(BattleController __instance, int ____battleState, GameObject ____ball)
+            public static void Prefix(BattleController __instance)
             {
-                if (____battleState == 9) return;
+                if (BattleController._battleState == BattleState.NAVIGATION) return;
 
                 RelicManager relicManager = __instance._relicManager;
                 if (relicManager != null)

@@ -1,4 +1,5 @@
 ﻿using Battle;
+using Battle.Attacks;
 using BepInEx.Configuration;
 using ProLib.Orbs;
 using ProLib.Relics;

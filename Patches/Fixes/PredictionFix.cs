@@ -79,17 +79,33 @@ namespace Promethium.Patches.Fixes
                         state.Peg.gameObject.SetActive(true);
                     state.Peg._numBounces = state.NumOfBounces;
 
-                    if(state.Peg._collider != null)
-                        state.Peg._collider.enabled = !state.IsDead;
+                    if(state.Type == Peg.PegType.DESTROYED)
+                    {
+                        if (state.Peg._collider != null)
+                            state.Peg._collider.enabled = false;
 
-                    if(state.Peg._trigger != null)
-                        state.Peg._trigger.enabled = !state.IsDead;
+                        if (state.Peg._trigger != null)
+                            state.Peg._trigger.enabled = false;
 
-                    if (state.Peg._poppedPegCollider != null)
-                        state.Peg._poppedPegCollider.enabled = state.IsDead;
+                        if (state.Peg._poppedPegCollider != null)
+                            state.Peg._poppedPegCollider.enabled = false;
 
-                    if (state.Peg._specialPegCollider != null)
-                        state.Peg._specialPegCollider.enabled = state.IsDead;
+                        if (state.Peg._specialPegCollider != null)
+                            state.Peg._specialPegCollider.enabled = false;
+                    } else 
+                    {
+                        if (state.Peg._collider != null)
+                            state.Peg._collider.enabled = !state.IsDead;
+
+                        if (state.Peg._trigger != null)
+                            state.Peg._trigger.enabled = !state.IsDead;
+
+                        if (state.Peg._poppedPegCollider != null)
+                            state.Peg._poppedPegCollider.enabled = state.IsDead;
+
+                        if (state.Peg._specialPegCollider != null)
+                            state.Peg._specialPegCollider.enabled = state.IsDead;
+                    }
 
                     state.Peg.pegType = state.Type;
 

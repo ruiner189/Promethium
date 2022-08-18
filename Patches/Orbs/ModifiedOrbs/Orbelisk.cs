@@ -11,6 +11,7 @@ using ProLib.Orbs;
 using BepInEx.Configuration;
 using ProLib.Relics;
 using Promethium.Patches.Relics.CustomRelics;
+using Battle.Attacks;
 
 namespace Promethium.Patches.Orbs.ModifiedOrbs
 {

@@ -6,6 +6,7 @@ using System;
 using UnityEngine;
 using ProLib.Orbs;
 using BepInEx.Configuration;
+using Battle.Attacks;
 
 namespace Promethium.Patches.Orbs.CustomOrbs
 {

@@ -1,4 +1,5 @@
-﻿using BepInEx.Configuration;
+﻿using Battle.Attacks;
+using BepInEx.Configuration;
 using ProLib.Orbs;
 using ProLib.Relics;
 using Promethium.Extensions;
