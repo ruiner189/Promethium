@@ -74,8 +74,8 @@ namespace Promethium.Components
                         }
                     }
 
-                    Peg component = collision.collider.GetComponent<Peg>();
-                    Bomb component2 = collision.collider.GetComponent<Bomb>();
+                    Peg peg = collision.collider.GetComponent<Peg>();
+                    Bomb bomb = collision.collider.GetComponent<Bomb>();
                     Vector2 vector = Vector2.Perpendicular(base.transform.right).normalized;
                     if (vector.y < 0f)
                     {
@@ -100,26 +100,26 @@ namespace Promethium.Components
                         num += contactPoint2D.normalImpulse;
                     }
                     num /= Time.fixedDeltaTime;
-                    if (component is RegularPeg && !this.RefreshPegHitThisTurn && this._relicManager != null && this._relicManager.RelicEffectActive(RelicEffect.BOMB_FORCE_ALWAYS))
+                    if (peg is RegularPeg && !this.RefreshPegHitThisTurn && this._relicManager != null && this._relicManager.RelicEffectActive(RelicEffect.BOMB_FORCE_ALWAYS))
                     {
-                        RegularPeg regularPeg = component as RegularPeg;
+                        RegularPeg regularPeg = peg as RegularPeg;
                         num += regularPeg.bombRelicFlingForce;
                     }
-                    else if (component2 != null && component2.ShouldExplode())
+                    else if (bomb != null && bomb.ShouldExplode())
                     {
                         num += collision.collider.GetComponent<Bomb>().bombFlingForce;
                     }
 
-                    GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(base.gameObject, vector2, base.transform.rotation);
-                    PachinkoBall component3 = gameObject.GetComponent<PachinkoBall>();
-                    component3.Init(this._relicManager, _pachinko.aimVector, this._predictionManager, this._playerStatusEffectController);
-                    component3.SetFiring();
+                    GameObject gameObject = Instantiate<GameObject>(base.gameObject, vector2, base.transform.rotation);
+                    PachinkoBall pachinko = gameObject.GetComponent<PachinkoBall>();
+                    pachinko.Init(_relicManager, _pachinko.aimVector, _predictionManager, _playerStatusEffectController);
+                    pachinko.SetFiring();
                     gameObject.GetComponent<Rigidbody2D>().AddForce(vector * num * _pachinko.MultiballForceMod);
-                    IceOrbPachinko component4 = gameObject.GetComponent<IceOrbPachinko>();
-                    if (component4 != null)
+                    IceOrbPachinko iceOrb = gameObject.GetComponent<IceOrbPachinko>();
+                    if (iceOrb != null)
                     {
-                        component4.enabled = false;
-                        component4.GetComponentInChildren<SpriteRenderer>().sprite = _pachinko.sprite;
+                        iceOrb.enabled = false;
+                        iceOrb.GetComponentInChildren<SpriteRenderer>().sprite = _pachinko.sprite;
                     }
 
                     gameObject.transform.localScale *= Reduction;
@@ -131,11 +131,11 @@ namespace Promethium.Components
                         this.gameObject.GetComponent<Rigidbody2D>().mass *= Reduction;
                     }
 
-                    Fragile component5 = gameObject.GetComponent<Fragile>();
-                    if (component5 != null)
+                    Fragile fragile = gameObject.GetComponent<Fragile>();
+                    if (fragile != null)
                     {
-                        component5.Original = false;
-                        component5.HitToSplitCount = 2;
+                        fragile.Original = false;
+                        fragile.HitToSplitCount = 2;
                     }
                     PachinkoBall.OnAdditionalPachinkoBallCreated();
                 }

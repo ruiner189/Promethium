@@ -85,33 +85,26 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             ArmorManager armor = Plugin.PromethiumManager.GetComponent<ArmorManager>();
             if (armor != null)
             {
-                amount = armor.CurrentArmor.Value;
+                amount = (int) Mathf.Clamp(armor.CurrentArmor.Value, 0, 5);
             }
             return amount;
         }
 
         public float GetHealthDiscardDamage(Attack attack)
         {
-            float amount = 0;
-
-            ArmorManager armor = Plugin.PromethiumManager.GetComponent<ArmorManager>();
-            if (armor != null)
-            {
-                amount = armor.CurrentArmor.Value;
-            }
-            return amount;
+            return GetArmorDiscardDamage(attack);
         }
 
         public float GetArmorHoldDamage(Attack attack)
         {
-            return 4;
+            return 3;
         }
 
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
             if (CustomRelicManager.RelicActive(RelicNames.HOLSTER))
             {
-                ReplaceDescription(attack, new string[] { "attacks_flying_and_ground", "armor_damage_multiplier", "armor_damage_hold_multiplier" });
+                ReplaceDescription(attack, new string[] { "attacks_flying_and_ground", "armor_damage_multiplier", "armor_damage_discard_multiplier", "armor_damage_hold_multiplier" });
             }
             else
             {
@@ -179,7 +172,6 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             return _instance;
         }
     }
-
 
     [HarmonyPatch(typeof(AddDamageForStonesInDeck), nameof(AddDamageForStonesInDeck.GetDamageMod))]
     public static class RemoveStoneBonusDamage

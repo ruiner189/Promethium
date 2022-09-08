@@ -28,13 +28,9 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             int level = attack.Level;
             if (CustomRelicManager.RelicActive(RelicNames.HOLSTER))
             {
-                if (level == 2)
+                if (level >= 2)
                 {
-                    ReplaceDescription(attack, "refresh_on_hold", 1);
-                }
-                else if (level == 3)
-                {
-                    ReplaceDescription(attack, "refresh_on_hold", 2);
+                    AddToDescription(attack, "refresh_on_hold");
                 }
             }
         }

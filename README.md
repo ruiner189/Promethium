@@ -43,6 +43,15 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 
 ## Changelog
 <details>
+  <summary> v1.3.2 </summary>
+
+* Updated dependancy ProLib
+* Updated localization
+* Fixed some orb descriptions
+* Orbelisk has been buffed
+</details>
+
+<details>
   <summary> v1.3.1 </summary>
 
 * Updated to v.0.7.48

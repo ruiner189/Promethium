@@ -15,10 +15,11 @@
     <Reference Include="$(peglin)\Peglin_Data\Managed\*.dll" Exclude="$(peglin)\Peglin_Data\Managed\Assembly-CSharp.dll" />
     <Reference Include="$(peglin)\Assembly-CSharp.dll" />
     <Reference Include="$(appdata)\Thunderstore Mod Manager\DataFolder\Peglin\profiles\Development\BepInEx\plugins\Promethium-ProLib\ProLib.dll" />
-    <Reference Include="$(appdata)\Thunderstore Mod Manager\DataFolder\Peglin\profiles\Development\BepInEx\plugins\CustomChallenges-CustomChallenges\CustomChallenges.dll" />
+    <Reference Include="$(appdata)\Thunderstore Mod Manager\DataFolder\Peglin\profiles\Development\BepInEx\plugins\Promethium-CustomChallenges\CustomChallenges.dll" />
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="Resources\Relics\*" />
     <EmbeddedResource Include="Resources\Orbs\*" />
+    <EmbeddedResource Include="Resources\Localization\*" />
   </ItemGroup>
 
   <!-- This copies the compliled .dll to the location specified -->

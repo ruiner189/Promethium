@@ -11,7 +11,7 @@ namespace Promethium.Components
     public class Plasma : MonoBehaviour
     {
         public const int AdditionalZaps = 3;
-        public const int PegsToHit = 5;
+        public const int PegsToHit = 7;
         private ThunderOrbPachinko _thunder;
         private PachinkoBall _pachinkoBall;
         private int _pegsHit = 0;
@@ -59,9 +59,8 @@ namespace Promethium.Components
         public void ActivateEffect()
         {
             if (_thunder != null)
-            {
-                if (_pachinkoBall._relicManager != null)
-                   CustomRelicManager.AttemptUseRelic(RelicNames.PLASMA_BALL);
+            { 
+                CustomRelicManager.AttemptUseRelic(RelicNames.PLASMA_BALL);
                 _thunder.numZaps = _defaultZaps + AdditionalZaps;
             }
         }
