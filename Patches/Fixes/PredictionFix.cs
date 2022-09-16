@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 
 namespace Promethium.Patches.Fixes
 {
-    [HarmonyPatch(typeof(PachinkoBall), nameof(PachinkoBall.DoUpdate))]
+    [HarmonyPatch(typeof(PachinkoBall), nameof(MagnetBehavior.DoUpdate))]
     public static class PredictionFix
     {
         public class PegState
@@ -150,63 +150,36 @@ namespace Promethium.Patches.Fixes
             }
         }
 
-        [HarmonyPatch(typeof(PachinkoBall), nameof(PachinkoBall.DoMagnetAttraction))]
+        [HarmonyPatch(typeof(MagnetBehavior), nameof(MagnetBehavior.DoMagnetAttraction))]
         public static class FixMagnetAttraction
         {
-            public static bool Prefix(PachinkoBall __instance, PhysicsScene2D physicsScene)
+            public static bool Prefix(MagnetBehavior __instance, PhysicsScene2D physicsScene2D)
             {
                 if (!Plugin.UseCustomPrediction) return true;
 
-                if ((__instance._state == PachinkoBall.FireballState.FIRING || __instance.IsDummy) && __instance._relicManager != null && __instance._relicManager.RelicEffectActive(RelicEffect.PEG_MAGNET) && __instance._shotTime < 12f)
+                physicsScene2D.OverlapCircle(__instance.transform.position, 3f, __instance._nearbyPegs, __instance._circleCastLayer);
+
+                HashSet<Peg> set = new HashSet<Peg>();
+                foreach (Collider2D collider2D in __instance._nearbyPegs)
                 {
-                    float t = (__instance._shotTime <= 4f) ? 0f : ((__instance._shotTime - 4f) / 8f);
-
-                    physicsScene.OverlapCircle(__instance.transform.position, 3f, __instance._nearbyPegs, __instance._circleCastLayerMask);
-
-                    HashSet<Collider2D> set = new HashSet<Collider2D>();
-                    foreach (Collider2D collider2D in __instance._nearbyPegs)
+                    if (collider2D != null)
                     {
-                        if (collider2D != null)
-                            set.Add(collider2D);
-                    }
-
-                    foreach (Collider2D collider2D in set)
-                    {  
-                        if (collider2D != null)
-                        {                   
-                            Peg peg = collider2D.GetComponent<Peg>();
-
-                            Vector2 position = new Vector2(peg.transform.position.x, peg.transform.position.y);
-                            float strength = 0;
-                            if (peg is LongPeg && !IsPegDead(peg))
-                            {
-                                position = new Vector2(peg.GetCenterOfPeg().x, peg.GetCenterOfPeg().y);
-                                strength = (peg.pegType == Peg.PegType.RESET || peg.pegType == Peg.PegType.CRIT) ? 6.25f : 0.9f;
-                            } 
-                            else if (peg is Bomb)
-                            {
-                                strength = 1.1f;
-                            } 
-                            else if (peg is RegularPeg && peg.pegType != Peg.PegType.DULL)
-                            {
-                                strength = (peg.pegType == Peg.PegType.RESET || peg.pegType == Peg.PegType.CRIT) ? 6.25f : 1.1f;
-                            }
-                            double distance = Vector2.Distance(__instance.transform.position, position);
-                            if (distance > 2.5f) continue;
-
-                            Vector2 pachinkoPosition = new Vector2(__instance.transform.position.x, __instance.transform.position.y);
-                            Vector2 direction = position - pachinkoPosition;
-                            float magnitude = direction.magnitude / 2.5f;
-
-                            if(distance > 0.05 && strength != 0)
-                            {
-                                strength = Mathf.Lerp(strength, 0f, t);
-                                Vector2 force = direction.normalized * (strength / (magnitude * magnitude));
-                                __instance._rigid.AddForce(force);
-                            }
-                        }
+                        Peg peg = collider2D.GetComponent<Peg>();
+                        set.Add(peg);
                     }
                 }
+
+                float num = (__instance._weakeningTime > 0f) ? ((__instance._pachinko.shotTime - __instance._fullStrTime) / __instance._weakeningTime) : 0f;
+                float forceMod = (__instance._pachinko.shotTime <= __instance._fullStrTime) ? 0f : num;
+
+                foreach (Peg peg in set)
+                {
+                    Vector2 position = new Vector2(peg.transform.position.x, peg.transform.position.y);
+                    double distance = Vector2.Distance(__instance.transform.position, position);
+                    if (distance > 2.5f) continue;
+                    __instance.AddMagnetForce(peg.GetCenterOfPeg(), peg.GetMagnetForce(), forceMod);
+                }
+
                 return false;
             }
 

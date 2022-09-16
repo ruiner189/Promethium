@@ -114,6 +114,7 @@ namespace Promethium
                 .SetEnabled(IsRelicEnabled(RelicNames.HOLSTER))
                 .SetSprite(Plugin.Holster)
                 .SetRarity(RelicRarity.BOSS)
+                .AlwaysUnlocked(true)
                 .Build();
 
             new CustomRelicBuilder()
@@ -121,6 +122,7 @@ namespace Promethium
                 .SetEnabled(IsRelicEnabled(RelicNames.MINI))
                 .SetSprite(Plugin.MiniBelt)
                 .SetRarity(RelicRarity.RARE)
+                .AlwaysUnlocked(true)
                 .Build();
 
             new CustomRelicBuilder()
@@ -128,6 +130,7 @@ namespace Promethium
                 .SetEnabled(IsRelicEnabled(RelicNames.WUMBO))
                 .SetSprite(Plugin.WumboBelt)
                 .SetRarity(RelicRarity.RARE)
+                .AlwaysUnlocked(true)
                 .Build();
 
             new CustomRelicBuilder()
@@ -135,6 +138,7 @@ namespace Promethium
                 .SetEnabled(IsRelicEnabled(RelicNames.KILL_BUTTON))
                 .SetSprite(Plugin.KillButtonRelic)
                 .SetRarity(RelicRarity.COMMON)
+                .AlwaysUnlocked(true)
                 .Build();
 
             new CustomRelicBuilder()
@@ -142,6 +146,7 @@ namespace Promethium
                 .SetEnabled(IsRelicEnabled(RelicNames.REDUCED_GRAVITY))
                 .SetSprite(Plugin.PocketMoon)
                 .SetRarity(RelicRarity.RARE)
+                .AlwaysUnlocked(true)
                 .Build<PocketMoon>();
 
             new CustomRelicBuilder()
@@ -150,6 +155,7 @@ namespace Promethium
                 .SetSprite(Plugin.RealityMarble[0])
                 .SetRelicIcon(typeof(RealityMarbleIcon))
                 .SetRarity(RelicRarity.RARE)
+                .AlwaysUnlocked(true)
                 .Build<RealityMarble>();
 
             new CustomRelicBuilder()
@@ -157,6 +163,7 @@ namespace Promethium
                 .SetEnabled(IsRelicEnabled(RelicNames.PLASMA_BALL))
                 .SetSprite(Plugin.PlasmaBall)
                 .SetRarity(RelicRarity.RARE)
+                .AlwaysUnlocked(true)
                 .Build<Plasmaball>();
 
             new CustomRelicBuilder()
@@ -164,6 +171,7 @@ namespace Promethium
                 .SetEnabled(IsRelicEnabled(RelicNames.SINGLE_ITEM_POOL))
                 .SetSprite(Plugin.Chaos)
                 .SetRarity(RelicRarity.COMMON)
+                .AlwaysUnlocked(true)
                 .Build<Chaos>();
 
             new CustomRelicBuilder()
@@ -171,6 +179,7 @@ namespace Promethium
                 .SetEnabled(IsRelicEnabled(RelicNames.WEIGHTED_ITEM_POOL))
                 .SetSprite(Plugin.Order)
                 .SetRarity(RelicRarity.BOSS)
+                .AlwaysUnlocked(true)
                 .Build<Order>();
 
             foreach (String name in new String[] { RelicNames.CURSE_ONE_ATTACK, RelicNames.CURSE_ONE_CRIT, RelicNames.CURSE_ONE_BALANCE })
@@ -178,6 +187,7 @@ namespace Promethium
                     .SetName(name)
                     .SetSprite(Plugin.CurseOne)
                     .SetRarity(RelicRarity.UNAVAILABLE)
+                    .IncludeInCustomLoadout(false)
                     .Build<CurseRelic>()
                     .CurseLevel = 1;
 
@@ -186,6 +196,7 @@ namespace Promethium
                     .SetName(name)
                     .SetSprite(Plugin.CurseTwo)
                     .SetRarity(RelicRarity.UNAVAILABLE)
+                    .IncludeInCustomLoadout(false)
                     .Build<CurseRelic>()
                     .CurseLevel = 2;
 
@@ -194,6 +205,7 @@ namespace Promethium
                     .SetName(name)
                     .SetSprite(Plugin.CurseThree)
                     .SetRarity(RelicRarity.UNAVAILABLE)
+                    .IncludeInCustomLoadout(false)
                     .Build<CurseRelic>()
                     .CurseLevel = 3;
 
@@ -203,6 +215,7 @@ namespace Promethium
                     .SetName(name)
                     .SetSprite(Plugin.CurseFour)
                     .SetRarity(RelicRarity.UNAVAILABLE)
+                    .IncludeInCustomLoadout(false)
                     .Build<CurseRelic>()
                     .CurseLevel = 4;
 
@@ -211,6 +224,7 @@ namespace Promethium
                     .SetName(name)
                     .SetSprite(Plugin.CurseFive)
                     .SetRarity(RelicRarity.UNAVAILABLE)
+                    .IncludeInCustomLoadout(false)
                     .Build<CurseRelic>()
                     .CurseLevel = 5;
         }

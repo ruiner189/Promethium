@@ -26,9 +26,6 @@ namespace Promethium.Components
 
         public bool Duplicate = true;
 
-        public bool RefreshPegHitThisTurn => (bool)(typeof(PachinkoBall).GetField("_refreshPegHitThisTurn", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(_pachinko));
-        public int State => (int)(typeof(PachinkoBall).GetField("_state", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(_pachinko));
-
         private void Awake()
         {
             _pachinko = GetComponent<PachinkoBall>();
@@ -56,7 +53,7 @@ namespace Promethium.Components
 
         public void OnCollisionEnter2D(Collision2D collision)
         {
-            if (_pachinko.IsDummy || State != 2 || !Duplicate) return;
+            if (_pachinko.IsDummy || _pachinko.CurrentState != PachinkoBall.FireballState.FIRING || !Duplicate) return;
             if (collision.collider.CompareTag("Peg") || collision.collider.CompareTag("Bomb"))
             {
                 HitCount++;
@@ -100,7 +97,7 @@ namespace Promethium.Components
                         num += contactPoint2D.normalImpulse;
                     }
                     num /= Time.fixedDeltaTime;
-                    if (peg is RegularPeg && !this.RefreshPegHitThisTurn && this._relicManager != null && this._relicManager.RelicEffectActive(RelicEffect.BOMB_FORCE_ALWAYS))
+                    if (peg is RegularPeg && !_pachinko._refreshPegHitThisTurn && this._relicManager != null && this._relicManager.RelicEffectActive(RelicEffect.BOMB_FORCE_ALWAYS))
                     {
                         RegularPeg regularPeg = peg as RegularPeg;
                         num += regularPeg.bombRelicFlingForce;

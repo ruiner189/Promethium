@@ -39,4 +39,20 @@ namespace Promethium.Patches.Status_Effect
             return false;
         }
     }
+
+    [HarmonyPatch(typeof(StatusEffectData), nameof(StatusEffectData.GetStatusEffectDesc))]
+    public static class SetDescription
+    {
+        public static bool Prefix(StatusEffectType type, ref string __result)
+        {
+            CustomStatusEffect effect = (CustomStatusEffect)(int)type;
+            if(effect == CustomStatusEffect.Armor)
+            {
+                __result = "armor_desc";
+                return false;
+            }
+
+            return true;
+        }
+    }
 }

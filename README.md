@@ -1,5 +1,5 @@
 # Promethium
-**This Mod does NOT work on the Demo. It is for the Early Access version of the Game**
+**This Mod does NOT work on the Demo. It is for the Early Access version of the game**
 
 The goal of the mod is to offer balance changes, new mechanics, and QoL features. It is currently in development, so please report any bugs found!
 
@@ -30,16 +30,6 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 4. Unzip the BepInEx folder into your peglin directory
 5. Launch Peglin. BepInEx will then create a plugins folder. Close Peglin after the game launches.
 6. Put Promethium in your plugin folder (...\Peglin\Bepinex\plugins)
-
-## Releases
-| Peglin - Version| Mod Version | Link |
-|----------|-------------|-----------------|
-| v0.7.48 | v1.3.1 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.3.1/Promethium.dll) |
-| v0.7.45 | v1.3.0 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.3.0/Promethium.dll) |
-| v0.7.34 | v1.2.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.2.4/Promethium.dll) |
-| v0.7.26 | v1.1.8 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.8/Promethium.dll) |
-| v0.7.21 - v0.7.23 | v1.1.4 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.4/Promethium.dll) |
-| v0.7.0 - v0.7.20 | v1.1.2 | [Download](https://github.com/ruiner189/Promethium/releases/download/1.1.2/Promethium.dll) |
 
 ## Changelog
 <details>
