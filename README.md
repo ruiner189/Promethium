@@ -33,6 +33,12 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 
 ## Changelog
 <details>
+  <summary> v1.3.3 </summary>
+
+* Updated to Peglin v.0.7.53
+</details>
+
+<details>
   <summary> v1.3.2 </summary>
 
 * Updated dependancy ProLib
