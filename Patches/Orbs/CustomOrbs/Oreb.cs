@@ -12,9 +12,6 @@ namespace Promethium.Patches.Orbs.CustomOrbs
 {
     public sealed class Oreb : CustomOrb
     {
-        private static GameObject _levelOne;
-        private static GameObject _levelTwo;
-        private static GameObject _levelThree;
         private static Oreb _instance;
 
         public const String Name = "oreb";
@@ -38,91 +35,49 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             return _instance;
         }
 
-        public override GameObject GetPrefab(int level)
-        {
-            if (_levelOne == null || _levelTwo == null || _levelThree == null)
-                CreatePrefabs();
-            if (level == 1)
-                return _levelOne;
-            else if (level == 2)
-                return _levelTwo;
-            else if (level == 3)
-                return _levelThree;
-            return null;
-        }
-
         public override void CreatePrefabs()
         {
-            _levelOne = Resources.Load<GameObject>("$Prefabs/Orbs/Oreb-Lvl1");
-            _levelOne.name = "Oreb-Lvl1";
+            CustomOrbBuilder levelOne = new CustomOrbBuilder("Oreb-Lvl1")
+                .SetName("Oreb")
+                .SetDamage(1,2)
+                .IncludeInOrbPool(true)
+                .SetLevel(1)
+                .SetDescription(new string[] { "wrong_shape", "fragile_on_hit" });
 
-            Fragile fragileOne = _levelOne.AddComponent<Fragile>();
-            fragileOne.HitToSplitCount = 3;
+            CustomOrbBuilder levelTwo = levelOne.Clone()
+                .SetLevel(2)
+                .SetDamage(2,2)
+                .IncludeInOrbPool(false)
+                .AddToDescription("fragile_split");
 
-            Attack attackOne = _levelOne.GetComponent<Attack>();
-            attackOne.locDescStrings = new string[] {
-                "wrong_shape",
-                "fragile_on_hit"
-            };
-            attackOne.Level = 1;
-            attackOne.DamagePerPeg = 1;
-            attackOne.CritDamagePerPeg = 2;
-
-            _levelOne.AddComponent<LocalizationParamsManager>();
-
-            fragileOne.OnValidate();
-
-            ////////////////////
-
-            _levelTwo = GameObject.Instantiate(_levelOne);
-            _levelTwo.name = "Oreb-Lvl2";
-            Attack attackTwo = _levelTwo.GetComponent<Attack>();
-            attackTwo.locDescStrings = new string[] {
-                "wrong_shape",
-                "fragile_on_hit",
-                "fragile_split"
-            };
-            attackTwo.Level = 2;
-            attackTwo.DamagePerPeg = 2;
-            attackTwo.CritDamagePerPeg = 2;
-
-            Fragile fragileTwo = _levelTwo.GetComponent<Fragile>();
-            fragileTwo.HitToSplitCount = 3;
-            fragileTwo.MaxSplits = 2;
-
-            fragileTwo.OnValidate();
-            _levelTwo.transform.SetParent(Plugin.PromethiumPrefabHolder.transform);
-            _levelTwo.HideAndDontSave();
+            CustomOrbBuilder levelThree = levelTwo.Clone()
+                .SetLevel(3)
+                .SetDamage(2, 3);
 
 
-            ////////////////////
+            GameObject one = levelOne.Build();
+            GameObject two = levelTwo.Build();
+            GameObject three = levelThree.Build();
 
-            _levelThree = GameObject.Instantiate(_levelOne);
-            _levelThree.name = "Oreb-Lvl3";
+            Fragile fOne = one.AddComponent<Fragile>();
+            fOne.HitToSplitCount = 3;
+            fOne.OnValidate();
 
-            Fragile fragileThree = _levelThree.GetComponent<Fragile>();
-            fragileThree.HitToSplitCount = 2;
-            fragileThree.MaxSplits = 3;
+            Fragile fTwo = two.AddComponent<Fragile>();
+            fTwo.HitToSplitCount = 3;
+            fTwo.MaxSplits = 2;
+            fTwo.OnValidate();
 
-            Attack attackThree = _levelThree.GetComponent<Attack>();
-            attackThree.locDescStrings = new string[] {
-                "wrong_shape",
-                "fragile_on_hit",
-                "fragile_split"
-            };
-            attackThree.Level = 3;
-            attackThree.DamagePerPeg = 2;
-            attackThree.CritDamagePerPeg = 3;
+            Fragile fThree = three.AddComponent<Fragile>();
+            fThree.HitToSplitCount = 2;
+            fThree.MaxSplits = 3;
+            fThree.OnValidate();
 
-            fragileThree.OnValidate();
-            _levelThree.transform.SetParent(Plugin.PromethiumPrefabHolder.transform);
-            _levelThree.HideAndDontSave();
+            CustomOrbBuilder.JoinLevels(one, two, three);
 
-
-            ////////////////////
-
-            attackOne.NextLevelPrefab = _levelTwo;
-            attackTwo.NextLevelPrefab = _levelThree;
+            Prefabs[1] = one;
+            Prefabs[2] = two;
+            Prefabs[3] = three;
         }
     }
 

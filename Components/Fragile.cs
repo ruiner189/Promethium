@@ -40,14 +40,13 @@ namespace Promethium.Components
 
         public void OnValidate()
         {
+            
+            if (gameObject.GetComponent<LocalizationParamsManager>() == null) gameObject.AddComponent<LocalizationParamsManager>();
             _localParams = gameObject.GetComponent<LocalizationParamsManager>();
-            if (_localParams == null) gameObject.AddComponent<LocalizationParamsManager>();
 
-            if (_localParams != null)
-            {
-                _localParams.SetParameterValue(ParamKeys.FRAGILE_FRAGMENTS, $"{MaxSplits - 1}", true);
-                _localParams.SetParameterValue(ParamKeys.FRAGILE_HITS, $"{HitToSplitCount}", true);
-            }
+            _localParams.SetParameterValue(ParamKeys.FRAGILE_FRAGMENTS, $"{MaxSplits - 1}", true);
+            _localParams.SetParameterValue(ParamKeys.FRAGILE_HITS, $"{HitToSplitCount}", true);
+            
         }
 
 

@@ -7,15 +7,13 @@ using Promethium.Extensions;
 using Relics;
 using UnityEngine;
 using Battle.Attacks;
+using ProLib.Loaders;
 
 namespace Promethium.Patches.Orbs.CustomOrbs
 {
     public sealed class OrbofGreed : CustomOrb
     {
         private static OrbofGreed _instance;
-        private static GameObject _levelOne;
-        private static GameObject _levelTwo;
-        private static GameObject _levelThree;
 
         public static bool SkipReloadTurn = false;
         private static int critCount = 0;
@@ -50,71 +48,59 @@ namespace Promethium.Patches.Orbs.CustomOrbs
 
         public float GetDiscardDamage(Attack attack)
         {
-            if (attack.Level == 2)
+            return GetDiscardDamage(attack.Level);
+        }
+
+        public static float GetDiscardDamage(int level)
+        {
+            if (level == 2)
                 return 1f;
-            if (attack.Level == 3)
+            if (level == 3)
                 return 3f;
             return 0f;
         }
 
         public override void CreatePrefabs()
         {
-            GameObject prefab = Resources.Load<GameObject>("$Prefabs/Orbs/StoneOrb-Lvl1");
-            _levelOne = GameObject.Instantiate(prefab);
-            _levelOne.name = "OrbOfGreed-Lvl1";
-            GameObject sprite = _levelOne.transform.GetChild(0).gameObject;
-            SpriteRenderer renderer = sprite.GetComponent<SpriteRenderer>();
-            renderer.sprite = Plugin.OrbOfGreed;
-            sprite.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
 
-            ProjectileAttack attackOne = _levelOne.GetComponent<ProjectileAttack>();
-            attackOne.locName = "orbofgreed";
-            attackOne.locNameString = "orbofgreed";
-            attackOne.DamagePerPeg = 1;
-            attackOne.CritDamagePerPeg = 1;
-            attackOne.locDescStrings = new string[] { "shuffle_deck_on_discard", "remove_on_discard" };
-            attackOne.Level = 1;
+            GameObject shotPrefab = new CustomShotBuilder()
+                .SetName("orbofgreedThrow")
+                .SetSprite(Plugin.OrbOfGreedAttack)
+                .Build();
 
-            GameObject shotPrefab = GameObject.Instantiate(attackOne._shotPrefab);
-            shotPrefab.name = "orbofgreedThrow";
-            shotPrefab.GetComponent<SpriteRenderer>().sprite = Plugin.OrbOfGreedAttack;
-            attackOne._shotPrefab = shotPrefab;
-            attackOne._criticalShotPrefab = shotPrefab;
+            CustomOrbBuilder levelOne = new CustomOrbBuilder()
+                .SetName("OrbOfGreed")
+                .SetSprite(Plugin.OrbOfGreed)
+                .SetSpriteScale(new Vector3(0.6f, 0.6f, 1f))
+                .SetDamage(1, 1)
+                .SetLevel(1)
+                .SetDescription(new string[] { "shuffle_deck_on_discard", "remove_on_discard" })
+                .AddParameter(ParamKeys.DISCARD_DAMAGE, $"{GetDiscardDamage(1)}")
+                .IncludeInOrbPool(true)
+                .SetShot(shotPrefab);
 
-            _levelTwo = GameObject.Instantiate(_levelOne);
-            _levelTwo.name = "OrbOfGreed-Lvl2";
-            Attack attackTwo = _levelTwo.GetComponent<Attack>();
-            attackTwo.locDescStrings = new string[] { "shuffle_deck_on_discard", "skip_enemy_turn_on_discard", "damage_self_on_discard", "remove_on_discard"};
-            attackTwo.Level = 2;
-            
+            CustomOrbBuilder levelTwo = levelOne
+                .Clone()
+                .SetLevel(2)
+                .IncludeInOrbPool(false)
+                .SetDescription(new string[] { "shuffle_deck_on_discard", "skip_enemy_turn_on_discard", "damage_self_on_discard", "remove_on_discard" })
+                .AddParameter(ParamKeys.DISCARD_DAMAGE, $"{GetDiscardDamage(2)}");
 
-            _levelThree = GameObject.Instantiate(_levelTwo);
-            _levelThree.name = "OrbOfGreed-Lvl3";
-            Attack attackThree = _levelThree.GetComponent<Attack>();
-            attackThree.Level = 3;
-            attackThree.locDescStrings = new string[] {"add_crit_refresh_on_discard", "shuffle_deck_on_discard", "skip_enemy_turn_on_discard", "damage_self_on_discard", "remove_on_discard" };
+            CustomOrbBuilder levelThree = levelTwo
+                .Clone()
+                .SetLevel(3)
+                .SetDescription(new string[] { "add_crit_refresh_on_discard", "shuffle_deck_on_discard", "skip_enemy_turn_on_discard", "damage_self_on_discard", "remove_on_discard" })
+                .AddParameter(ParamKeys.DISCARD_DAMAGE, $"{GetDiscardDamage(3)}");
 
-            attackOne.NextLevelPrefab = _levelTwo;
-            attackTwo.NextLevelPrefab = _levelThree;
-            attackThree.NextLevelPrefab = null;
+            GameObject one = levelOne.Build();
+            GameObject two = levelTwo.Build();
+            GameObject three = levelThree.Build();
 
+            CustomOrbBuilder.JoinLevels(one, two, three);
 
-            foreach(GameObject obj in new GameObject[] {_levelOne, _levelTwo, _levelThree, shotPrefab})
-            {
-                obj.transform.SetParent(Plugin.PromethiumPrefabHolder.transform);
-                obj.HideAndDontSave();
-            }
-        }
-
-        public override GameObject GetPrefab(int level)
-        {
-            if (_levelOne == null || _levelTwo == null || _levelThree == null) CreatePrefabs();
-
-            if (level == 1) return _levelOne;
-            else if (level == 2) return _levelTwo;
-            else if (level == 3) return _levelThree;
-
-            return null;
+            Prefabs[1] = one;
+            Prefabs[2] = two;
+            Prefabs[3] = three;
         }
 
         public override void OnDiscard(RelicManager relicManager, BattleController battleController, GameObject orb, Attack attack)

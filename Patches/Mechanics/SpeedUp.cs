@@ -9,20 +9,21 @@ namespace Promethium.Patches.Mechanics
     {
         private static float timeElapsed = 0f;
         private static bool speedUpActive = false;
-        public static void Postfix(BattleController __instance, int ____battleState)
+        public static void Postfix(BattleController __instance)
         {
             if (Plugin.SpeedUpOn)
             {
-                if(TimescaleManager.Instance != null && TimescaleManager.Instance._isSpedUp)
-                    return;
-                if (____battleState == 3)
+                float startSpeed = TimescaleManager.Instance._isSpedUp ? SettingsManager.Instance.SpeedupLevel : 1;
+                if (BattleController._battleState == BattleController.BattleState.AWAITING_SHOT_COMPLETION)
                 {
+                    if (startSpeed >= Plugin.SpeedUpMax) return;
+
                     timeElapsed += Time.deltaTime;
                     if (timeElapsed > Plugin.SpeedUpDelay)
                     {
-                        float speedUp = Math.Min((float)Math.Pow(1 + (0.05 * Plugin.SpeedUpRate), timeElapsed - (Plugin.SpeedUpDelay - 1)), Plugin.SpeedUpMax);
+                        float speedUp = (float) Math.Pow(1 + (0.05f * Plugin.SpeedUpRate), timeElapsed - (Plugin.SpeedUpDelay - 1)) - 1;
+                        Time.timeScale = Mathf.Clamp(startSpeed + speedUp, startSpeed, Plugin.SpeedUpMax);
                         speedUpActive = true;
-                        Time.timeScale = speedUp;
                     }
                 }
                 else
@@ -30,7 +31,7 @@ namespace Promethium.Patches.Mechanics
                     timeElapsed = 0f;
                     if (speedUpActive)
                     {
-                        Time.timeScale = 1f;
+                        Time.timeScale = startSpeed;
                         speedUpActive = false;
                     }
                 }

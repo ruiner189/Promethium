@@ -78,8 +78,7 @@ namespace Promethium
         {
             if (Oreb.GetInstance().IsEnabled())
                 orbLoader.AddOrbToPool(Oreb.GetInstance().GetPrefab(1));
-            if (OrbofGreed.GetInstance().IsEnabled())
-                orbLoader.AddOrbToPool(OrbofGreed.GetInstance().GetPrefab(1));
+            OrbofGreed.GetInstance();
         }
 
         private static void RegisterModifiedOrbs()
