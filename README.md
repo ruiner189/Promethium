@@ -33,6 +33,15 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 
 ## Changelog
 <details>
+  <summary> v1.3.4 </summary>
+
+* Updated dependancy Prolib.
+* Changed speed-up as suggested by Imakunee
+  * Speed-up now works with vanilla speed-up.
+  * Speed-up now adjusts itself with the vanilla speed-up.
+</details>
+
+<details>
   <summary> v1.3.3 </summary>
 
 * Updated to Peglin v.0.7.53
@@ -150,11 +159,21 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 
 
 ## Quality of Life Changes
-* Game speeds up after 10 seconds of sending your orb out. It currently maxes out at 3x the gamespeed.
+### Speed-Up
+* A dynamic speed-up system that increases the gamespeed the longer your orb is in play.
+* Highly configurable. You can change the delay, the rate of speed-up, and the maximum speed-up.
+* Works together with vanilla speed-up.
+
+### Retargeting
 * You can now retarget after sending your orb out!
-* You can turn off enemy turn on reload in the configs! Default is vanilla behavior.
-* Confusion is removed while navigating
+
+### Negative Effects
+* All negative effects (i.e. Confusion) are removed while navigating.
+
+### Dynamic Relic Icons
 * You can now set relic icons to disappear if they are not relevant to what you are currently doing (I.e. relics that don't affect navigation won't appear while navigating). This is mainly aimed for cursed/endless runs, as your screen just becomes all relics. This feature requires you to have a minimum number of relics to activate, and can be turned off.
+
+### Prediction System
 * Prediction system is now much more accurate with pegnet and unicorn horn. There are still some edge cases, but generally should be accurate.
 
 ## New Mechanics
