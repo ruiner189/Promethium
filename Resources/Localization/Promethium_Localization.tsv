@@ -13,7 +13,7 @@ Orbs/armor_on_start	Start with <style=armor>+{[ARMOR_START]} Armor</style> each 
 Orbs/armor_turn	Restores <style=armor>{[ARMOR_PER_RELOAD]} Armor</style> every reload	Restaure <style=armor>{[ARMOR_PER_RELOAD]} Armure</style> à chaque rechargement.		Stellt beim Nachladen <style=armor>{[ARMOR_PER_RELOAD]} Rüstung </style> wieder her				Восстанавливает <style=armor>{[ARMOR_PER_RELOAD]} Брони</style> каждую перезарядку	当这颗弹珠被装填时，恢复<style=armor>{[ARMOR_PER_RELOAD]}</style>点<style=armor>护甲</style>	當這顆彈珠被裝填時，恢復<style=armor>{[ARMOR_PER_RELOAD]}</style>點<style=armor>護甲</style>					
 Orbs/armor_remove_on_fire	Removes <style=armor>{[ARMOR_REMOVED]} Armor</style> when fired														
 Orbs/damage_increase_missing_health	Attacks gain <style=dmg_bonus>{[DAMAGE_INCREASE]}/{[CRIT_DAMAGE_INCREASE]}</style> for every <style=damage>{[HEALTH_THRESHOLD]} missing health</style>														
-Orbs/berserkorb_name	Beserkorb														
+Orbs/berserkorb_name	Berserkorb														
 Orbs/enemy_hit_row	Hits all enemies in the same row								攻击整排敌人						
 Orbs/enemy_multihit_split	Hits enemies {[ENEMY_HIT_COUNT]} times. Damage is split evenly for each hit								攻击敌人 {[ENEMY_HIT_COUNT]} 次，每次攻击的伤害会被平分						
 Orbs/fragile_on_hit	Fragments every {[FRAGILE_HITS]} <sprite name="PEG"> hits			Fragmentiert alle {[FRAGILE_HITS]} <sprite name="PEG"> Treffer				Распадается каждые {[FRAGILE_HITS]} <sprite name="PEG"> ударов	每击中{[FRAGILE_HITS]}次 <sprite name="PEG"> ，弹珠将分裂出更小的弹珠碎片	每擊中{[FRAGILE_HITS]}次 <sprite name="PEG"> ，彈珠將分裂出更小的彈珠碎片					
