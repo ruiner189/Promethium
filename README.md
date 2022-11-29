@@ -33,12 +33,27 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 
 ## Changelog
 <details>
+   <summary> v1.4.0 </summary>
+
+* Added new orb: Lasorb
+* Added new orb: Orbgis
+* Added new orb: Berserkorb
+* Added new relic: Anvil
+* Added new relic: Mystery Capsule
+* Reverted Stone back to vanilla behavior
+* Reverted Bouldorb back to vanilla behavior
+* Reverted Orbelisk back to vanilla behavior
+
+* Fixed invisible bombs having collision for predicitions
+</details>
+
+<details>
   <summary> v1.3.4 </summary>
 
 * Updated dependancy Prolib.
 * Changed speed-up as suggested by Imakunee
-  * Speed-up now works with vanilla speed-up.
-  * Speed-up now adjusts itself with the vanilla speed-up.
+* Speed-up now works with vanilla speed-up.
+* Speed-up now adjusts itself with the vanilla speed-up.
 </details>
 
 <details>
@@ -251,6 +266,18 @@ Excluding the curse relics, Promethium currently adds several new relics:
   * Changes the direction of gravity every x seconds
 </details>
 
+<details>
+   <summary> Anvil </summary>
+   
+   * Increases orb battle reward levels by 1
+</details>
+
+<details>
+   <summary> Mystery Capsule </summary>
+
+ * Give a random boss relic after hitting 500 pegs
+</details>
+
 ## Relic Changes
 <details>
   <summary> Gardener's Glove </summary>
@@ -308,6 +335,82 @@ Level 3
 * Can only be discarded once per battle
 </details>
 
+<details>
+<summary> Lasorb </summary>
+![laser](https://user-images.githubusercontent.com/47389474/204408728-c0f0c5a6-f1f0-4ac3-9f3f-c901c17c5666.gif)
+
+Sends out a laserbeam between other lasorbs. Each beam will activate pegs in its path.
+
+Level 1
+* Attack: 1 | Crit: 2
+* Hits all enemies in the same row as the targeted enemy
+* Hits enemies 3 times each. Damage is split evenly per hit
+* Sends a laser towards other lasorbs every 5 pegs hit
+* Multiball 1
+   
+Level 2
+* Attack: 1 | Crit: 2
+* Hits all enemies in the same row as the targeted enemy
+* Hits enemies 3 times each. Damage is split evenly per hit
+* Sends a laser towards other lasorbs every 4 pegs hit
+* Multiball 1
+   
+Level 3
+* Attack: 1 | Crit: 2
+* Hits all enemies in the same row as the targeted enemy
+* Hits enemies 3 times each. Damage is split evenly per hit
+* Sends a laser towards other lasorbs every 3 pegs hit
+* Increases laser duration by 100%
+* Multiball 1
+</details>
+
+<details>
+<summary> Orbgis </summary>
+
+Level 1
+* Attack: 1 | Crit: 1
+* Increases Maximum Armor by 2
+* Start with +1 Armor each battle
+* Gain +2 Armor when fired
+   
+Level 2
+* Attack: 1 | Crit: 1
+* Increases Maximum Armor by 4
+* Start with +2 Armor each battle
+* Gain +4 Armor when fired
+
+Level 3
+* Attack: 1 | Crit: 1
+* Increases Maximum Armor by 6
+* Start with +3 Armor each battle
+* Gain +6 Armor when fired
+</details>
+
+<details>
+<summary> Berserkorb </summary>
+
+Level 1
+* Attack: 1 | Crit: 1
+* Overflow
+* Attacks gain +1|+1 for every 20 missing health
+* Multiplies damage based on current armor (x * 0.08)
+* Removes 50% of current armor when fired
+
+Level 2
+* Attack: 1 | Crit: 1
+* Overflow
+* Attacks gain +1|+1 for every 15 missing health
+* Multiplies damage based on current armor (x * 0.1)
+* Removes 40% of current armor when fired
+
+Level 3
+* Attack: 1 | Crit: 1
+* Overflow
+* Attacks gain +1|+1 for every 10 missing health
+* Multiplies damage based on current armor (x * 0.12)
+* Removes 25% of current armor when fired
+</details>
+
 ## Orb Changes
 <details>
 <summary> Oreb </summary>
@@ -333,54 +436,4 @@ Level 3
 * Every 2 hits a fragment gets sent off
 * Fragments can split twice
 * After the last split, the next 2 hits will cause it to disappear
-</details>
-
-<details>
-<summary> Stone </summary>
-
-### Normal Gameplay
-Level 1
-* Does nothing
-
-Level 2
-* Increases Maximum Armor by 3
-* Replenishes Armor by 2 every reload
-
-Level 3
-* Increases Maximum Armor by 6
-* Replenishes Armor by 4 every reload
-### Cruciball Lvl 3
-Level 2
-* Increases Maximum Armor by 2
-* Replenishes Armor by 1 every reload
-
-Level 3
-* Increases Maximum Armor by 4
-* Replenishes Armor by 2 every reload
-</details>
-
-<details>
-<summary> Bouldorb </summary>
-
-All Levels
-* Restores 10 Armor if discarded
-</details>
-
-<details>
-<summary> Orbelisk </summary>
-
- Level 1
- * Attack: 1 | Crit: 3
- * Multiplies damage based on current armor (0.08 * currentArmor)
- * On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
-
-Level 2
-* Attack: 2 | Crit: 5
-* Multiplies damage based on current armor (0.10 * currentArmor)
-* On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
-
-Level 3
-* Attack: 3 | Crit: 7
-* Multiplies damage based on current armor (0.12 * currentArmor)
-* On discard transfers multiplier to next orb. Removes all armor and damages player on the amount of armor
 </details>
