@@ -38,5 +38,7 @@ namespace Promethium.Patches.Relics.CustomRelics
         public const String GRAVITY_CHANGE = "gravity_change";
         public const String WEIGHTED_ITEM_POOL = "weighted_item_pool";
         public const String SINGLE_ITEM_POOL = "single_item_pool";
+        public const String UPGRADED_ORBS = "upgraded_orbs";
+        public const String RANDOM_RELIC = "random_relic";
     }
 }

@@ -1,7 +1,5 @@
 ﻿using ProLib.Relics;
 using HarmonyLib;
-using Promethium.Extensions;
-using Promethium.Patches.Relics;
 using Promethium.Patches.Relics.CustomRelics;
 using UnityEngine;
 

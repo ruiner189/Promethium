@@ -3,6 +3,7 @@ using BepInEx.Bootstrap;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using ProLib.Utility;
 using Promethium.Components;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.3.4";
+        public const String Version = "1.4.0";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -50,11 +51,19 @@ namespace Promethium
         public static Sprite PlasmaBall;
         public static Sprite OrbOfGreed;
         public static Sprite OrbOfGreedAttack;
+        public static Sprite Orbgis;
+        public static Sprite OrbgisAttack;
+        public static Sprite[] Lasorb;
+        public static Sprite[] LasorbAttack;
+        public static Sprite Berserkorb;
+        public static Sprite BerserkorbAttack;
         public static Sprite Order;
         public static Sprite Chaos;
         public static Sprite PocketMoon;
         public static Sprite DogRelicSprite;
         public static Sprite[] RealityMarble;
+        public static Sprite Capsule;
+        public static Sprite Anvil;
 
         // Config
         private static ConfigEntry<bool> EnemyAttackOnShuffleConfig;
@@ -77,7 +86,7 @@ namespace Promethium
         public static bool CustomChallengesPlugin = false;
 
         public static bool EnemyAttackOnReload => EnemyAttackOnShuffleConfig.Value;
-        public static bool CurseRunOn =>  CurseRunOnConfig.Value && !EndlessPeglinPlugin;
+        public static bool CurseRunOn => CurseRunOnConfig.Value && !EndlessPeglinPlugin;
         public static bool PruneRelicsOnNewCurseRunOn => PruneRelicsOnNewCurseRunConfig.Value;
         public static bool PruneOrbsOnNewCurseRunOn => PruneOrbsOnNewCurseRunConfig.Value;
         public static float TierOneHealthMultiplier => TierOneCurseHealth.Value;
@@ -132,6 +141,7 @@ namespace Promethium
             DontDestroyOnLoad(PromethiumPrefabHolder);
             PromethiumPrefabHolder.hideFlags = HideFlags.HideAndDontSave;
             PromethiumPrefabHolder.SetActive(false);
+        
         }
 
 
@@ -153,114 +163,60 @@ namespace Promethium
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            ArmorEffect = LoadSprite("ArmorEffect.png");
-            Circle = LoadSprite("Circle.png");
-            Holster = LoadSprite("Relics.Holster.png");
-            WumboBelt = LoadSprite("Relics.WumboBelt.png");
-            MiniBelt = LoadSprite("Relics.MiniBelt.png");
-            PlasmaBall = LoadSprite("Relics.Plasmaball.png");
-            Order = LoadSprite("Relics.Order.png");
-            Chaos = LoadSprite("Relics.Chaos.png");
-            PocketMoon = LoadSprite("Relics.PocketMoon.png");
-            DogRelicSprite = LoadSprite("Relics.Dog_1.png");
+            Assembly assembly = Assembly.GetExecutingAssembly();
 
-            CurseOne = LoadSprite("Relics.Curse_One.png");
-            CurseTwo = LoadSprite("Relics.Curse_Two.png");
-            CurseThree = LoadSprite("Relics.Curse_Three.png");
-            CurseFour = LoadSprite("Relics.Curse_Four.png");
-            CurseFive = LoadSprite("Relics.Curse_Five.png");
+            ArmorEffect = assembly.LoadSprite("Resources.ArmorEffect.png");
+            Circle = assembly.LoadSprite("Resources.Circle.png");
+            Holster = assembly.LoadSprite("Resources.Relics.Holster.png");
+            WumboBelt = assembly.LoadSprite("Resources.Relics.WumboBelt.png");
+            MiniBelt = assembly.LoadSprite("Resources.Relics.MiniBelt.png");
+            PlasmaBall = assembly.LoadSprite("Resources.Relics.Plasmaball.png");
+            Order = assembly.LoadSprite("Resources.Relics.Order.png");
+            Chaos = assembly.LoadSprite("Resources.Relics.Chaos.png");
+            PocketMoon = assembly.LoadSprite("Resources.Relics.PocketMoon.png");
+            Capsule = assembly.LoadSprite("Resources.Relics.GachaBall.png");
+            Anvil = assembly.LoadSprite("Resources.Relics.Anvil.png");
 
-            KillButtonRelic = LoadSprite("Relics.KillButton.png");
-            KillButton = LoadSprite("KillButton.png");
 
-            OrbOfGreed = LoadSprite("Orbs.OrbOfGreed.png", 8);
-            OrbOfGreedAttack = LoadSprite("Orbs.OrbOfGreed.png", 16);
+            DogRelicSprite = assembly.LoadSprite("Resources.Relics.Dog_1.png");
 
-            RealityMarble = new Sprite[] { 
-                LoadSprite("Relics.RealityMarble_0.png"),
-                LoadSprite("Relics.RealityMarble_1.png"),
-                LoadSprite("Relics.RealityMarble_2.png"),
-                LoadSprite("Relics.RealityMarble_3.png"),
-                LoadSprite("Relics.RealityMarble_4.png"),
-            };
+            CurseOne = assembly.LoadSprite("Resources.Relics.Curse_One.png");
+            CurseTwo = assembly.LoadSprite("Resources.Relics.Curse_Two.png");
+            CurseThree = assembly.LoadSprite("Resources.Relics.Curse_Three.png");
+            CurseFour = assembly.LoadSprite("Resources.Relics.Curse_Four.png");
+            CurseFive = assembly.LoadSprite("Resources.Relics.Curse_Five.png");
+
+            KillButtonRelic = assembly.LoadSprite("Resources.Relics.KillButton.png");
+            KillButton = assembly.LoadSprite("Resources.KillButton.png");
+
+            OrbOfGreed = assembly.LoadSprite("Resources.Orbs.OrbOfGreed.png", 8);
+            OrbOfGreedAttack = assembly.LoadSprite("Resources.Orbs.OrbOfGreed.png", 16);
+
+            Orbgis = assembly.LoadSprite("Resources.Orbs.Orbgis.png", 8);
+            OrbgisAttack = assembly.LoadSprite("Resources.Orbs.Orbgis.png", 16);
+
+            Lasorb = LoadMultipleSprites("Resources.Orbs.Lasorb", 9, pixelsPerUnit: 8);
+            LasorbAttack = LoadMultipleSprites("Resources.Orbs.LaserAttack.LaserAttack", 15);
+
+            Berserkorb = assembly.LoadSprite("Resources.Orbs.Berserkorb.png", 8);
+            BerserkorbAttack = assembly.LoadSprite("Resources.Orbs.Berserkorb.png", 16);
+
+            RealityMarble = LoadMultipleSprites("Resources.Relics.RealityMarble", 5);    
 
             stopwatch.Stop();
             Log.LogInfo($"Sprites loaded! Took {stopwatch.ElapsedMilliseconds}ms");
         }
 
-        public static Texture2D LoadTexture(string filePath)
+        public static Sprite[] LoadMultipleSprites(string filePath,  int amount, string extension = ".png", float pixelsPerUnit = 16f)
         {
-            Texture2D texture;
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(filePath);
-            texture = new Texture2D(16, 16, TextureFormat.RGBA32, false);
-            texture.LoadImage(ReadToEnd(stream));
-            texture.filterMode = FilterMode.Point;
-            texture.wrapMode = TextureWrapMode.Clamp;
-            texture.wrapModeU = TextureWrapMode.Clamp;
-            texture.wrapModeV = TextureWrapMode.Clamp;
-            texture.wrapModeW = TextureWrapMode.Clamp;
-   
-            return texture;
-        }
-
-        public static Sprite LoadSprite(string filePath, float pixelsPerUnit = 16f)
-        {
-            filePath = $"{Name}.Resources.{filePath}";
-            Texture2D texture = LoadTexture(filePath);
-            Sprite sprite =  Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
-            return sprite;
-        }
-
-        public static Sprite LoadSprite(string filePath, float width, float height, float pixelsPerUnit = 16f)
-        {
-            filePath = $"{Name}.Resources.{filePath}";
-            Texture2D texture = LoadTexture(filePath);
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
-            return sprite;
-        }
-
-        private static byte[] ReadToEnd(Stream stream)
-        {
-            long originalPosition = stream.Position;
-            stream.Position = 0;
-
-            try
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Sprite[] sprites = new Sprite[amount];
+            for (int i = 0; i < amount; i++)
             {
-                byte[] readBuffer = new byte[4096];
-
-                int totalBytesRead = 0;
-                int bytesRead;
-
-                while ((bytesRead = stream.Read(readBuffer, totalBytesRead, readBuffer.Length - totalBytesRead)) > 0)
-                {
-                    totalBytesRead += bytesRead;
-
-                    if (totalBytesRead == readBuffer.Length)
-                    {
-                        int nextByte = stream.ReadByte();
-                        if (nextByte != -1)
-                        {
-                            byte[] temp = new byte[readBuffer.Length * 2];
-                            Buffer.BlockCopy(readBuffer, 0, temp, 0, readBuffer.Length);
-                            Buffer.SetByte(temp, totalBytesRead, (byte)nextByte);
-                            readBuffer = temp;
-                            totalBytesRead++;
-                        }
-                    }
-                }
-
-                byte[] buffer = readBuffer;
-                if (readBuffer.Length != totalBytesRead)
-                {
-                    buffer = new byte[totalBytesRead];
-                    Buffer.BlockCopy(readBuffer, 0, buffer, 0, totalBytesRead);
-                }
-                return buffer;
+                String path = $"{filePath}_{i}{extension}";
+                sprites[i] = assembly.LoadSprite(path, pixelsPerUnit);
             }
-            finally
-            {
-                stream.Position = originalPosition;
-            }
+            return sprites;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Promethium.Patches.Mechanics
                     GameObject mask = GameObject.Find("OrbCountMask");
                     GameObject maskClone = GameObject.Instantiate(mask);
                     maskClone.transform.SetParent(mask.transform.parent);
-                    maskClone.transform.localScale = new Vector3(0.6f, 0.6f, 1);
+                    maskClone.transform.localScale = new Vector3(0.35f, 0.35f, 1);
                     maskClone.transform.position = new Vector3(-8.4f, 4.6f, -0.1f);
                 }
             }

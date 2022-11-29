@@ -142,7 +142,7 @@ namespace Promethium.Components
         {
             yield return new WaitForEndOfFrame();
             _pachinko.StartDestroy();
-            GameObject.Destroy(this.gameObject);
+            Destroy(gameObject);
         }
 
         public void OnTriggerEnter2D(Collider2D other)

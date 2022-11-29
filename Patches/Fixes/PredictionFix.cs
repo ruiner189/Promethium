@@ -34,6 +34,10 @@ namespace Promethium.Patches.Fixes
 
         public static bool IsPegDead(Peg peg)
         {
+            if (!peg.gameObject.activeSelf)
+            {
+                if (peg.GetComponent<FlickeringPeg>() == null) return true;
+            }
             if (peg is Bomb bomb && bomb._detonated) return true;
             if (peg._collider != null && !peg._collider.enabled) return true;
             if (peg._trigger != null && !peg._trigger.enabled) return true;

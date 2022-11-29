@@ -6,7 +6,6 @@ namespace Promethium.Components
 {
     public class AutoScaler : MonoBehaviour
     {
-        public RelicManager RelicManager;
         public Vector3 StartScale;
         public Vector3 EndScale;
 
@@ -16,11 +15,6 @@ namespace Promethium.Components
         public const float Duration = 2f;
 
         public bool IsShrinking = false;
-
-        public void Awake()
-        {
-            RelicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
-        }
 
         public void Start()
         {

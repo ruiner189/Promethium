@@ -1,5 +1,4 @@
-﻿using Promethium.Extensions;
-using UnityEngine;
+﻿using UnityEngine;
 using Relics;
 using Promethium.Components;
 using I2.Loc;

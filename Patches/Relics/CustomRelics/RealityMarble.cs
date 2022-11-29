@@ -1,12 +1,8 @@
-﻿using DG.Tweening;
-using ProLib.Relics;
+﻿using ProLib.Relics;
 using HarmonyLib;
-using Promethium.Extensions;
-using Promethium.Patches.Relics.CustomRelicIcon;
 using Relics;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Promethium.Patches.Relics.CustomRelics

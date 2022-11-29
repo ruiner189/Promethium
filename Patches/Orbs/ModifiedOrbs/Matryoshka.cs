@@ -2,7 +2,6 @@
 using ProLib.Orbs;
 using ProLib.Relics;
 using I2.Loc;
-using Promethium.Extensions;
 using Promethium.Patches.Relics;
 using Promethium.Patches.Relics.CustomRelics;
 using Relics;

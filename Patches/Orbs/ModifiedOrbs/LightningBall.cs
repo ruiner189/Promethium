@@ -3,8 +3,6 @@ using BepInEx.Configuration;
 using ProLib.Orbs;
 using ProLib.Relics;
 using Promethium.Components;
-using Promethium.Extensions;
-using Promethium.Patches.Relics;
 using Promethium.Patches.Relics.CustomRelics;
 using Relics;
 using UnityEngine;

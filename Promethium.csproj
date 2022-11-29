@@ -19,7 +19,11 @@
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="Resources\Relics\*" />
     <EmbeddedResource Include="Resources\Orbs\*" />
+    <EmbeddedResource Include="Resources\Orbs\LaserAttack\*" />
     <EmbeddedResource Include="Resources\Localization\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Localization\Promethium_Localization.tsv" />
   </ItemGroup>
 
   <!-- This copies the compliled .dll to the location specified -->

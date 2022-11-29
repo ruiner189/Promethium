@@ -1,6 +1,6 @@
 ﻿using ProLib.Attributes;
+using ProLib.Extensions;
 using ProLib.Loaders;
-using Promethium.Extensions;
 using System;
 using UnityEngine;
 using UnityEngine.UI;

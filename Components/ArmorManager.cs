@@ -18,8 +18,14 @@ namespace Promethium.Components
         private RelicManager _relicManager;
         private CruciballManager _cruciballManager;
 
+        public static ArmorManager Instance  {  get; private set; }
+
         public void Awake()
         {
+            if (Instance == null) Instance = this;
+            if (this != Instance) Destroy(this);
+
+
             CurrentArmor = ScriptableObject.CreateInstance<FloatVariable>();
             CurrentArmor.name = "CurrentArmor";
             CurrentArmor._initialValue = 0;

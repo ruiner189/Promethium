@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static BattleController;
+using System.Linq;
 
 namespace Promethium.Patches.Relics
 {
@@ -108,6 +109,7 @@ namespace Promethium.Patches.Relics
                 {
                     foreach(RelicIcon icon in _icons)
                     {
+                        if (icon == null || icon.gameObject == null || icon.relic == null) continue;
                         DynamicRelicIcon dynamicRelicIcon = DynamicRelicIcon.GetRelicIcon(icon.relic.effect);
                         if (dynamicRelicIcon == null && icon.relic is CustomRelic customRelic)
                             dynamicRelicIcon = DynamicRelicIcon.GetRelicIcon(customRelic.Id);
@@ -118,12 +120,15 @@ namespace Promethium.Patches.Relics
                 {
                     foreach (RelicIcon icon in _icons)
                     {
+                        if (icon == null || icon.gameObject == null || icon.relic == null) continue;
                         icon.gameObject.SetActive(true);
                     }
                 } else if (state == BattleState.NAVIGATION)
                 {
                     foreach (RelicIcon icon in _icons)
                     {
+                        if (icon == null || icon.gameObject == null || icon.relic == null) continue;
+
                         DynamicRelicIcon dynamicRelicIcon = DynamicRelicIcon.GetRelicIcon(icon.relic.effect);
                         if (dynamicRelicIcon == null && icon.relic is CustomRelic customRelic)
                             dynamicRelicIcon = DynamicRelicIcon.GetRelicIcon(customRelic.Id);
@@ -139,11 +144,28 @@ namespace Promethium.Patches.Relics
         {
             public static void Prefix()
             {
+                if (_icons.Any(icon => icon == null))
+                {
+                    _icons.Clear();
+                    GameObject relicContainer = GameObject.Find("RelicContainer");
+                    if (relicContainer != null)
+                    {
+                        foreach (Transform child in relicContainer.transform)
+                        {
+                            RelicIcon icon = child.GetComponent<RelicIcon>();
+                            if (icon != null)
+                            {
+                                _icons.Add(icon);
+                            }
+                        }
+                    }
+                }
+
                 foreach (RelicIcon icon in _icons)
                 {
-                    DynamicRelicIcon dynamicRelicIcon = DynamicRelicIcon.GetRelicIcon(icon.relic.effect);
+                    DynamicRelicIcon dynamicRelicIcon = GetRelicIcon(icon.relic.effect);
                     if (dynamicRelicIcon == null && icon.relic is CustomRelic customRelic)
-                        dynamicRelicIcon = DynamicRelicIcon.GetRelicIcon(customRelic.Id);
+                        dynamicRelicIcon = GetRelicIcon(customRelic.Id);
                     bool keep = dynamicRelicIcon == null ? true : dynamicRelicIcon.Prepare;
                     icon.gameObject.SetActive(keep);
                 }

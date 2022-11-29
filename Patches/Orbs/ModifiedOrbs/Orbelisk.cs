@@ -2,7 +2,6 @@
 using Battle.Attacks.DamageModifiers;
 using Cruciball;
 using HarmonyLib;
-using Promethium.Extensions;
 using UnityEngine;
 using Relics;
 using I2.Loc;

@@ -8,10 +8,13 @@ using Promethium.Patches.Orbs.ModifiedOrbs;
 using Promethium.Patches.Relics;
 using Promethium.Patches.Relics.CustomRelicIcon;
 using Promethium.Patches.Relics.CustomRelics;
+using Promethium.Patches.Relics.ModifiedRelics;
 using Relics;
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using TMPro;
+using UnityEngine;
 
 namespace Promethium
 {
@@ -39,6 +42,7 @@ namespace Promethium
             RegisterDynamicRelicIcons();
         }
 
+
         private static void RegisterOrbs(OrbLoader orbLoader)
         {
             RegisterModifiedOrbs();
@@ -49,6 +53,8 @@ namespace Promethium
         {
             languageLoader.LoadGoogleSheetTSVSource("https://docs.google.com/spreadsheets/d/e/2PACX-1vRe82XVSt8LOUz3XewvAHT5eDDzAqXr5MV0lt3gwvfN_2n9Zxj613jllVPtdPdQweAap2yOSJSgwpPt/pub?gid=0&single=true&output=tsv", "Promethium_Translation.tsv");
             languageLoader.AddDynamicLocalizationParam(GetParameterValue);
+            languageLoader.RegisterStyle("armor", "<color=#8560b3>", "</color>");
+            languageLoader.RegisterTooltipKeyword("armor", "armor_desc");
         }
 
         public static string GetParameterValue(string Param)
@@ -76,9 +82,12 @@ namespace Promethium
 
         private static void RegisterCustomOrbs(OrbLoader orbLoader)
         {
-            if (Oreb.GetInstance().IsEnabled())
-                orbLoader.AddOrbToPool(Oreb.GetInstance().GetPrefab(1));
+
+            Oreb.GetInstance();
             OrbofGreed.GetInstance();
+            Orbgis.GetInstance();
+            Lasorb.GetInstance();
+            CustomRelicManager.AddDamageModifier(Berserkorb.GetInstance());
         }
 
         private static void RegisterModifiedOrbs()
@@ -87,7 +96,6 @@ namespace Promethium
             stopwatch.Start();
             ModifiedBouldorb.Register();
             ModifiedOrbelisk.Register();
-            ModifiedStone.Register();
             ModifiedDoctorb.Register();
             ModifiedNosforbatu.Register();
             ModifiedRefreshOrb.Register();
@@ -101,8 +109,14 @@ namespace Promethium
         private static void RegisterModifiedRelics()
         {
             ModifiedRelic.AddRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT); // Gardening Gloves
+
             ModifiedRelic.AddRelic(RelicEffect.NO_DISCARD);
+            if (ModifiedRelic.HasRelicEffect(RelicEffect.NO_DISCARD))
+                CustomRelicManager.AddDamageModifier(new NoDiscardDamageModifier());
+
             ModifiedRelic.AddRelic(RelicEffect.MATRYOSHKA);
+            if (ModifiedRelic.HasRelicEffect(RelicEffect.MATRYOSHKA))
+                CustomRelicManager.AddDamageModifier(new MatryoshkaDamageModifier());
         }
 
         private static void RegisterCustomRelics()
@@ -180,6 +194,24 @@ namespace Promethium
                 .SetRarity(RelicRarity.BOSS)
                 .AlwaysUnlocked(true)
                 .Build<Order>();
+
+            new CustomRelicBuilder()
+                .SetName(RelicNames.UPGRADED_ORBS)
+                .SetEnabled(IsRelicEnabled(RelicNames.UPGRADED_ORBS))
+                .SetSprite(Plugin.Anvil)
+                .SetRarity(RelicRarity.RARE)
+                .AlwaysUnlocked(true)
+                .Build<AnvilRelic>();
+
+            new CustomRelicBuilder()
+                .SetName(RelicNames.RANDOM_RELIC)
+                .SetEnabled(IsRelicEnabled(RelicNames.RANDOM_RELIC))
+                .SetSprite(Plugin.Capsule)
+                .SetRarity(RelicRarity.RARE)
+                .SetCountdown(500)
+                .SetUses(1)
+                .AlwaysUnlocked(true)
+                .Build<CapsuleRelic>();
 
             foreach (String name in new String[] { RelicNames.CURSE_ONE_ATTACK, RelicNames.CURSE_ONE_CRIT, RelicNames.CURSE_ONE_BALANCE })
                 new CustomRelicBuilder()

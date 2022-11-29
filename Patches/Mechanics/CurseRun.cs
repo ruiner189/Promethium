@@ -300,8 +300,6 @@ namespace Promethium.Patches.Mechanics
                 }
                 CurseRun.PruneDeck(__instance._deckManager);
 
-                PopulateSuggestionOrbs.ShouldForceNewOrb = true;
-
                 StaticGameData.hasReachedBoss = false;
                 StaticGameData.specificNodeOverride = null;
                 StaticGameData.relicRarityOverride = RelicRarity.NONE;

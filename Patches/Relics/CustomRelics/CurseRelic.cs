@@ -2,7 +2,6 @@
 using Battle.Enemies;
 using Battle.StatusEffects;
 using HarmonyLib;
-using Promethium.Extensions;
 using Relics;
 using System;
 using System.Collections.Generic;
@@ -53,20 +52,22 @@ namespace Promethium.Patches.Relics
 
         public override int DamageModifier(Attack attack, int critCount)
         {
-            if (Id == RelicNames.CURSE_ONE_ATTACK || Id == RelicNames.CURSE_THREE_ATTACK)
-                return 2;
-            if (Id == RelicNames.CURSE_ONE_BALANCE)
-                return 1;
-            return 0;
-        }
+            if(critCount == 0)
+            {
+                if (Id == RelicNames.CURSE_ONE_ATTACK || Id == RelicNames.CURSE_THREE_ATTACK)
+                    return 2;
+                if (Id == RelicNames.CURSE_ONE_BALANCE)
+                    return 1;
+                return 0;
+            } else
+            {
+                if (Id == RelicNames.CURSE_ONE_CRIT || Id == RelicNames.CURSE_THREE_CRIT)
+                    return 2;
+                if (Id == RelicNames.CURSE_ONE_BALANCE)
+                    return 1;
+                return 0;
+            }
 
-        public override int CritModifier(Attack attack, int critCount)
-        {
-            if (Id == RelicNames.CURSE_ONE_CRIT || Id == RelicNames.CURSE_THREE_CRIT)
-                return 2;
-            if (Id == RelicNames.CURSE_ONE_BALANCE)
-                return 1;
-            return 0;
         }
 
         public override void OnRelicAdded(RelicManager relicManager)

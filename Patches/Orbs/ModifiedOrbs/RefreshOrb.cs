@@ -2,8 +2,6 @@
 using BepInEx.Configuration;
 using ProLib.Orbs;
 using ProLib.Relics;
-using Promethium.Extensions;
-using Promethium.Patches.Relics;
 using Promethium.Patches.Relics.CustomRelics;
 using Relics;
 using UnityEngine;
@@ -46,7 +44,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             Attack attack = heldOrb.GetComponent<Attack>();
             if (attack != null && attack.Level > 1)
             {
-                Peg.OnPegDestroyedMutable?.Invoke(Peg.PegType.RESET);
+                Peg.OnPegAudioRequest?.Invoke(Peg.PegType.RESET);
                 battleController.ResetField(false);
             }
         }

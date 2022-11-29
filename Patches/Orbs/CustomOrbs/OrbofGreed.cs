@@ -3,11 +3,9 @@ using BepInEx.Configuration;
 using ProLib.Orbs;
 using HarmonyLib;
 using I2.Loc;
-using Promethium.Extensions;
 using Relics;
 using UnityEngine;
 using Battle.Attacks;
-using ProLib.Loaders;
 
 namespace Promethium.Patches.Orbs.CustomOrbs
 {
@@ -76,31 +74,26 @@ namespace Promethium.Patches.Orbs.CustomOrbs
                 .SetLevel(1)
                 .SetDescription(new string[] { "shuffle_deck_on_discard", "remove_on_discard" })
                 .AddParameter(ParamKeys.DISCARD_DAMAGE, $"{GetDiscardDamage(1)}")
+                .SetRarity(PachinkoBall.OrbRarity.RARE)
                 .IncludeInOrbPool(true)
                 .SetShot(shotPrefab);
 
-            CustomOrbBuilder levelTwo = levelOne
-                .Clone()
+            CustomOrbBuilder levelTwo = levelOne.Clone()
                 .SetLevel(2)
                 .IncludeInOrbPool(false)
                 .SetDescription(new string[] { "shuffle_deck_on_discard", "skip_enemy_turn_on_discard", "damage_self_on_discard", "remove_on_discard" })
                 .AddParameter(ParamKeys.DISCARD_DAMAGE, $"{GetDiscardDamage(2)}");
 
-            CustomOrbBuilder levelThree = levelTwo
-                .Clone()
+            CustomOrbBuilder levelThree = levelTwo.Clone()
                 .SetLevel(3)
                 .SetDescription(new string[] { "add_crit_refresh_on_discard", "shuffle_deck_on_discard", "skip_enemy_turn_on_discard", "damage_self_on_discard", "remove_on_discard" })
                 .AddParameter(ParamKeys.DISCARD_DAMAGE, $"{GetDiscardDamage(3)}");
 
-            GameObject one = levelOne.Build();
-            GameObject two = levelTwo.Build();
-            GameObject three = levelThree.Build();
+            this[1] = levelOne.Build();
+            this[2] = levelTwo.Build();
+            this[3] = levelThree.Build();
 
-            CustomOrbBuilder.JoinLevels(one, two, three);
-
-            Prefabs[1] = one;
-            Prefabs[2] = two;
-            Prefabs[3] = three;
+            CustomOrbBuilder.JoinLevels(this[1], this[2], this[3]);
         }
 
         public override void OnDiscard(RelicManager relicManager, BattleController battleController, GameObject orb, Attack attack)
@@ -136,7 +129,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
                 if (SkipReloadTurn)
                 {
                     SkipReloadTurn = false;
-                    __instance._skipPlayersTurn = false;
+                    __instance._skipPlayerTurnCount = 0;
                 }
             }
         }

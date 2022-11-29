@@ -12,10 +12,7 @@ namespace Promethium.Patches.Relics
         public static List<RelicEffect> ModifiedRelics = new List<RelicEffect>();
         public static readonly String AltText = $"_{Plugin.Name.ToLower()}";
 
-        public const int MATRYOSHKA_SHELL_DAMAGE = -2;
-        public const int MATRYOSHKA_SHELL_CRIT = -2;
-        public const int NO_DISCARD_RELIC_DAMAGE = 2;
-        public const int NO_DISCARD_RELIC_CRIT = 2;
+
 
         public const float MATRYOSHKA_SHELL_MULTIPLIER = 0.65f;
         public const float NO_DISCARD_RELIC_MULTIPLIER = 0.25f;

@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
-using I2.Loc;
 using Promethium.Components;
-using Promethium.Extensions;
 using System;
 using UnityEngine;
 using ProLib.Orbs;
@@ -55,29 +53,25 @@ namespace Promethium.Patches.Orbs.CustomOrbs
                 .SetDamage(2, 3);
 
 
-            GameObject one = levelOne.Build();
-            GameObject two = levelTwo.Build();
-            GameObject three = levelThree.Build();
+           this[1] = levelOne.Build();
+           this[2] = levelTwo.Build();
+           this[3] = levelThree.Build();
 
-            Fragile fOne = one.AddComponent<Fragile>();
+            Fragile fOne = this[1].AddComponent<Fragile>();
             fOne.HitToSplitCount = 3;
             fOne.OnValidate();
 
-            Fragile fTwo = two.AddComponent<Fragile>();
+            Fragile fTwo = this[2].AddComponent<Fragile>();
             fTwo.HitToSplitCount = 3;
             fTwo.MaxSplits = 2;
             fTwo.OnValidate();
 
-            Fragile fThree = three.AddComponent<Fragile>();
+            Fragile fThree = this[3].AddComponent<Fragile>();
             fThree.HitToSplitCount = 2;
             fThree.MaxSplits = 3;
             fThree.OnValidate();
 
-            CustomOrbBuilder.JoinLevels(one, two, three);
-
-            Prefabs[1] = one;
-            Prefabs[2] = two;
-            Prefabs[3] = three;
+            CustomOrbBuilder.JoinLevels(this[1], this[2], this[3]);
         }
     }
 

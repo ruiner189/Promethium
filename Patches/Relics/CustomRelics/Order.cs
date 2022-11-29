@@ -1,6 +1,5 @@
 ﻿using ProLib.Relics;
 using HarmonyLib;
-using Promethium.Extensions;
 using Relics;
 using System;
 
