@@ -94,8 +94,6 @@ namespace Promethium
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            ModifiedBouldorb.Register();
-            ModifiedOrbelisk.Register();
             ModifiedDoctorb.Register();
             ModifiedNosforbatu.Register();
             ModifiedRefreshOrb.Register();

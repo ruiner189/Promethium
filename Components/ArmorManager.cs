@@ -25,7 +25,6 @@ namespace Promethium.Components
             if (Instance == null) Instance = this;
             if (this != Instance) Destroy(this);
 
-
             CurrentArmor = ScriptableObject.CreateInstance<FloatVariable>();
             CurrentArmor.name = "CurrentArmor";
             CurrentArmor._initialValue = 0;
