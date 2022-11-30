@@ -18,10 +18,6 @@ namespace Promethium.Components
                     Plugin.Log.LogMessage("Found restart button. Activating");
                     _restartButton.SetActive(true);
                 }
-                else
-                {
-                    //Plugin.Log.LogMessage("Could not find restart button.");
-                }
             }
             else
             {

@@ -33,6 +33,18 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 
 ## Changelog
 <details>
+   <summary> v1.4.1 </summary>
+
+* Changed plasmaball counter to be global instead of per-orb. Now you can watch the countdown!
+* Increased plasmaball line duration. It disappeared way too fast and made it almost invisible
+* Buffed Berserkorb. Lvl 1: (1|1) -> (1|3) Lvl2: (1|1) -> (2|4) Lvl3: (1|1) -> (3|5)
+* Buffed Orbgis. Lvl 1: (1|1) -> (1|2) Lvl2: (1|1) -> (2|3) Lvl3: (1|1) -> (3|4)
+* Buffed lasorb. Lvl 3: (1|2) -> (2|3)
+* Fixed lasorb continuous activation on long pegs
+* Fixed the modification to Matryorshka and Sealed Convicition. They should now remove vanilla behavior in favor of modded instead of both at the same time. (This was fixed last patch, but forgot to put in patch notes)
+</details>
+
+<details>
    <summary> v1.4.0 </summary>
 
 * Added new orb: Lasorb
@@ -337,7 +349,6 @@ Level 3
 
 <details>
 <summary> Lasorb </summary>
-![laser](https://user-images.githubusercontent.com/47389474/204408728-c0f0c5a6-f1f0-4ac3-9f3f-c901c17c5666.gif)
 
 Sends out a laserbeam between other lasorbs. Each beam will activate pegs in its path.
 
@@ -356,7 +367,7 @@ Level 2
 * Multiball 1
    
 Level 3
-* Attack: 1 | Crit: 2
+* Attack: 2 | Crit: 3
 * Hits all enemies in the same row as the targeted enemy
 * Hits enemies 3 times each. Damage is split evenly per hit
 * Sends a laser towards other lasorbs every 3 pegs hit
@@ -368,19 +379,19 @@ Level 3
 <summary> Orbgis </summary>
 
 Level 1
-* Attack: 1 | Crit: 1
+* Attack: 1 | Crit: 2
 * Increases Maximum Armor by 2
 * Start with +1 Armor each battle
 * Gain +2 Armor when fired
    
 Level 2
-* Attack: 1 | Crit: 1
+* Attack: 2 | Crit: 3
 * Increases Maximum Armor by 4
 * Start with +2 Armor each battle
 * Gain +4 Armor when fired
 
 Level 3
-* Attack: 1 | Crit: 1
+* Attack: 3 | Crit: 4
 * Increases Maximum Armor by 6
 * Start with +3 Armor each battle
 * Gain +6 Armor when fired
@@ -390,21 +401,21 @@ Level 3
 <summary> Berserkorb </summary>
 
 Level 1
-* Attack: 1 | Crit: 1
+* Attack: 1 | Crit: 3
 * Overflow
 * Attacks gain +1|+1 for every 20 missing health
 * Multiplies damage based on current armor (x * 0.08)
 * Removes 50% of current armor when fired
 
 Level 2
-* Attack: 1 | Crit: 1
+* Attack: 2 | Crit: 4
 * Overflow
 * Attacks gain +1|+1 for every 15 missing health
 * Multiplies damage based on current armor (x * 0.1)
 * Removes 40% of current armor when fired
 
 Level 3
-* Attack: 1 | Crit: 1
+* Attack: 3 | Crit: 5
 * Overflow
 * Attacks gain +1|+1 for every 10 missing health
 * Multiplies damage based on current armor (x * 0.12)

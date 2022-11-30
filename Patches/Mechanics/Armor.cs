@@ -47,9 +47,4 @@ namespace Promethium.Patches.Mechanics
             }
         }
     }
-
-
-
-
-
 }

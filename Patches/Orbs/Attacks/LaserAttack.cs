@@ -65,7 +65,7 @@ namespace Promethium.Patches.Orbs.Attacks
             if (target != null && target.enemyTypes.HasFlag(Enemy.EnemyType.Flying))
             {
                 laserBehavior.gameObject.transform.position = new Vector2(-_playerPosition.x - 3.7f, 8.1f);
-            } 
+            }
             else
             {
                 laserBehavior.gameObject.transform.position = new Vector2(-_playerPosition.x - 3.7f, _playerPosition.y);
@@ -74,9 +74,7 @@ namespace Promethium.Patches.Orbs.Attacks
             laserBehavior.gameObject.SetActive(true);
             laserBehavior.OnLaserHit += HandleLaserHit;
             laserBehavior.OnLaserEnd += HandleLaserEnded;
-
         }
-
 
         public void HandleLaserHit()
         {

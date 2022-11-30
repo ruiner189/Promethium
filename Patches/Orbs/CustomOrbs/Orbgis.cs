@@ -41,7 +41,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
                 .SetName("Orbgis")
                 .SetSprite(Plugin.Orbgis)
                 .SetSpriteScale(new Vector3(0.6f, 0.6f, 1f))
-                .SetDamage(1, 1)
+                .SetDamage(1, 2)
                 .SetLevel(1)
                 .SetDescription(new string[] { "armor_max", "armor_on_start", "armor_on_fire" })
                 .AddParameter(ParamKeys.MAX_ARMOR_INCREASE, GetMaxArmor(1).ToString())
@@ -53,16 +53,18 @@ namespace Promethium.Patches.Orbs.CustomOrbs
 
             CustomOrbBuilder levelTwo = levelOne.Clone()
                 .SetLevel(2)
+                .SetDamage(2, 3)
                 .AddParameter(ParamKeys.MAX_ARMOR_INCREASE, GetMaxArmor(2).ToString())
                 .AddParameter(ParamKeys.ARMOR_START, GetArmorOnStart(2).ToString())
                 .AddParameter(ParamKeys.ARMOR_SHOT_INCREASE, GetArmorOnShot(2).ToString())
                 .IncludeInOrbPool(false);
 
             CustomOrbBuilder levelThree = levelTwo.Clone()
+                .SetLevel(3)
+                .SetDamage(3, 4)
                 .AddParameter(ParamKeys.MAX_ARMOR_INCREASE, GetMaxArmor(3).ToString())
                 .AddParameter(ParamKeys.ARMOR_START, GetArmorOnStart(3).ToString())
-                .AddParameter(ParamKeys.ARMOR_SHOT_INCREASE, GetArmorOnShot(3).ToString())
-                .SetLevel(3);
+                .AddParameter(ParamKeys.ARMOR_SHOT_INCREASE, GetArmorOnShot(3).ToString());
 
             this[1] = levelOne.Build();
             this[2] = levelTwo.Build();
@@ -84,7 +86,6 @@ namespace Promethium.Patches.Orbs.CustomOrbs
         public int GetMaxArmor(int level)
         {
             int amount = level * 2;
-
             return amount;
         }
 

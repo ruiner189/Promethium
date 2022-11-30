@@ -34,12 +34,11 @@ namespace Promethium.Patches.Orbs.Attacks
             _sprites = Plugin.LasorbAttack;
         }
 
-        public void OnEnabled()
+        public void OnEnable()
         {
             _frame = 0;
             _renderer.sprite = _sprites[_frame];
             _ending = false;
-
         }
 
         public void Update()

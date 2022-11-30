@@ -10,12 +10,12 @@ namespace Promethium.Components
     [RequireComponent(typeof(PachinkoBall))]
     public class LaserGenerator : MonoBehaviour
     {
-        public static List<LaserGenerator> ActiveLazers = new List<LaserGenerator>();
-        public static List<LaserGenerator> AllLazers = new List<LaserGenerator>();
-        public static GameObject LazerPrefab;
+        public static List<LaserGenerator> ActiveLasers = new List<LaserGenerator>();
+        public static List<LaserGenerator> AllLasers = new List<LaserGenerator>();
+        public static GameObject LaserPrefab;
 
         public PachinkoBall Pachinko;
-        public bool ShouldLazer = true;
+        public bool ShouldLaser = true;
 
         public int HitsForLazer = 5;
         public float LaserDuration = 1.5f;
@@ -23,42 +23,41 @@ namespace Promethium.Components
 
         public void Awake()
         {
-            if (LazerPrefab == null) CreatePrefab();
+            if (LaserPrefab == null) CreatePrefab();
             Pachinko = GetComponent<PachinkoBall>();
         }
 
         private void CreatePrefab()
         {
-            LazerPrefab = new GameObject("Lazer");
-            LazerPrefab.AddComponent<Laser>();
-            LazerPrefab.transform.SetParent(Plugin.PromethiumPrefabHolder.transform);
+            LaserPrefab = new GameObject("Laser");
+            LaserPrefab.AddComponent<Laser>();
+            LaserPrefab.transform.SetParent(Plugin.PromethiumPrefabHolder.transform);
         }
 
-        private void CreateLazer(Vector3 end)
+        private void CreateLaser(Vector3 end)
         {
-            GameObject obj = GameObject.Instantiate(LazerPrefab);
-            Laser lazer = obj.GetComponent<Laser>();
-            if(lazer != null)
+            GameObject obj = GameObject.Instantiate(LaserPrefab);
+            Laser laser = obj.GetComponent<Laser>();
+            if(laser != null)
             {
-                lazer.Initialize(transform.position, end, LaserDuration);
+                laser.Initialize(transform.position, end, LaserDuration);
             }
         }
 
-
         public void OnEnable()
         {
-            ActiveLazers.Add(this);
+            ActiveLasers.Add(this);
         }
 
         public void OnDisable()
         {
-            ActiveLazers.Remove(this);
+            ActiveLasers.Remove(this);
         }
 
         public void OnDestroy()
         {
-            ActiveLazers.Remove(this);
-            AllLazers.Remove(this);
+            ActiveLasers.Remove(this);
+            AllLasers.Remove(this);
         }
 
         public void OnCollisionEnter2D(Collision2D collision)
@@ -66,15 +65,21 @@ namespace Promethium.Components
             if (Pachinko.IsDummy || Pachinko.CurrentState != PachinkoBall.FireballState.FIRING) return;
             if (collision.collider.CompareTag("Peg") || collision.collider.CompareTag("Bomb"))
             {
+                Peg peg = collision.collider.GetComponent<Peg>();
+                if (peg is LongPeg longPeg && longPeg.hit)
+                {
+                    return;
+                }
+
                 _currentHits++;
                 if(_currentHits == HitsForLazer)
                 {
                     _currentHits = 0;
-                    foreach (LaserGenerator generator in ActiveLazers)
+                    foreach (LaserGenerator generator in ActiveLasers)
                     {
-                        if (generator.gameObject != gameObject && generator.gameObject.activeInHierarchy && generator.Pachinko.CurrentState == PachinkoBall.FireballState.FIRING && generator.ShouldLazer && this.ShouldLazer)
+                        if (generator.gameObject != gameObject && generator.gameObject.activeInHierarchy && generator.Pachinko.CurrentState == PachinkoBall.FireballState.FIRING && generator.ShouldLaser && this.ShouldLaser)
                         {
-                            CreateLazer(generator.gameObject.transform.position);
+                            CreateLaser(generator.gameObject.transform.position);
                         }
                     }
                 }
@@ -85,7 +90,7 @@ namespace Promethium.Components
         {
             if (other.GetComponent<Destroyer>() != null)
             {
-                ShouldLazer = false;
+                ShouldLaser = false;
             }
         }
     }

@@ -80,6 +80,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
 
             CustomOrbBuilder levelThree = levelTwo
                 .Clone()
+                .SetDamage(2,3)
                 .SetDescription(new string[] { "enemy_hit_row", "enemy_multihit_split", "laser_on_hit", "increased_laser_duration", "multiball_desc2" })
                 .AddParameter(ParamKeys.ENEMY_HIT_COUNT, "3")
                 .AddParameter(ParamKeys.LASER_HITS, "3")

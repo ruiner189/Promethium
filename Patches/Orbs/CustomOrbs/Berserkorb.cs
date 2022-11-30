@@ -47,7 +47,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
                 .SetSpriteScale(new Vector3(0.6f, 0.6f, 1f))
                 .SetShot(shotPrefab)
                 .SetRarity(PachinkoBall.OrbRarity.RARE)
-                .SetDamage(1, 1)
+                .SetDamage(1, 3)
                 .IncludeInOrbPool(true)
                 .SetLevel(1)
                 .SetDescription(new string[] {"overflow2", "damage_increase_missing_health", "armor_damage_multiplier", "armor_remove_on_fire"})
@@ -59,6 +59,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
 
             CustomOrbBuilder levelTwo = levelOne.Clone()
                 .SetLevel(2)
+                .SetDamage(2, 4)
                 .IncludeInOrbPool(false)
                 .AddParameter(ParamKeys.DAMAGE_INCREASE, "+1")
                 .AddParameter(ParamKeys.CRIT_DAMAGE_INCREASE, "+1")
@@ -69,6 +70,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
 
             CustomOrbBuilder levelThree = levelTwo.Clone()
                 .SetLevel(3)
+                .SetDamage(3,5)
                 .AddParameter(ParamKeys.DAMAGE_INCREASE, "+1")
                 .AddParameter(ParamKeys.CRIT_DAMAGE_INCREASE, "+1")
                 .AddParameter(ParamKeys.HEALTH_THRESHOLD, GetHealthThreshold(3).ToString())

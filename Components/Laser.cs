@@ -41,10 +41,6 @@ namespace Promethium.Components
                 {
 
                     GameObject obj = hit.collider.gameObject;
-                    /*
-                    if (collisions.Contains(obj)) return;
-                    collisions.Add(obj);
-                    */
 
                     if (hit.collider.CompareTag("Peg") || hit.collider.CompareTag("Bomb"))
                     {
@@ -56,8 +52,6 @@ namespace Promethium.Components
                     }
                 }
             }
-
-            //Destroy(gameObject);
         }
 
         public void Initialize(Vector3 start, Vector3 end, float fadeTime)
@@ -94,38 +88,11 @@ namespace Promethium.Components
                 line.endWidth = 0.1f;
                 line.startColor = Color.red;
                 line.endColor = Color.red;
-                Material whiteDiffuseMat = new Material(Shader.Find("Sprites/Default"));
-                line.material = whiteDiffuseMat;
+                Material material = new Material(Shader.Find("Sprites/Default"));
+                line.material = material;
                 Line = line;
             }
         }
-
-        public void GenerateMeshCollider()
-        {
-            MeshCollider collider = GetComponent<MeshCollider>();
-            if (collider == null)
-                collider = gameObject.AddComponent<MeshCollider>();
-
-            Mesh mesh = new Mesh();
-            Line.BakeMesh(mesh);
-            collider.sharedMesh = mesh;
-        }
-
-        public void GenerateCollider()
-        {
-            EdgeCollider2D collider = GetComponent<EdgeCollider2D>();
-            if (collider == null)
-                collider = gameObject.AddComponent<EdgeCollider2D>();
-            List<Vector2> points = new List<Vector2>();
-            for(int point = 0; point < Line.positionCount; point++)
-            {
-                points.Add(Line.GetPosition(point));
-            }
-
-            collider.points = points.ToArray();
-        }
-
-        private List<GameObject> collisions = new List<GameObject>();
 
         public void OnCollisionEnter2D(Collision2D collision)
         {

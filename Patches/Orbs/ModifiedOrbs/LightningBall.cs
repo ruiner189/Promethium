@@ -62,12 +62,6 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
             {
                 thunder.numZaps++;
             }
-
-            Plasma plasma = attackingOrb.GetComponent<Plasma>();
-            if(plasma != null)
-            {
-                plasma.AddToDefault(1);
-            }
         }
 
         public static ModifiedLightningBall Register()

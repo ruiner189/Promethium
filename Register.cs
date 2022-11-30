@@ -60,9 +60,9 @@ namespace Promethium
         public static string GetParameterValue(string Param)
         {
             if (Param == ParamKeys.ADDITIONAL_LIGHTNING_ZAPS)
-                return $"{Plasma.AdditionalZaps}";
+                return $"{Plasma.Zaps}";
             else if (Param == ParamKeys.PLASMA_PEG_HITS)
-                return $"{Plasma.PegsToHit}";
+                return $"{Plasma.AmountForZaps}";
             else if (Param == ParamKeys.MULTIBALL_RELIC_MULTIPLIER)
                 return $"<style=dmg_negative>{(1 - ModifiedRelic.MATRYOSHKA_SHELL_MULTIPLIER) * 100}%</style>";
             else if (Param == ParamKeys.NO_DISCARD_MULTIPLIER)
@@ -174,6 +174,7 @@ namespace Promethium
                 .SetEnabled(IsRelicEnabled(RelicNames.PLASMA_BALL))
                 .SetSprite(Plugin.PlasmaBall)
                 .SetRarity(RelicRarity.RARE)
+                .SetCountdown(Plasma.AmountForZaps)
                 .AlwaysUnlocked(true)
                 .Build<Plasmaball>();
 
