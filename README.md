@@ -496,7 +496,7 @@ Level 1
 <summary> Gemini Potion </summary>
 
 Level 1
-* Clones the next two orbs two times and send them to the bottom of the deck. The clones do not last for the next shuffle.
+* Clones the next orb two times and send them to the bottom of the deck. The clones do not last for the next shuffle.
 * Can not clone other gemini potions
 * Potion is activated immediately
 * Can only be used once per battle
