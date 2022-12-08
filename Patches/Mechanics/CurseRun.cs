@@ -46,7 +46,7 @@ namespace Promethium.Patches.Mechanics
         public static void PruneRelics(RelicManager manager)
         {
             Dictionary<RelicEffect, Relic> relicDict = manager._ownedRelics;
-            List<Relic> relics = relicDict.Values.Union(CustomRelicManager.OwnedRelics).ToList();
+            List<Relic> relics = relicDict.Values.Union(CustomRelicManager.Instance.OwnedRelics).ToList();
 
             Random rand = new Random();
             List<Relic> curses = relics.FindAll(relic => relic is CurseRelic);
@@ -129,21 +129,21 @@ namespace Promethium.Patches.Mechanics
         {
             relicManager._availableCommonRelics = relicManager.CommonRelicPool.Where(relic => {
                 if (relicManager.RelicEffectActive(relic.effect)) return false;
-                if (relic is CustomRelic customRelic && CustomRelicManager.RelicActive(customRelic)) return false;
+                if (relic is CustomRelic customRelic && CustomRelicManager.Instance.RelicActive(customRelic)) return false;
                 return true;
             }).ToList();
             relicManager._availableRareRelics = relicManager.RareRelicPool.Where(relic => {
                 if (relicManager.RelicEffectActive(relic.effect)) return false;
-                if (relic is CustomRelic customRelic && CustomRelicManager.RelicActive(customRelic)) return false;
+                if (relic is CustomRelic customRelic && CustomRelicManager.Instance.RelicActive(customRelic)) return false;
                 return true;
             }).ToList();
             relicManager._availableBossRelics = relicManager.BossRelicPool.Where(relic => {
                 if (relicManager.RelicEffectActive(relic.effect)) return false;
-                if (relic is CustomRelic customRelic && CustomRelicManager.RelicActive(customRelic)) return false;
+                if (relic is CustomRelic customRelic && CustomRelicManager.Instance.RelicActive(customRelic)) return false;
                 return true;
             }).ToList();
 
-            if (CustomRelicManager.RelicActive(RelicNames.SINGLE_ITEM_POOL))
+            if (CustomRelicManager.Instance.RelicActive(RelicNames.SINGLE_ITEM_POOL))
                 Chaos.MixRelicPools(relicManager);
         }
 
@@ -159,7 +159,7 @@ namespace Promethium.Patches.Mechanics
                 return new Relic[] { manager.consolationPrize, manager.consolationPrize, manager.consolationPrize }.ToList();
             }
             Dictionary<RelicEffect, Relic> relicDict = manager._ownedRelics;
-            List<CustomRelic> ownedCurseRelics = CustomRelicManager.OwnedRelics.Where(relic => relic is CurseRelic).ToList();
+            List<CustomRelic> ownedCurseRelics = CustomRelicManager.Instance.OwnedRelics.Where(relic => relic is CurseRelic).ToList();
 
             List<Relic> curses = new List<Relic>(CurseRelic.GetCurseRelicOfLevel(ownedCurseRelics.Count + 1));
 

@@ -24,6 +24,11 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             LocalVariables = true;
         }
 
+        public static void Register()
+        {
+            GetInstance();
+        }
+
         public static Orbgis GetInstance()
         {
             if (_instance == null) _instance = new Orbgis();

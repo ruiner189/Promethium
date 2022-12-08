@@ -25,7 +25,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
             int level = attack.Level;
-            if (CustomRelicManager.RelicActive(RelicNames.HOLSTER))
+            if (CustomRelicManager.Instance.RelicActive(RelicNames.HOLSTER))
             {
                 if (level >= 2)
                 {

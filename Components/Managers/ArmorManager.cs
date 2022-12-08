@@ -1,15 +1,19 @@
-﻿using Battle.StatusEffects;
+﻿using Battle;
+using Battle.StatusEffects;
 using Cruciball;
+using HarmonyLib;
 using ProLib.Relics;
 using Promethium.Patches.Relics;
 using Promethium.Patches.Relics.CustomRelics;
 using Promethium.Patches.Status_Effect;
 using Relics;
+using System;
 using UnityEngine;
 
 namespace Promethium.Components
 {
-    class ArmorManager : MonoBehaviour
+    [HarmonyPatch]
+    public class ArmorManager : MonoBehaviour
     {
         public FloatVariable CurrentArmor;
         public FloatVariable MaxArmor;
@@ -18,7 +22,7 @@ namespace Promethium.Components
         private RelicManager _relicManager;
         private CruciballManager _cruciballManager;
 
-        public static ArmorManager Instance  {  get; private set; }
+        public static ArmorManager Instance { get; private set; }
 
         public void Awake()
         {
@@ -99,26 +103,63 @@ namespace Promethium.Components
         {
             int total = 0;
 
-            if (CustomRelicManager.AttemptUseRelic(RelicNames.CURSE_TWO_EQUIP))
+            if (CustomRelicManager.Instance.AttemptUseRelic(RelicNames.CURSE_TWO_EQUIP))
                 total += 1;
-            if (CustomRelicManager.AttemptUseRelic(RelicNames.CURSE_FOUR_EQUIP))
+            if (CustomRelicManager.Instance.AttemptUseRelic(RelicNames.CURSE_FOUR_EQUIP))
                 total += 1;
             if (ModifiedRelic.HasRelicEffect(RelicEffect.DAMAGE_BONUS_PLANT_FLAT) && _relicManager.AttemptUseRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
                 total += 1;
-            
+
             return total;
         }
 
         public int GetMaxArmorFromRelics()
         {
             int total = 0;
-            if (CustomRelicManager.AttemptUseRelic(RelicNames.CURSE_TWO_ARMOR))
+            if (CustomRelicManager.Instance.AttemptUseRelic(RelicNames.CURSE_TWO_ARMOR))
                 total += 5;
-            if (CustomRelicManager.AttemptUseRelic(RelicNames.CURSE_FOUR_ARMOR))
+            if (CustomRelicManager.Instance.AttemptUseRelic(RelicNames.CURSE_FOUR_ARMOR))
                 total += 5;
             if (ModifiedRelic.HasRelicEffect(RelicEffect.DAMAGE_BONUS_PLANT_FLAT) && _relicManager.AttemptUseRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT))
                 total += 5;
             return total;
         }
+
+        #region Harmony Patches
+
+        [HarmonyPatch(typeof(PlayerHealthController), nameof(PlayerHealthController.Damage))]
+        [HarmonyPrefix]
+        private static void PatchDamage(ref float damage)
+        {
+            ArmorManager armor = Plugin.PromethiumManager.GetComponent<ArmorManager>();
+            if (armor != null)
+            {
+                float originalDamage = damage;
+                damage = Math.Max(damage - armor.CurrentArmor.Value, 0);
+                float difference = originalDamage - damage;
+                armor.RemoveArmor(difference);
+            }
+        }
+
+        [HarmonyPatch(typeof(BattleController), nameof(BattleController.Start))]
+        [HarmonyPostfix]
+        [HarmonyPriority(Priority.First)]
+        private static void PatchBattleStart(BattleController __instance)
+        {
+            Plugin.PromethiumManager.GetComponent<ArmorManager>()?.Init(__instance._relicManager, __instance._cruciballManager, __instance._playerStatusEffectController);
+        }
+
+        [HarmonyPatch(typeof(BattleController), nameof(BattleController.EnemyTurnComplete))]
+        [HarmonyPostfix]
+        private static void PatchEnemyTurnComplete()
+        {
+            ArmorManager armorManager = Plugin.PromethiumManager.GetComponent<ArmorManager>();
+            if (armorManager != null)
+            {
+                armorManager.AddArmor(armorManager.GetArmorPerTurnFromRelics());
+            }
+        }
     }
+
+    #endregion
 }

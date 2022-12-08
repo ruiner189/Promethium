@@ -1,6 +1,6 @@
 ﻿using ProLib.Attributes;
 using ProLib.Extensions;
-using ProLib.Loaders;
+using ProLib.Managers;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -91,7 +91,7 @@ namespace Promethium.UI
 
         public static void LateOnSceneLoaded(String scene, bool firstLoad)
         {
-            if(scene == SceneLoader.Battle)
+            if(scene == SceneInfoManager.Battle)
             {
                 GameObject parent = GameObject.Find("OrbDetails");
                 if(parent != null)

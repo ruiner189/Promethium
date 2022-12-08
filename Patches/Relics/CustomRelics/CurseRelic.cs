@@ -36,7 +36,7 @@ namespace Promethium.Patches.Relics
                 {
                     if (relic.CurseLevel == curseLevel)
                     {
-                        if (CustomRelicManager.RelicActive(relic))
+                        if (CustomRelicManager.Instance.RelicActive(relic))
                         {
                             return true;
                         }
@@ -47,7 +47,7 @@ namespace Promethium.Patches.Relics
 
         public static int AmountOfCurseRelics()
         {
-            return AllCurseRelics.Where(relic => CustomRelicManager.RelicActive(relic)).Count();
+            return AllCurseRelics.Where(relic => CustomRelicManager.Instance.RelicActive(relic)).Count();
         }
 
         public override int DamageModifier(Attack attack, int critCount)
@@ -149,7 +149,7 @@ namespace Promethium.Patches.Relics
 
         public static void Postfix(PegManager ____pegManager)
         {
-            if (CustomRelicManager.RelicActive(RelicNames.CURSE_THREE_BOMB))
+            if (CustomRelicManager.Instance.RelicActive(RelicNames.CURSE_THREE_BOMB))
             {
                 ____pegManager.ConvertPegsToBombs(3, false);
 

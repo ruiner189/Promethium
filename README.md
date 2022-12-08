@@ -14,7 +14,7 @@ For this mod to work, you must also have ProLib installed. Download links: [[Git
 This mod uses ProLib which does affect your save file. Please back up your save file before using.
 
 ## Installation
-### Thunderstore (ModManager)
+### Thunderstore 
 1. Download [Thunderstore](https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager)
 2. Choose Peglin for the Game Selection
 3. Create or select a profile
@@ -22,16 +22,25 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 5. Click "Download with dependencies"
 6. Click "Start Modded" to begin playing!
 
-### Github (Manual)
-1. Download [Promethium.dll](https://github.com/ruiner189/Promethium/releases)
-2. Download [BepInEx_x64_5.x.x.x.zip](https://github.com/BepInEx/BepInEx/releases)
-3. Go to your install directory for Peglin.
-    * For Steam go to your Steam Library and right click Peglin > Manage > Browse Local Files
-4. Unzip the BepInEx folder into your peglin directory
-5. Launch Peglin. BepInEx will then create a plugins folder. Close Peglin after the game launches.
-6. Put Promethium in your plugin folder (...\Peglin\Bepinex\plugins)
-
 ## Changelog
+<details>
+   <summary> v1.5.0 </summary>
+   
+* Updated to Peglin 0.8.10
+* Added a new orb-type: Potions.
+* Potions are a "consumable". Unless stated, they do not take up a turn to be used.
+* Holster ability to hold orbs has been set to always be available. This is to allow more freedom with your deck, especially with much larger decks due to potions.
+* Holster has been removed temporarily. It will be back in the near future, better and stronger!
+* Added Potions:
+  * Critical Potion
+  * Berserk Potion
+  * Potion of Iron Skin
+  * Potion of Avarice
+  * Gemini Potion
+* Many more potions are to come! Some will even have a unique way of getting them. 
+* Potions currently only have one level. Most of them will stay this way, but others will be getting more levels in the future.
+</details>
+
 <details>
    <summary> v1.4.1 </summary>
 
@@ -206,6 +215,22 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 ## New Mechanics
 ### Armor
 Armor acts as a second resource for health. It is used up first, and has unique ways of replenishing it. The amount of armor you currently have is indicated by a status effect.
+
+### Hold Ability
+You can now hold an orb. To do so, use the discard action and it'll put your current orb in the hold slot. To discard, hold the discard button until the radial bar around the trash can fills up.
+
+### Potions
+Potions are a new type of orb. They act as consumables. Unless stated, they do not take up a turn when used. There are three types of potions:
+
+#### Permanent Potions
+These potions last for the remainder of the battle. They require an open potion slot to be used.
+
+#### Durational Potions
+These potions last for a set amount of turns before their effect runs out. They require an open potion slot to be used.
+
+#### Instant Potions
+These potions are used immediately and do not require an open potion slot.
+
 ### Curse
 ![Curse1](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_One.png)![Curse2](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Two.png)![Curse3](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Three.png)![Curse4](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Four.png)![Curse5](https://raw.githubusercontent.com/ruiner189/Promethium/main/Resources/Relics/Curse_Five.png)
 
@@ -420,6 +445,54 @@ Level 3
 * Attacks gain +1|+1 for every 10 missing health
 * Multiplies damage based on current armor (x * 0.12)
 * Removes 25% of current armor when fired
+</details>
+
+## Potions
+<details>
+<summary> Critical Potion </summary>
+
+Level 1
+* Every attack is a crit
+* Lasts 3 turns
+* Can only be used once per battle
+</details>
+
+<details>
+<summary> Berserk Potion </summary>
+
+Level 1
+* Increases damage dealt by 1.5x
+* Increases damage received by 2x
+* Lasts 3 turns
+* Can only be used once per battle
+</details>
+
+<details>
+<summary> Potion of Iron Skin </summary>
+
+Level 1
+* Reduces damage received by 1
+* Lasts 3 turns
+* Can only be used once per battle
+</details>
+
+<details>
+<summary> Potion of Avarice </summary>
+
+Level 1
+* Increases gold gained by 2x but deal 75% less damage
+* Lasts 2 turns
+* Can only be used once per battle
+</details>
+
+<details>
+<summary> Gemini Potion </summary>
+
+Level 1
+* Clones the next two orbs two times and send them to the bottom of the deck. The clones do not last for the next shuffle.
+* Can not clone other gemini potions
+* Potion is activated immediately
+* Can only be used once per battle
 </details>
 
 ## Orb Changes

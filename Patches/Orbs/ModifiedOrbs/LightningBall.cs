@@ -25,7 +25,7 @@ namespace Promethium.Patches.Orbs.ModifiedOrbs
 
         public override void ChangeDescription(Attack attack, RelicManager relicManager)
         {
-            if (CustomRelicManager.RelicActive(RelicNames.HOLSTER))
+            if (CustomRelicManager.Instance.RelicActive(RelicNames.HOLSTER))
                 AddToDescription(attack, "lightning_on_hold");
         }
 

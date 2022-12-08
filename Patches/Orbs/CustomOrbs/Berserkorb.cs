@@ -19,9 +19,15 @@ namespace Promethium.Patches.Orbs.CustomOrbs
         public ConfigEntry<bool> EnabledConfig { internal set; get; }
         private static Berserkorb _instance;
 
-        public Berserkorb() : base("berserkorb")
+        private Berserkorb() : base("berserkorb")
         {
             LocalVariables = true;
+            CustomRelicManager.Instance.AddDamageModifier(this);
+        }
+
+        public static void Register()
+        {
+            GetInstance();
         }
 
         public static Berserkorb GetInstance()

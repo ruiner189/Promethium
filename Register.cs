@@ -1,9 +1,10 @@
 ﻿using ProLib.Attributes;
-using ProLib.Loaders;
+using ProLib.Managers;
 using ProLib.Relics;
 using ProLib.Utility;
 using Promethium.Components;
 using Promethium.Patches.Orbs.CustomOrbs;
+using Promethium.Patches.Orbs.CustomOrbs.Potions;
 using Promethium.Patches.Orbs.ModifiedOrbs;
 using Promethium.Patches.Relics;
 using Promethium.Patches.Relics.CustomRelicIcon;
@@ -29,13 +30,13 @@ namespace Promethium
             {
                 _registered = true;
 
-                RelicLoader.Register += new RelicLoader.RelicRegister(RegisterRelics);
-                OrbLoader.Register += new OrbLoader.OrbRegister(RegisterOrbs);
-                LanguageLoader.RegisterLocalization += new LanguageLoader.LocalizationRegistration(RegisterLocalization);
+                CustomRelicManager.Register += RegisterRelics;
+                OrbManager.Register += RegisterOrbs;
+                LanguageManager.RegisterLocalization += RegisterLocalization;
             }
         }
 
-        private static void RegisterRelics(RelicLoader relicLoader)
+        private static void RegisterRelics(CustomRelicManager relicManager)
         {
             RegisterCustomRelics();
             RegisterModifiedRelics();
@@ -43,18 +44,19 @@ namespace Promethium
         }
 
 
-        private static void RegisterOrbs(OrbLoader orbLoader)
+        private static void RegisterOrbs(OrbManager orbManager)
         {
-            RegisterModifiedOrbs();
-            RegisterCustomOrbs(orbLoader);
+            orbManager.RegisterAll();
         }
 
-        private static void RegisterLocalization(LanguageLoader languageLoader)
+        private static void RegisterLocalization(LanguageManager languageManager)
         {
-            languageLoader.LoadGoogleSheetTSVSource("https://docs.google.com/spreadsheets/d/e/2PACX-1vRe82XVSt8LOUz3XewvAHT5eDDzAqXr5MV0lt3gwvfN_2n9Zxj613jllVPtdPdQweAap2yOSJSgwpPt/pub?gid=0&single=true&output=tsv", "Promethium_Translation.tsv");
-            languageLoader.AddDynamicLocalizationParam(GetParameterValue);
-            languageLoader.RegisterStyle("armor", "<color=#8560b3>", "</color>");
-            languageLoader.RegisterTooltipKeyword("armor", "armor_desc");
+            languageManager.LoadGoogleSheetTSVSource("https://docs.google.com/spreadsheets/d/e/2PACX-1vRe82XVSt8LOUz3XewvAHT5eDDzAqXr5MV0lt3gwvfN_2n9Zxj613jllVPtdPdQweAap2yOSJSgwpPt/pub?gid=0&single=true&output=tsv", "Promethium_Translation.tsv");
+            languageManager.AddDynamicLocalizationParam(GetParameterValue);
+            languageManager.RegisterStyle("armor", "<color=#8560b3>", "</color>");
+            languageManager.RegisterStyle("immediate", "", "");
+            languageManager.RegisterTooltipKeyword("armor", "armor_desc");
+            languageManager.RegisterTooltipKeyword("immediate", "immediate_desc");
         }
 
         public static string GetParameterValue(string Param)
@@ -80,53 +82,31 @@ namespace Promethium
             return null;
         }
 
-        private static void RegisterCustomOrbs(OrbLoader orbLoader)
-        {
-
-            Oreb.GetInstance();
-            OrbofGreed.GetInstance();
-            Orbgis.GetInstance();
-            Lasorb.GetInstance();
-            CustomRelicManager.AddDamageModifier(Berserkorb.GetInstance());
-        }
-
-        private static void RegisterModifiedOrbs()
-        {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            ModifiedDoctorb.Register();
-            ModifiedNosforbatu.Register();
-            ModifiedRefreshOrb.Register();
-            ModifiedShuffleOrb.Register();
-            ModifiedMatryoshka.Register();
-            ModifiedLightningBall.Register();
-            stopwatch.Stop();
-            Plugin.Log.LogInfo($"Vanilla orbs modified! Took {stopwatch.ElapsedMilliseconds}ms");
-        }
-
         private static void RegisterModifiedRelics()
         {
             ModifiedRelic.AddRelic(RelicEffect.DAMAGE_BONUS_PLANT_FLAT); // Gardening Gloves
 
             ModifiedRelic.AddRelic(RelicEffect.NO_DISCARD);
             if (ModifiedRelic.HasRelicEffect(RelicEffect.NO_DISCARD))
-                CustomRelicManager.AddDamageModifier(new NoDiscardDamageModifier());
+                CustomRelicManager.Instance.AddDamageModifier(new NoDiscardDamageModifier());
 
             ModifiedRelic.AddRelic(RelicEffect.MATRYOSHKA);
             if (ModifiedRelic.HasRelicEffect(RelicEffect.MATRYOSHKA))
-                CustomRelicManager.AddDamageModifier(new MatryoshkaDamageModifier());
+                CustomRelicManager.Instance.AddDamageModifier(new MatryoshkaDamageModifier());
         }
 
         private static void RegisterCustomRelics()
         {
+            /*
             new CustomRelicBuilder()
                 .SetName(RelicNames.HOLSTER)
                 .SetAlternativeDescription("2")
                 .SetEnabled(IsRelicEnabled(RelicNames.HOLSTER))
                 .SetSprite(Plugin.Holster)
-                .SetRarity(RelicRarity.BOSS)
+                .SetRarity(RelicRarity.UNAVAILABLE)
                 .AlwaysUnlocked(true)
                 .Build();
+            */
 
             new CustomRelicBuilder()
                 .SetName(RelicNames.MINI)
@@ -144,6 +124,7 @@ namespace Promethium
                 .AlwaysUnlocked(true)
                 .Build();
 
+            
             new CustomRelicBuilder()
                 .SetName(RelicNames.KILL_BUTTON)
                 .SetEnabled(IsRelicEnabled(RelicNames.KILL_BUTTON))
@@ -151,7 +132,7 @@ namespace Promethium
                 .SetRarity(RelicRarity.COMMON)
                 .AlwaysUnlocked(true)
                 .Build();
-
+            
             new CustomRelicBuilder()
                 .SetName(RelicNames.REDUCED_GRAVITY)
                 .SetEnabled(IsRelicEnabled(RelicNames.REDUCED_GRAVITY))
@@ -266,6 +247,8 @@ namespace Promethium
 
         private static void RegisterDynamicRelicIcons()
         {
+            new DynamicRelicIcon(RelicEffect.ANCIENT_FLEECE, navigating: false);
+            new DynamicRelicIcon(RelicEffect.ADDITIONAL_BATTLE_GOLD, false, false, false);
             new DynamicRelicIcon(RelicEffect.ADDITIONAL_BOMB_DAMAGE, true, false, false);
             new DynamicRelicIcon(RelicEffect.ADDITIONAL_BOMB_DAMAGE2, true, false, false);
             new DynamicRelicIcon(RelicEffect.ADDITIONAL_CRIT1, false, false, false);
@@ -274,11 +257,14 @@ namespace Promethium
             new DynamicRelicIcon(RelicEffect.ADDITIONAL_DISCARD, true, false, false);
             new DynamicRelicIcon(RelicEffect.ADDITIONAL_END_BATTLE_HEAL, false, false);
             new DynamicRelicIcon(RelicEffect.ADDITIONAL_ORB_RELIC_OPTIONS, false, false, false, true);
+            new DynamicRelicIcon(RelicEffect.ADDITIONAL_PEGLIN_CHOICES, false, false, false, true);
             new DynamicRelicIcon(RelicEffect.ADDITIONAL_REFRESH1, false, false, false);
             new DynamicRelicIcon(RelicEffect.ADDITIONAL_REFRESH2, false, false, false);
             new DynamicRelicIcon(RelicEffect.ADDITIONAL_REFRESH3, false, false, false);
             new DynamicRelicIcon(RelicEffect.ADDITIONAL_STARTING_BOMBS, false, false, false);
             new DynamicRelicIcon(RelicEffect.ADD_ORBS_AND_UPGRADE, false, false, false);
+            new DynamicRelicIcon(RelicEffect.ADJACENCY_BONUS, true, false, false);
+            new DynamicRelicIcon(RelicEffect.AIM_LIMITER, true, false, true);
             new DynamicRelicIcon(RelicEffect.ALL_ATTACKS_ECHO, navigating: false);
             new DynamicRelicIcon(RelicEffect.ALL_BOMBS_RIGGED, true, false, false);
             new DynamicRelicIcon(RelicEffect.ALL_IN_RELIC, navigating: false);
@@ -296,7 +282,10 @@ namespace Promethium
             new DynamicRelicIcon(RelicEffect.BOMB_SPLASH, navigating: false, treasureNavigation: true);
             new DynamicRelicIcon(RelicEffect.BOUNCERS_COUNT, navigating: false);
             new DynamicRelicIcon(RelicEffect.CONFUSION_RELIC, navigating: false);
+            new DynamicRelicIcon(RelicEffect.CONVERT_COIN_TO_DAMAGE, navigating: false);
+            new DynamicRelicIcon(RelicEffect.CREATE_GOLD_ON_REFRESH, navigating: false);
             new DynamicRelicIcon(RelicEffect.CRITS_STACK, navigating: false);
+            new DynamicRelicIcon(RelicEffect.CRIT_DAMAGES_ENEMIES, navigating: false);
             new DynamicRelicIcon(RelicEffect.CRIT_ALSO_REFRESH, navigating: false);
             new DynamicRelicIcon(RelicEffect.CRIT_BONUS_DMG, true, false, false);
             new DynamicRelicIcon(RelicEffect.DAMAGE_BONUS_PLANT_FLAT, navigating: false);
@@ -307,13 +296,16 @@ namespace Promethium
             new DynamicRelicIcon(RelicEffect.DAMAGE_TARGETED_PEG_HITS, navigating: false);
             new DynamicRelicIcon(RelicEffect.DOUBLE_BOMBS_ON_MAP, false, false, false);
             new DynamicRelicIcon(RelicEffect.DOUBLE_DAMAGE_HURT_ON_PEG);
+            new DynamicRelicIcon(RelicEffect.DUPLICATE_SPECIAL_PEGS, navigating: false);
             new DynamicRelicIcon(RelicEffect.EVADE_CHANCE, navigating: false);
             new DynamicRelicIcon(RelicEffect.FLYING_HORIZONTAL_PIERCE, true, false, false);
-            new DynamicRelicIcon(RelicEffect.FREE_RELOAD, true, true, false);
+            new DynamicRelicIcon(RelicEffect.FREE_RELOAD, navigating: false);
+            new DynamicRelicIcon(RelicEffect.GOLD_ADDS_TO_DAMAGE, navigating: false);
             new DynamicRelicIcon(RelicEffect.HEAL_ON_PEG_HITS, navigating: false);
             new DynamicRelicIcon(RelicEffect.HEAL_ON_REFRESH_POTION, navigating: false);
             new DynamicRelicIcon(RelicEffect.HEAL_ON_RELOAD, navigating: false);
             new DynamicRelicIcon(RelicEffect.HEDGE_BETS, navigating: false);
+            new DynamicRelicIcon(RelicEffect.IMMORTAL, treasureNavigation: true);
             new DynamicRelicIcon(RelicEffect.INCREASE_STRENGTH_SMALL, true, false, false);
             new DynamicRelicIcon(RelicEffect.INFLIGHT_DAMAGE, navigating: false);
             new DynamicRelicIcon(RelicEffect.LIFESTEAL_PEG_HITS, navigating: false);
@@ -328,6 +320,7 @@ namespace Promethium
             new DynamicRelicIcon(RelicEffect.NON_CRIT_BONUS_DMG, true, false, false);
             new DynamicRelicIcon(RelicEffect.NORMAL_ATTACKS_OVERFLOW, navigating: false);
             new DynamicRelicIcon(RelicEffect.NO_DAMAGE_ON_RELOAD, true, false, false);
+            new DynamicRelicIcon(RelicEffect.NO_DAMAGE_REDUCTION, navigating: false);
             new DynamicRelicIcon(RelicEffect.NO_DISCARD, true, false, false);
             new DynamicRelicIcon(RelicEffect.PEG_CLEAR_DAMAGE_SCALING, navigating: false);
             new DynamicRelicIcon(RelicEffect.PEG_MAGNET, true, true, true, true);
@@ -340,6 +333,7 @@ namespace Promethium
             new DynamicRelicIcon(RelicEffect.REFRESH_ALSO_CRIT, navigating: false);
             new DynamicRelicIcon(RelicEffect.REFRESH_BOARD_ON_ENEMY_KILLED, navigating: false);
             new DynamicRelicIcon(RelicEffect.REFRESH_BOARD_ON_RELOAD, true, false, false);
+            new DynamicRelicIcon(RelicEffect.REFRESH_BUFF, navigating: false);
             new DynamicRelicIcon(RelicEffect.REFRESH_DAMAGES_PEG_COUNT, navigating: false);
             new DynamicRelicIcon(RelicEffect.REFRESH_PEGS_SPLASH, true, true, false);
             new DynamicRelicIcon(RelicEffect.SHUFFLE_REFRESH_PEG, navigating: false);
@@ -361,6 +355,8 @@ namespace Promethium
             new DynamicRelicIcon(RelicNames.WEIGHTED_ITEM_POOL, false, false, false);
             new DynamicRelicIcon(RelicNames.REDUCED_GRAVITY, true, true, true, true);
             new DynamicRelicIcon(RelicNames.GRAVITY_CHANGE, navigating: false);
+            new DynamicRelicIcon(RelicNames.RANDOM_RELIC, treasureNavigation: true);
+            new DynamicRelicIcon(RelicNames.UPGRADED_ORBS, false, false, false);
         }
     }
 }

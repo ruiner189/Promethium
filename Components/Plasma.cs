@@ -126,7 +126,7 @@ namespace Promethium.Components
                 return;
             }
 
-            if (CustomRelicManager.AttemptUseRelic(RelicNames.PLASMA_BALL))
+            if (CustomRelicManager.Instance.AttemptUseRelic(RelicNames.PLASMA_BALL))
             {
                 ActivateEffect(peg);
             }

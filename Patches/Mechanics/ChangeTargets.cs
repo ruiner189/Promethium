@@ -3,19 +3,19 @@ using HarmonyLib;
 
 namespace Promethium.Patches
 {
-    [HarmonyPatch(typeof(TargetingManager), "StopTargetingOnFire")]
-    public static class ChangeTargetWhileAttacking
+    [HarmonyPatch]
+    public static class ChangeTargets
     {
-        public static bool Prefix()
+        [HarmonyPatch(typeof(TargetingManager), nameof(TargetingManager.StopTargetingOnFire))]
+        [HarmonyPrefix]
+        public static bool PatchStopTargeting()
         {
             return false;
         }
-    }
 
-    [HarmonyPatch(typeof(BattleController), "Update")]
-    public static class StopTargetingWhenAttackStarts
-    {
-        public static void Prefix(BattleController __instance, TargetingManager ____targetingManager)
+        [HarmonyPatch(typeof(BattleController), nameof(BattleController.Update))]
+        [HarmonyPrefix]
+        public static void PatchUpdate(BattleController __instance)
         {
             __instance._targetingManager._canTarget =
                 BattleController._battleState == BattleController.BattleState.AWAITING_SHOT ||

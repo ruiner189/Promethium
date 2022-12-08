@@ -21,6 +21,11 @@ namespace Promethium.Patches.Orbs.CustomOrbs
             LocalVariables = true;
         }
 
+        public static void Register()
+        {
+            GetInstance();
+        }
+
         public ConfigEntry<bool> EnabledConfig { internal set; get; }
         public override bool IsEnabled()
         {

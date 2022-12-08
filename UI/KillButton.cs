@@ -1,5 +1,5 @@
 ﻿using ProLib.Attributes;
-using ProLib.Loaders;
+using ProLib.Managers;
 using ProLib.Relics;
 using Promethium.Components;
 using Promethium.Patches.Relics.CustomRelics;
@@ -19,12 +19,12 @@ namespace Promethium.UI
 
         public static void LateOnSceneLoaded(string sceneName, bool firstLoad)
         {
-            if(sceneName == SceneLoader.Battle)
+            if(sceneName == SceneInfoManager.Battle)
             {
                 RelicManager relicManager = Resources.FindObjectsOfTypeAll<RelicManager>().FirstOrDefault();
                 if(relicManager != null)
                 {
-                   if (CustomRelicManager.RelicActive(RelicNames.KILL_BUTTON))
+                   if (CustomRelicManager.Instance.RelicActive(RelicNames.KILL_BUTTON))
                        currentButton = CreateButton(new Vector3(12, -4.5f, 0));
                 }
             }

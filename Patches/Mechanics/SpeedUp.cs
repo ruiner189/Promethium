@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Promethium.Patches.Mechanics
 {
-    [HarmonyPatch(typeof(BattleController), "Update")]
+    [HarmonyPatch(typeof(BattleController), nameof(BattleController.Update))]
     public static class SpeedUp
     {
         private static float timeElapsed = 0f;

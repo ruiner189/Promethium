@@ -20,23 +20,24 @@ namespace Promethium.Patches.Relics
         public static class ChangeBallSizeOnSetup
         {
             [HarmonyPriority(Priority.Low)]
-            public static void Prefix(BattleController __instance, RelicManager ____relicManager)
+            public static void Prefix(BattleController __instance)
             {
-                if (____relicManager == null) return;
+                CustomRelicManager relicManager = CustomRelicManager.Instance;
+                if (relicManager == null) return;
                 Scale = __instance._activePachinkoBall.transform.localScale;
 
-                if (CustomRelicManager.RelicActive(RelicNames.WUMBO) && !CustomRelicManager.RelicActive(RelicNames.MINI))
+                if (relicManager.RelicActive(RelicNames.WUMBO) && !relicManager.RelicActive(RelicNames.MINI))
                 {
-                    CustomRelicManager.AttemptUseRelic(RelicNames.WUMBO);
+                    relicManager.AttemptUseRelic(RelicNames.WUMBO);
                     __instance._activePachinkoBall.transform.DOScale(new Vector3(Scale.x * TargetEnlarge, Scale.y * TargetEnlarge, Scale.z), Time);
                 }
 
-                else if (CustomRelicManager.RelicActive(RelicNames.MINI) && !CustomRelicManager.RelicActive(RelicNames.WUMBO))
+                else if (relicManager.RelicActive(RelicNames.MINI) && !relicManager.RelicActive(RelicNames.WUMBO))
                 {
-                    CustomRelicManager.AttemptUseRelic(RelicNames.MINI);
+                    relicManager.AttemptUseRelic(RelicNames.MINI);
                     __instance._activePachinkoBall.transform.DOScale(new Vector3(Scale.x * TargetShrink, Scale.y * TargetShrink, Scale.z), Time);
                 }
-                else if (CustomRelicManager.RelicActive(RelicNames.MINI) && CustomRelicManager.RelicActive(RelicNames.WUMBO))
+                else if (relicManager.RelicActive(RelicNames.MINI) && relicManager.RelicActive(RelicNames.WUMBO))
                 {
                     if (__instance._activePachinkoBall.GetComponent<AutoScaler>() == null)
                         __instance._activePachinkoBall.AddComponent<AutoScaler>();

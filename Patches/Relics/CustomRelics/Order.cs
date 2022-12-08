@@ -23,17 +23,23 @@ namespace Promethium.Patches.Relics.CustomRelics
         public const String REWARDS = "REWARDS";
         public const String REFRESH = "REFRESH";
         public const String RANDOM = "RANDOM";
-        public const String ORB_DAMAGE = "ORB_DAMAGE";
-        public const String SELF_DAMAGE = "SELF_DAMAGE";
+
         public const String RELOAD = "RELOAD";
         public const String SPLASH = "SPLASH";
         public const String ARMOR = "ARMOR";
-        public const String FLAT_DAMAGE = "FLAT_DAMAGE";
         public const String ON_HIT = "ON_HIT";
         public const String NEGATE_DAMAGE = "NEGATE_DAMAGE";
         public const String BUFF = "BUFF";
         public const String HEALTH = "HEALTH";
         public const String NAVIGATION = "NAVIGATION";
+
+        public const String GOLD = "GOLD";
+
+        public const String CRIT_DAMAGE = "CRIT_DAMAGE";
+        public const String NORMAL_DAMAGE = "NORMAL_DAMAGE";
+        public const String ORB_DAMAGE = "ORB_DAMAGE";
+        public const String FLAT_DAMAGE = "FLAT_DAMAGE";
+        public const String SELF_DAMAGE = "SELF_DAMAGE";
 
         public Order()
         {
@@ -47,6 +53,7 @@ namespace Promethium.Patches.Relics.CustomRelics
 
         private void SetCategories()
         {
+            RelicCategory.AddCategories(RelicEffect.ADDITIONAL_BATTLE_GOLD, GOLD, REWARDS);
             RelicCategory.AddCategories(RelicEffect.ADDITIONAL_BOMB_DAMAGE, BOMB, BOMB_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.ADDITIONAL_BOMB_DAMAGE2, BOMB, BOMB_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.ADDITIONAL_CRIT1, CRIT, MODIFY_BOARD);
@@ -55,21 +62,23 @@ namespace Promethium.Patches.Relics.CustomRelics
             RelicCategory.AddCategories(RelicEffect.ADDITIONAL_DISCARD, DISCARD);
             RelicCategory.AddCategories(RelicEffect.ADDITIONAL_END_BATTLE_HEAL, HEAL);
             RelicCategory.AddCategories(RelicEffect.ADDITIONAL_ORB_RELIC_OPTIONS, REWARDS);
+            RelicCategory.AddCategories(RelicEffect.ADDITIONAL_PEGLIN_CHOICES, REWARDS);
             RelicCategory.AddCategories(RelicEffect.ADDITIONAL_REFRESH1, REFRESH, MODIFY_BOARD);
             RelicCategory.AddCategories(RelicEffect.ADDITIONAL_REFRESH2, REFRESH, MODIFY_BOARD);
             RelicCategory.AddCategories(RelicEffect.ADDITIONAL_REFRESH3, REFRESH, MODIFY_BOARD);
             RelicCategory.AddCategories(RelicEffect.ADDITIONAL_STARTING_BOMBS, BOMB, MODIFY_BOARD);
             RelicCategory.AddCategories(RelicEffect.ADD_ORBS_AND_UPGRADE, REWARDS, RANDOM);
+            RelicCategory.AddCategories(RelicEffect.ADJACENCY_BONUS, ORB_DAMAGE, NORMAL_DAMAGE, CRIT_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.ALL_ATTACKS_ECHO, ORB_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.ALL_BOMBS_RIGGED, BOMB, BOMB_DAMAGE, SELF_DAMAGE);
-            RelicCategory.AddCategories(RelicEffect.ALL_IN_RELIC, CRIT, ORB_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.ALL_IN_RELIC, CRIT, CRIT_DAMAGE, ORB_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.ALL_ORBS_BUFF, ORB_DAMAGE, AFFECTS_ORB);
             RelicCategory.AddCategories(RelicEffect.ALL_ORBS_PERSIST, AFFECTS_ORB);
             RelicCategory.AddCategories(RelicEffect.ALTERNATE_SHOT_POWER, AFFECTS_ORB);
             RelicCategory.AddCategories(RelicEffect.APPLIES_HEALING_SLIME, AFFECTS_PEG, HEAL, ON_HIT);
             RelicCategory.AddCategories(RelicEffect.ATTACKS_DEAL_BLIND, AFFECTS_ORB, DEBUFF, NEGATE_DAMAGE);
-            RelicCategory.AddCategories(RelicEffect.BAL_ON_RELOAD, ORB_DAMAGE, RELOAD);
-            RelicCategory.AddCategories(RelicEffect.BASIC_STONE_BONUS_DAMAGE, ORB_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.BAL_ON_RELOAD, ORB_DAMAGE, CRIT_DAMAGE, NORMAL_DAMAGE, RELOAD);
+            RelicCategory.AddCategories(RelicEffect.BASIC_STONE_BONUS_DAMAGE, ORB_DAMAGE, NORMAL_DAMAGE, CRIT_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.BLIND_WHEN_HIT, AFFECTS_ENEMY, DEBUFF);
             RelicCategory.AddCategories(RelicEffect.BOMBS_APPLY_BLIND, BOMB, DEBUFF, NEGATE_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.BOMBS_ONE_HIT, BOMB, AFFECTS_PEG, ON_HIT);
@@ -77,11 +86,12 @@ namespace Promethium.Patches.Relics.CustomRelics
             RelicCategory.AddCategories(RelicEffect.BOMB_FORCE_ALWAYS, AFFECTS_PEG);
             RelicCategory.AddCategories(RelicEffect.BOMB_SPLASH, AFFECTS_PEG, BOMB, SPLASH);
             RelicCategory.AddCategories(RelicEffect.BOUNCERS_COUNT, ORB_DAMAGE, MODIFY_BOARD);
-            RelicCategory.AddCategories(RelicEffect.CONFUSION_RELIC, DEBUFF, AFFECTS_ORB, ORB_DAMAGE);
-            RelicCategory.AddCategories(RelicEffect.CRITS_STACK, CRIT, ORB_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.CONFUSION_RELIC, DEBUFF, AFFECTS_ORB, ORB_DAMAGE, NORMAL_DAMAGE, CRIT_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.CONVERT_COIN_TO_DAMAGE, GOLD, ORB_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.CREATE_GOLD_ON_REFRESH, GOLD, REFRESH);
+            RelicCategory.AddCategories(RelicEffect.CRITS_STACK, CRIT, ORB_DAMAGE, CRIT_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.CRIT_ALSO_REFRESH, CRIT, REFRESH);
-            RelicCategory.AddCategories(RelicEffect.CRIT_BONUS_DMG, CRIT, ORB_DAMAGE);
-            RelicCategory.AddCategories(RelicEffect.CRIT_PIT, CRIT, ORB_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.CRIT_BONUS_DMG, CRIT, ORB_DAMAGE, CRIT_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.DAMAGE_BONUS_PLANT_FLAT, ARMOR, FLAT_DAMAGE, ORB_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.DAMAGE_BONUS_SLIME_FLAT, FLAT_DAMAGE, ORB_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.DAMAGE_ENEMIES_ON_RELOAD, RELOAD);
@@ -90,14 +100,17 @@ namespace Promethium.Patches.Relics.CustomRelics
             RelicCategory.AddCategories(RelicEffect.DAMAGE_TARGETED_PEG_HITS, AFFECTS_PEG, ON_HIT);
             RelicCategory.AddCategories(RelicEffect.DOUBLE_BOMBS_ON_MAP, BOMB, BOMB_AMOUNT, MODIFY_BOARD);
             RelicCategory.AddCategories(RelicEffect.DOUBLE_DAMAGE_HURT_ON_PEG, SELF_DAMAGE, ORB_DAMAGE, ON_HIT);
+            RelicCategory.AddCategories(RelicEffect.DUPLICATE_SPECIAL_PEGS, CRIT, REFRESH, AFFECTS_PEG);
             RelicCategory.AddCategories(RelicEffect.EVADE_CHANCE, AFFECTS_ENEMY, DEBUFF, NEGATE_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.FLYING_HORIZONTAL_PIERCE, AFFECTS_ORB);
             RelicCategory.AddCategories(RelicEffect.FREE_RELOAD, RELOAD, NEGATE_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.GOLD_ADDS_TO_DAMAGE, GOLD, ORB_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.HEAL_ON_PEG_HITS, HEAL, ON_HIT);
             RelicCategory.AddCategories(RelicEffect.HEAL_ON_REFRESH_POTION, HEAL, REFRESH);
             RelicCategory.AddCategories(RelicEffect.HEAL_ON_RELOAD, HEAL, RELOAD);
-            RelicCategory.AddCategories(RelicEffect.HEDGE_BETS, ORB_DAMAGE, CRIT);
-            RelicCategory.AddCategories(RelicEffect.INCREASE_STRENGTH_SMALL, ORB_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.HEDGE_BETS, ORB_DAMAGE, CRIT, NORMAL_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.INCREASED_NAV_GOLD, GOLD, REWARDS);
+            RelicCategory.AddCategories(RelicEffect.INCREASE_STRENGTH_SMALL, ORB_DAMAGE, NORMAL_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.INFLIGHT_DAMAGE, ORB_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.LEGACY_METEORITE, AFFECTS_PEG, ON_HIT);
             RelicCategory.AddCategories(RelicEffect.LIFESTEAL_PEG_HITS, HEAL, ORB_DAMAGE);
@@ -108,7 +121,8 @@ namespace Promethium.Patches.Relics.CustomRelics
             RelicCategory.AddCategories(RelicEffect.MAX_HEALTH_LARGE, HEALTH);
             RelicCategory.AddCategories(RelicEffect.MAX_HEALTH_MEDIUM, HEALTH);
             RelicCategory.AddCategories(RelicEffect.MAX_HEALTH_SMALL, HEALTH);
-            RelicCategory.AddCategories(RelicEffect.NON_CRIT_BONUS_DMG, ORB_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.MINIMUM_PEGS, ORB_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.NON_CRIT_BONUS_DMG, ORB_DAMAGE, NORMAL_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.NORMAL_ATTACKS_OVERFLOW, AFFECTS_ORB);
             RelicCategory.AddCategories(RelicEffect.NO_DAMAGE_ON_RELOAD, NEGATE_DAMAGE, RELOAD);
             RelicCategory.AddCategories(RelicEffect.NO_DISCARD, DISCARD, ORB_DAMAGE);
@@ -119,10 +133,11 @@ namespace Promethium.Patches.Relics.CustomRelics
             RelicCategory.AddCategories(RelicEffect.POTION_PEGS_COUNT, CRIT, REFRESH);
             RelicCategory.AddCategories(RelicEffect.PREVENT_FIRST_DAMAGE, NEGATE_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.RANDOM_ENEMY_HEALTH, AFFECTS_ENEMY, HEALTH);
-            RelicCategory.AddCategories(RelicEffect.REDUCE_CRIT, CRIT, ORB_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.REDUCE_CRIT, CRIT, ORB_DAMAGE, NORMAL_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.REDUCE_LOST_HEALTH, HEALTH, NEGATE_DAMAGE);
-            RelicCategory.AddCategories(RelicEffect.REDUCE_REFRESH, REFRESH, ORB_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.REDUCE_REFRESH, REFRESH, ORB_DAMAGE, CRIT_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.REFRESH_ALSO_CRIT, REFRESH, CRIT);
+            RelicCategory.AddCategories(RelicEffect.REFRESH_BUFF, ORB_DAMAGE, REFRESH, CRIT_DAMAGE, NORMAL_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.REFRESH_BOARD_ON_ENEMY_KILLED, REFRESH);
             RelicCategory.AddCategories(RelicEffect.REFRESH_BOARD_ON_RELOAD, REFRESH, RELOAD);
             RelicCategory.AddCategories(RelicEffect.REFRESH_DAMAGES_PEG_COUNT, REFRESH);
@@ -130,8 +145,8 @@ namespace Promethium.Patches.Relics.CustomRelics
             RelicCategory.AddCategories(RelicEffect.SHUFFLE_REFRESH_PEG, REFRESH, MODIFY_BOARD);
             RelicCategory.AddCategories(RelicEffect.SLOT_MULTIPLIERS, ORB_DAMAGE, RANDOM);
             RelicCategory.AddCategories(RelicEffect.SPAWN_BOMB_ON_PEG_HITS, BOMB, BOMB_DAMAGE, MODIFY_BOARD, ON_HIT);
-            RelicCategory.AddCategories(RelicEffect.START_WITH_STR, BUFF, ORB_DAMAGE);
-            RelicCategory.AddCategories(RelicEffect.STR_ON_RELOAD, BUFF, ORB_DAMAGE, RELOAD);
+            RelicCategory.AddCategories(RelicEffect.START_WITH_STR, BUFF, ORB_DAMAGE, NORMAL_DAMAGE);
+            RelicCategory.AddCategories(RelicEffect.STR_ON_RELOAD, BUFF, ORB_DAMAGE, RELOAD, NORMAL_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.SUPER_BOOTS, NAVIGATION, HEAL, NEGATE_DAMAGE);
             RelicCategory.AddCategories(RelicEffect.UNPOPPABLE_PEGS, AFFECTS_PEG);
             RelicCategory.AddCategories(RelicEffect.WALL_BOUNCES_COUNT, ORB_DAMAGE, MODIFY_BOARD);
@@ -143,6 +158,8 @@ namespace Promethium.Patches.Relics.CustomRelics
             RelicCategory.AddCategories(RelicNames.PLASMA_BALL, ORB_DAMAGE, AFFECTS_ORB);
             RelicCategory.AddCategories(RelicNames.REDUCED_GRAVITY, AFFECTS_PHYSICS, MODIFY_BOARD);
             RelicCategory.AddCategories(RelicNames.GRAVITY_CHANGE, AFFECTS_PHYSICS, MODIFY_BOARD, RANDOM);
+            RelicCategory.AddCategories(RelicNames.RANDOM_RELIC, RANDOM, REWARDS);
+            RelicCategory.AddCategories(RelicNames.UPGRADED_ORBS, REWARDS);
         }
 
         
@@ -151,7 +168,7 @@ namespace Promethium.Patches.Relics.CustomRelics
         {
             public static bool Prefix(RelicManager __instance, bool fallback, ref Relic __result)
             {
-                if (CustomRelicManager.RelicActive(RelicNames.WEIGHTED_ITEM_POOL))
+                if (CustomRelicManager.Instance.RelicActive(RelicNames.WEIGHTED_ITEM_POOL))
                 {
                     __instance.CheckForDebugReset(__instance._availableCommonRelics);
                     if (__instance._availableCommonRelics.Count > 0)
@@ -172,7 +189,7 @@ namespace Promethium.Patches.Relics.CustomRelics
         {
             public static bool Prefix(RelicManager __instance, bool fallback, ref Relic __result)
             {
-                if (CustomRelicManager.RelicActive(RelicNames.WEIGHTED_ITEM_POOL))
+                if (CustomRelicManager.Instance.RelicActive(RelicNames.WEIGHTED_ITEM_POOL))
                 {
                     __instance.CheckForDebugReset(__instance._availableRareRelics);
                     if (__instance._availableRareRelics.Count > 0)
@@ -194,7 +211,7 @@ namespace Promethium.Patches.Relics.CustomRelics
         {
             public static bool Prefix(RelicManager __instance, bool fallback, ref Relic __result)
             {
-                if (CustomRelicManager.RelicActive(RelicNames.WEIGHTED_ITEM_POOL))
+                if (CustomRelicManager.Instance.RelicActive(RelicNames.WEIGHTED_ITEM_POOL))
                 {
                     __instance.CheckForDebugReset(__instance._availableBossRelics);
                     if (__instance._availableBossRelics.Count > 0)

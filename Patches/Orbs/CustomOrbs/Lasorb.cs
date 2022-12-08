@@ -22,6 +22,12 @@ namespace Promethium.Patches.Orbs.CustomOrbs
         {
 
         }
+
+        public static void Register()
+        {
+            GetInstance();
+        }
+
         public static Lasorb GetInstance()
         {
             if (_instance == null)

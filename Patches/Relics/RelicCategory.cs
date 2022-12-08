@@ -53,7 +53,7 @@ namespace Promethium.Patches.Relics
 
         public static float GetWeight(RelicEffect effect)
         {
-            float weight = 10;
+            float weight = 0;
             int categories = 1;
 
             foreach (RelicCategory category in RelicCategories.Values)
@@ -65,7 +65,24 @@ namespace Promethium.Patches.Relics
                 }
             }
 
-            return weight / categories;
+            return 10 + (weight / categories);
+        }
+
+        public static float GetWeight(CustomRelic customRelic)
+        {
+            float weight = 0;
+            int categories = 1;
+
+            foreach (RelicCategory category in RelicCategories.Values)
+            {
+                if (category.customRelics.Contains(customRelic))
+                {
+                    weight += category.CurrentWeight;
+                    categories++;
+                }
+            }
+
+            return 10 + (weight / categories);
         }
 
         public List<RelicCategory> GetRelicCategories(RelicEffect effect)
@@ -117,7 +134,7 @@ namespace Promethium.Patches.Relics
 
             foreach(CustomRelic relic in category.customRelics)
             {
-                if (CustomRelicManager.RelicActive(relic))
+                if (CustomRelicManager.Instance.RelicActive(relic))
                 {
                     weight += 15;
                 }
@@ -140,7 +157,14 @@ namespace Promethium.Patches.Relics
             WeightedList<Relic> set = new WeightedList<Relic>();
             foreach(Relic relic in relics)
             {
-                set.Add(relic, GetWeight(relic.effect));
+                if (relic is CustomRelic customRelic)
+                {
+                    set.Add(customRelic, GetWeight(customRelic));
+                }
+                else
+                {
+                    set.Add(relic, GetWeight(relic.effect));
+                }
             }
             return set.GetRandomItem();
         }

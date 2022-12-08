@@ -6,16 +6,16 @@ using System.Reflection;
 
 namespace Promethium.Patches.Mechanics
 {
-    [HarmonyPatch(typeof(BattleController), "CompleteVictory")]
+    [HarmonyPatch(typeof(BattleController), nameof(BattleController.CompleteVictory))]
     public static class ResolveStatusEffectOnVictory
     {
-        public static void Postfix(BattleController __instance, PlayerStatusEffectController ____playerStatusEffectController)
+        public static void Postfix(BattleController __instance)
         {
-            List<StatusEffect> effects = ____playerStatusEffectController._statusEffects;
+            List<StatusEffect> effects = __instance._playerStatusEffectController._statusEffects;
             int attempts = 99;
             while (effects.Any(effect => StatusEffect.IsStatusEffectPerishable(effect.EffectType)) && attempts > 0)
             {
-                ____playerStatusEffectController.ResolveStatusEffects();
+                __instance._playerStatusEffectController.ResolveStatusEffects();
                 attempts--;
             }
         }

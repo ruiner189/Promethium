@@ -21,6 +21,13 @@ namespace Promethium
         public const String ARMOR_DAMAGE_MULTIPLIER = "ARMOR_DAMAGE_MULTIPLIER";
         public const String DISCARD_DAMAGE = "DISCARD_DAMAGE";
         public const String DISCARD_ARMOR_DAMAGE = "DISCARD_ARMOR_DAMAGE";
+        public const String DAMAGE_MULTIPLIER = "DAMAGE_MULTIPLIER";
+        public const String DURATION = "DURATION";
+        public const String GOLD_MULTIPLIER = "GOLD_MULTIPLIER";
+        public const String CLONE_AMOUNT = "CLONE_AMOUNT";
+        public const String DAMAGE_DEALT_MULTIPLIER = "DAMAGE_DEALT_MULTIPLIER";
+        public const String DAMAGE_RECEIVED_MULTIPLIER = "DAMAGE_RECEIVED_MULTIPLIER";
+        public const String DAMAGE_REDUCTION = "DAMAGE_REDUCTION";
         public const String HOLD_DAMAGE_MULTIPLIER = "HOLD_DAMAGE_MULTIPLIER";
         public const String ARMOR_HOLD_DAMAGE = "ARMOR_HOLD_DAMAGE";
         public const String MULTIBALL_HOLD_LEVEL = "MULTIBALL_HOLD_LEVEL";

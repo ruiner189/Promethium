@@ -1,6 +1,6 @@
 ﻿using Battle.Attacks;
 using ProLib.Attributes;
-using ProLib.Loaders;
+using ProLib.Managers;
 using ProLib.Relics;
 using Relics;
 using System;
@@ -67,9 +67,9 @@ namespace Promethium.Patches.Relics.CustomRelics
 
         public static void OnSceneLoaded(String sceneName, bool firstLoad)
         {
-            if(sceneName == SceneLoader.MainMenu)
+            if(sceneName == SceneInfoManager.MainMenu)
             {
-                if (CustomRelicManager.RelicActive(RelicNames.UPGRADED_ORBS))
+                if (CustomRelicManager.Instance.RelicActive(RelicNames.UPGRADED_ORBS))
                 {
                     AnvilRelic relic = (AnvilRelic) GetCustomRelic(RelicNames.UPGRADED_ORBS);
                     relic.RemoveUpgradedOrbs(Resources.FindObjectsOfTypeAll<DeckManager>().FirstOrDefault());

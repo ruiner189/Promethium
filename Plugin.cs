@@ -5,6 +5,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using ProLib.Utility;
 using Promethium.Components;
+using Promethium.Components.Managers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,7 +27,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.4.1";
+        public const String Version = "1.5.0";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -53,6 +54,13 @@ namespace Promethium
         public static Sprite OrbOfGreedAttack;
         public static Sprite Orbgis;
         public static Sprite OrbgisAttack;
+
+        public static Sprite CriticalPotion;
+        public static Sprite AvaricePotion;
+        public static Sprite GeminiPotion;
+        public static Sprite IronSkinPotion;
+        public static Sprite BerserkPotion;
+
         public static Sprite[] Lasorb;
         public static Sprite[] LasorbAttack;
         public static Sprite Berserkorb;
@@ -134,6 +142,7 @@ namespace Promethium
             PromethiumManager = new GameObject("Promethium Mod");
             PromethiumManager.AddComponent<RestartButtonActivator>();
             PromethiumManager.AddComponent<ArmorManager>();
+            PromethiumManager.AddComponent<HoldManager>();
             DontDestroyOnLoad(PromethiumManager);
             PromethiumManager.hideFlags = HideFlags.HideAndDontSave;
 
@@ -194,6 +203,12 @@ namespace Promethium
 
             Orbgis = assembly.LoadSprite("Resources.Orbs.Orbgis.png", 8);
             OrbgisAttack = assembly.LoadSprite("Resources.Orbs.Orbgis.png", 16);
+
+            CriticalPotion = assembly.LoadSprite("Resources.Orbs.CriticalPotion.png", 8);
+            AvaricePotion = assembly.LoadSprite("Resources.Orbs.AvaricePotion.png", 8);
+            GeminiPotion = assembly.LoadSprite("Resources.Orbs.GeminiPotion.png", 8);
+            IronSkinPotion = assembly.LoadSprite("Resources.Orbs.IronSkinPotion.png", 8);
+            BerserkPotion = assembly.LoadSprite("Resources.Orbs.BerserkPotion.png", 8);
 
             Lasorb = LoadMultipleSprites("Resources.Orbs.Lasorb", 9, pixelsPerUnit: 8);
             LasorbAttack = LoadMultipleSprites("Resources.Orbs.LaserAttack.LaserAttack", 15);

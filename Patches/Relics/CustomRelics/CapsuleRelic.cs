@@ -12,10 +12,10 @@ namespace Promethium.Patches.Relics.CustomRelics
     {
         public override void HandlePegHit(RelicManager relicManager)
         {
-            if (CustomRelicManager.AttemptUseRelic(this))
+            if (CustomRelicManager.Instance.AttemptUseRelic(this))
             {
                 relicManager.AddRelic(relicManager.GetBossRelic(true));
-                CustomRelicManager.RemoveRelic(this);
+                CustomRelicManager.Instance.RemoveRelic(this);
             }
         }
     }

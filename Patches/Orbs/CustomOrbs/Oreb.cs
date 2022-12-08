@@ -13,9 +13,17 @@ namespace Promethium.Patches.Orbs.CustomOrbs
         private static Oreb _instance;
 
         public const String Name = "oreb";
-
-        private Oreb() : base(Name) { }
         public ConfigEntry<bool> EnabledConfig { internal set; get; }
+
+        private Oreb() : base(Name) {
+        
+        }
+
+        public static void Register()
+        {
+            GetInstance();
+        }
+
         public override bool IsEnabled()
         {
             if (EnabledConfig == null)
@@ -32,6 +40,8 @@ namespace Promethium.Patches.Orbs.CustomOrbs
                 _instance = new Oreb();
             return _instance;
         }
+
+
 
         public override void CreatePrefabs()
         {

@@ -14,7 +14,7 @@ namespace Promethium.Patches.Relics
         {
             public static void Prefix()
             {
-                if (CustomRelicManager.AttemptUseRelic(RelicNames.KILL_BUTTON))
+                if (CustomRelicManager.Instance.AttemptUseRelic(RelicNames.KILL_BUTTON))
                 {
                     if (KillButton.currentButton != null)
                     {
@@ -29,7 +29,7 @@ namespace Promethium.Patches.Relics
         {
             public static void Prefix(BattleController __instance)
             {
-                if (CustomRelicManager.RelicActive(RelicNames.KILL_BUTTON))
+                if (CustomRelicManager.Instance.RelicActive(RelicNames.KILL_BUTTON))
                 {
                     __instance._activePachinkoBall.AddComponent<KillOnCommand>();
                 }

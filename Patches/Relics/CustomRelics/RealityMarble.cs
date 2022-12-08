@@ -27,7 +27,7 @@ namespace Promethium.Patches.Relics.CustomRelics
             Vector2 gravity = DEFAULT_GRAVITY;
             if (!normal)
             {
-                CustomRelicManager.AttemptUseRelic(RelicNames.GRAVITY_CHANGE);
+                CustomRelicManager.Instance.AttemptUseRelic(RelicNames.GRAVITY_CHANGE);
 
                 float force = 9.8f;
                 float xSign = Random.Range(0, 2) == 0 ? 1 : -1;
@@ -41,7 +41,7 @@ namespace Promethium.Patches.Relics.CustomRelics
                 gravity = new Vector2(x, y);
             }
 
-            if (CustomRelicManager.RelicActive(RelicNames.REDUCED_GRAVITY))
+            if (CustomRelicManager.Instance.RelicActive(RelicNames.REDUCED_GRAVITY))
                 gravity *= PocketMoon.GRAVITY_REDUCTION;
 
             Physics2D.gravity = gravity;
@@ -57,7 +57,7 @@ namespace Promethium.Patches.Relics.CustomRelics
 
                 if (BattleController._battleState == BattleController.BattleState.AWAITING_SHOT_COMPLETION)
                 {
-                    if (CustomRelicManager.RelicActive(RelicNames.GRAVITY_CHANGE))
+                    if (CustomRelicManager.Instance.RelicActive(RelicNames.GRAVITY_CHANGE))
                     {
                         _time += Time.deltaTime;
                         if (_time >= GRAVITY_CHANGE_SECONDS)
@@ -69,7 +69,7 @@ namespace Promethium.Patches.Relics.CustomRelics
                 }
                 else if (BattleController._battleState == BattleController.BattleState.AWAITING_ENEMY_CLEANUP)
                 {
-                    if (CustomRelicManager.RelicActive(RelicNames.GRAVITY_CHANGE))
+                    if (CustomRelicManager.Instance.RelicActive(RelicNames.GRAVITY_CHANGE))
                     {
                         _time = 0;
                         if (_restoreGravity)
@@ -82,7 +82,7 @@ namespace Promethium.Patches.Relics.CustomRelics
                 } 
                 else if (BattleController._battleState == BattleController.BattleState.THROW_BOMBS)
                 {
-                    if (CustomRelicManager.RelicActive(RelicNames.GRAVITY_CHANGE))
+                    if (CustomRelicManager.Instance.RelicActive(RelicNames.GRAVITY_CHANGE))
                     {
                         _currentGravity = new Vector2() + Physics2D.gravity;
                         _restoreGravity = true;
