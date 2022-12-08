@@ -24,6 +24,13 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 
 ## Changelog
 <details>
+   <summary> v1.5.1 </summary>
+   
+* Updated localization file
+</details>
+
+
+<details>
    <summary> v1.5.0 </summary>
    
 * Updated to Peglin 0.8.10
