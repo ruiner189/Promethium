@@ -97,17 +97,16 @@ namespace Promethium
 
         private static void RegisterCustomRelics()
         {
-            /*
+            
             new CustomRelicBuilder()
                 .SetName(RelicNames.HOLSTER)
                 .SetAlternativeDescription("2")
                 .SetEnabled(IsRelicEnabled(RelicNames.HOLSTER))
                 .SetSprite(Plugin.Holster)
                 .SetRarity(RelicRarity.UNAVAILABLE)
-                .AlwaysUnlocked(true)
+                .IncludeInCustomLoadout(false)
                 .Build();
-            */
-
+            
             new CustomRelicBuilder()
                 .SetName(RelicNames.MINI)
                 .SetEnabled(IsRelicEnabled(RelicNames.MINI))

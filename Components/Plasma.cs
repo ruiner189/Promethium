@@ -29,7 +29,6 @@ namespace Promethium.Components
         {
             _pachinkoBall = gameObject.GetComponent<PachinkoBall>();
 
-
             if (_linePrefab == null)
             {
                 GameObject gameObject = Resources.Load<GameObject>("Prefabs/Orbs/LightningBall-Lvl3");
@@ -50,7 +49,6 @@ namespace Promethium.Components
 
         public void ActivateEffect(Peg peg)
         {
-
             if (peg != null)
             {
                 if (_hitPegs.Contains(peg))
@@ -113,22 +111,26 @@ namespace Promethium.Components
         }
 
 
-        private void OnCollisionEnter2D(Collision2D other)
+        private void OnCollisionEnter2D(Collision2D collision)
         {
             if (_pachinkoBall == null || _pachinkoBall.IsDummy)
             {
                 return;
             }
-            Peg peg = other.collider.GetComponent<Peg>();
 
-            if (peg is LongPeg longPeg && longPeg.hit)
+            if (collision.collider.CompareTag("Peg") || collision.collider.CompareTag("Bomb"))
             {
-                return;
-            }
+                Peg peg = collision.collider.GetComponent<Peg>();
 
-            if (CustomRelicManager.Instance.AttemptUseRelic(RelicNames.PLASMA_BALL))
-            {
-                ActivateEffect(peg);
+                if (peg is LongPeg longPeg && longPeg.hit)
+                {
+                    return;
+                }
+
+                if (CustomRelicManager.Instance.AttemptUseRelic(RelicNames.PLASMA_BALL))
+                {
+                    ActivateEffect(peg);
+                }
             }
 
         }

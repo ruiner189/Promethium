@@ -27,7 +27,7 @@ namespace Promethium
 
         public const String GUID = "com.ruiner.promethium";
         public const String Name = "Promethium";
-        public const String Version = "1.5.1";
+        public const String Version = "1.5.2";
 
         private Harmony _harmony;
         public static ManualLogSource Log;
@@ -107,7 +107,7 @@ namespace Promethium
 
         public static bool DynamicIconActive => DynamicIconActiveConfig.Value;
         public static int DynamicIconMinimum => DynamicIconMinimumConfig.Value;
-        public static bool UseCustomPrediction => UseCustomPredictionConfig.Value;
+        public static bool UseCustomPrediction => false; //UseCustomPredictionConfig.Value;
         public static bool HoldDiscard => HoldDiscardConfig.Value;
 
         private void Awake()

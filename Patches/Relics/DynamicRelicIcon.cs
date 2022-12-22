@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static BattleController;
 using System.Linq;
+using Battle;
 
 namespace Promethium.Patches.Relics
 {

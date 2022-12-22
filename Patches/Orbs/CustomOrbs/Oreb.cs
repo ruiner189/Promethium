@@ -50,6 +50,7 @@ namespace Promethium.Patches.Orbs.CustomOrbs
                 .SetDamage(1,2)
                 .IncludeInOrbPool(true)
                 .SetLevel(1)
+                .SetRarity(PachinkoBall.OrbRarity.RARE)
                 .SetDescription(new string[] { "wrong_shape", "fragile_on_hit" });
 
             CustomOrbBuilder levelTwo = levelOne.Clone()

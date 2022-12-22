@@ -196,65 +196,62 @@ namespace Promethium.Patches.Fixes
 
                     if (__instance._currentPhysicsScene.IsValid() && __instance._predictionPhysicsScene.IsValid())
                     {
-                        if (__instance._dummy == null)
-                        {
-                            __instance._dummy = UnityEngine.Object.Instantiate<GameObject>(subject);
-                            SceneManager.MoveGameObjectToScene(__instance._dummy, __instance._predictionScene);
-                        }
                         foreach (GameObject gameObject in __instance._bounceIndicatorList)
                         {
                             gameObject.SetActive(false);
                         }
-                        PachinkoBall component = __instance._dummy.GetComponent<PachinkoBall>();
-                        component.InitializeMembers();
-                        component.MaxBounceCount = __instance._bounceCount;
-                        component.IsDummy = true;
-                        component.gameObject.transform.position = currentPosition;
-                        PachinkoBall pachinkoBall = component;
-                        pachinkoBall.OnPachinkoBallDummyBounce = (PachinkoBall.PachinkoBallDummyBounce)Delegate.Combine(pachinkoBall.OnPachinkoBallDummyBounce, new PachinkoBall.PachinkoBallDummyBounce(__instance.CreateBounceIndicator));
-                        component.SetRelicManager(__instance._relicManager);
-                        IUpdateableBySimulation[] componentsInChildren = component.GetComponentsInChildren<IUpdateableBySimulation>();
-                        Rigidbody2D component2 = __instance._dummy.GetComponent<Rigidbody2D>();
-
-                        component2.simulated = true;
-                        component2.gravityScale = component.GravityScale;
-
-                        component2.AddForce(force);
-                        __instance._predictionPhysicsScene.Simulate(Time.fixedDeltaTime);
-
-                        __instance._lineRenderer.positionCount = 0;
+                        __instance._dummy.transform.position = currentPosition;
+                        __instance.currentPachinkoInfo.rigidbody.AddForce(force);
                         __instance._lineRenderer.positionCount = __instance._maxIterations;
-
                         int num = 0;
-                        while (num < __instance._maxIterations && __instance._dummy != null)
+                        int num2 = 0;
+                        while (num2 < __instance._maxIterations && !__instance.currentPachinkoInfo.pachinko.HasDummyCollided)
                         {
-                            IUpdateableBySimulation[] array = componentsInChildren;
-                            for (int i = 0; i < array.Length; i++)
+                            IUpdateableBySimulation[] updateableBySimulation = __instance.currentPachinkoInfo.updateableBySimulation;
+                            for (int i = 0; i < updateableBySimulation.Length; i++)
                             {
-                                array[i].DoUpdate(__instance._predictionPhysicsScene);
+                                updateableBySimulation[i].DoUpdate(__instance._predictionPhysicsScene);
                             }
-
-                            foreach (IUpdateableBySimulation updateableBySimulation in __instance._updateableSceneObjs)
+                            foreach (IUpdateableBySimulation updateableBySimulation2 in __instance._updateableSceneObjs)
                             {
-                                updateableBySimulation.DoUpdate(__instance._predictionPhysicsScene);
+                                updateableBySimulation2.DoUpdate(__instance._predictionPhysicsScene);
                             }
-
                             __instance.UpdatePredictionPegs();
-                            if (__instance._dummy.activeInHierarchy)
+                            if (!__instance.currentPachinkoInfo.pachinko.HasDummyCollided)
                             {
-                                __instance._lineRenderer.SetPosition(num, new Vector3(__instance._dummy.transform.position.x, __instance._dummy.transform.position.y, -1f));
+                                __instance._lineRenderer.SetPosition(num2, new Vector3(__instance._dummy.transform.position.x, __instance._dummy.transform.position.y, -1f));
                             }
-                            else if (num > 0)
-                            {
-                                Vector3 position = __instance._lineRenderer.GetPosition(num - 1);
-                                __instance._lineRenderer.SetPosition(num, position);
-                            }
+                            num = num2;
                             __instance._predictionPhysicsScene.Simulate(Time.fixedDeltaTime);
-                            num++;
+                            __instance.currentPachinkoInfo.pachinko._shotTime += Time.fixedDeltaTime;
+                            num2++;
+                        }
+                        if (__instance.currentPachinkoInfo.pachinko.HasDummyCollided && num > 0)
+                        {
+                            for (int j = num; j < __instance._maxIterations; j++)
+                            {
+                                Vector3 position = __instance._lineRenderer.GetPosition(j - 1);
+                                __instance._lineRenderer.SetPosition(j, position);
+                            }
                         }
                         if (__instance._dummy != null)
                         {
-                            UnityEngine.Object.Destroy(__instance._dummy);
+                            __instance._dummy.transform.position = currentPosition;
+                            __instance.currentPachinkoInfo.pachinko._shotTime = 0;
+                            __instance.currentPachinkoInfo.rigidbody.velocity = Vector2.zero;
+                            __instance.currentPachinkoInfo.rigidbody.angularVelocity = 0f;
+                            __instance.currentPachinkoInfo.rigidbody.inertia = 0f;
+                            __instance.currentPachinkoInfo.rigidbody.isKinematic = true;
+                            __instance._predictionPhysicsScene.Simulate(Time.fixedDeltaTime);
+                            __instance.currentPachinkoInfo.rigidbody.isKinematic = false;
+                            __instance.currentPachinkoInfo.pachinko.HasDummyCollided = false;
+                            __instance.currentPachinkoInfo.rigidbody.simulated = true;
+                            __instance.currentPachinkoInfo.pachinko.MaxBounceCount = __instance._bounceCount;
+                            __instance.currentPachinkoInfo.pachinko.IsDummy = true;
+                            if (__instance.currentPachinkoInfo.pierce != null)
+                            {
+                                __instance.currentPachinkoInfo.pierce.RestartPierceForSimulation();
+                            }
                         }
                         SoftResetPegs(__instance);
                     }
@@ -273,6 +270,8 @@ namespace Promethium.Patches.Fixes
                         return true;
                     }
 
+                    // Anything from this point are dummy orbs made for the prediction system. 
+
                     __instance.SetBlockPopping(pachinko);
                     Multihit component2 = pachinko.gameObject.GetComponent<Multihit>();
                     if (component2 != null && component2.multihitLevel > 0)
@@ -289,12 +288,14 @@ namespace Promethium.Patches.Fixes
                         if(state != null)
                         {
                             __instance.gameObject.SetActive(false);
+                            __instance.pegType = Peg.PegType.DESTROYED;
                             state.FakeDestroy = true;
                         }
                         return false;
                     }
                     __instance._numBounces++;
-                    if (__instance.ShouldDestroyPegOnHit())
+
+                    if (__instance.ShouldPopPegOnHit())
                     {
                         __instance._collider.enabled = false;
                         __instance._trigger.enabled = false;
@@ -318,6 +319,9 @@ namespace Promethium.Patches.Fixes
                     {
                         return true;
                     }
+
+                    // Anything from this point are dummy orbs made for the prediction system. 
+
                     __instance.pegType = Peg.PegType.REGULAR;
                     __instance._hit = true;
                     return false;
@@ -333,6 +337,8 @@ namespace Promethium.Patches.Fixes
                     {
                         return true;
                     }
+
+                    // Anything from this point are dummy orbs made for the prediction system. 
 
                     if (__instance.HitCount == 0 && (pachinko.gameObject.GetComponent<DetonateBomb>() || pachinko.gameObject.GetComponent<Multihit>()))
                     {
@@ -360,6 +366,9 @@ namespace Promethium.Patches.Fixes
                     {
                         return true;
                     }
+
+                    // Anything from this point are dummy orbs made for the prediction system. 
+
                     PierceBehavior component = pachinko.GetComponent<PierceBehavior>();
                     if (component == null || !component.CanPierce)
                     {

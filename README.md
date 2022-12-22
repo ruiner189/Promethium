@@ -24,6 +24,14 @@ This mod uses ProLib which does affect your save file. Please back up your save 
 
 ## Changelog
 <details>
+   <summary> v1.5.2 </summary>
+   
+* Updated to Peglin 0.8.16
+* Disabled Promethium's Prediction System, as this current update broke it.
+* Fixed Oreb's rarity to now be Rare instead of Common
+</details>
+
+<details>
    <summary> v1.5.1 </summary>
    
 * Updated localization file
